@@ -11,7 +11,7 @@ export function BrandMark() {
   return (
     <picture>
       <source srcSet="/the-arcades-logo-light.svg" media="(prefers-color-scheme: light)" />
-      <img src="/the-arcades-logo.svg" alt="" width={139} height={26} />
+      <img src="/the-arcades-logo.svg" alt="" width={244} height={34} />
     </picture>
   );
 }
