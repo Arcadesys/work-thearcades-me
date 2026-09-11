@@ -709,6 +709,129 @@ textarea::placeholder {
   color: var(--text);
 }
 
+.case h3 a {
+  color: var(--text);
+}
+
+.case h3 a:hover {
+  color: var(--accent);
+  text-shadow: var(--accent-glow);
+}
+
+.case-more {
+  display: inline-block;
+  margin-top: 20px;
+  color: var(--accent);
+  letter-spacing: 0.14em;
+}
+
+.case-more:hover {
+  color: var(--accent);
+  text-shadow: var(--accent-glow);
+}
+
+/* --------------------------------------------------------------------------
+   Case study detail page — /work/[slug]
+   -------------------------------------------------------------------------- */
+
+.case-page {
+  padding-block: clamp(36px, 6vw, 72px) clamp(56px, 8vw, 104px);
+  max-width: 900px;
+}
+
+.back-link {
+  display: block;
+  width: fit-content;
+  color: var(--text-muted);
+  margin-bottom: clamp(28px, 4vw, 44px);
+}
+
+.back-link:hover {
+  color: var(--accent);
+  text-shadow: var(--accent-glow);
+}
+
+.case-page-title {
+  font-weight: 300;
+  font-size: clamp(1.9rem, 4.6vw, 3rem);
+  line-height: 1.16;
+  letter-spacing: 0.03em;
+  color: var(--text);
+  margin: 0 0 18px;
+  text-wrap: balance;
+}
+
+.case-page-lede {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: clamp(1.05rem, 2vw, 1.3rem);
+  line-height: 1.5;
+  color: var(--text-soft);
+  max-width: 56ch;
+  margin-bottom: 26px;
+  text-wrap: pretty;
+}
+
+.case-page-tags {
+  margin-bottom: clamp(32px, 5vw, 48px);
+}
+
+.case-page-figure {
+  margin-bottom: clamp(32px, 5vw, 48px);
+}
+
+/* STAR writeup */
+
+.star {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line);
+}
+
+.star-part {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: 8px clamp(24px, 5vw, 56px);
+  padding: clamp(26px, 4vw, 38px) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+/* The label column stays narrow once there's room for two columns. */
+@media (min-width: 780px) {
+  .star-part {
+    grid-template-columns: 8rem 1fr;
+  }
+}
+
+.star-label {
+  color: var(--accent);
+  text-shadow: var(--accent-glow);
+  margin: 0;
+  padding-top: 0.35em;
+}
+
+.star-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.star-body p {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--text-soft);
+  max-width: 68ch;
+  text-wrap: pretty;
+}
+
+.case-page-footer {
+  margin-top: clamp(40px, 6vw, 64px);
+}
+
+.case-page-footer .lede {
+  margin-bottom: 22px;
+}
+
 /* --------------------------------------------------------------------------
    Quote
    -------------------------------------------------------------------------- */
