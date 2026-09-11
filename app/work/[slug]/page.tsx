@@ -38,7 +38,7 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
         <header className="site-header">
           <Link className="brand" href="/">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/the-arcades-logo.svg" alt="" width={139} height={26} />
+            <img src="/the-arcades-logo.svg" alt="" width={244} height={34} />
             <span className="visually-hidden">{site.name} — home</span>
           </Link>
           <nav className="site-nav label" aria-label="Main">

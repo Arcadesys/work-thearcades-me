@@ -80,7 +80,7 @@ export default function Home() {
         <header className="site-header">
           <a className="brand" href="#top">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/the-arcades-logo.svg" alt="" width={139} height={26} />
+            <img src="/the-arcades-logo.svg" alt="" width={244} height={34} />
             <span className="visually-hidden">{site.name} — back to top</span>
           </a>
           <nav className="site-nav label" aria-label="Main">
