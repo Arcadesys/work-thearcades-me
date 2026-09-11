@@ -37,7 +37,7 @@ export const site = {
   name: 'Austen Tucker-Crowder',
   role: 'AI Builder & Evangelist',
   email: 'austen.crowder@gmail.com',
-  bookingUrl: 'https://cal.com/austen-crowder/intro',
+  bookingUrl: 'https://cal.com/austen-tucker-crowder/30min',
   resumeUrl: 'https://www.thearcades.me/resume',
   creativeUrl: 'https://www.thearcades.me',
   publishingUrl: 'https://freeplaypublishing.com',
