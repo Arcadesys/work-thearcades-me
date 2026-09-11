@@ -9,6 +9,27 @@ npm install
 npm run dev
 ```
 
+## Deployment and handoff
+
+- Production project: `austen-tuckers-projects/work-thearcades-me` on Vercel.
+- Custom production URL: `https://work.thearcades.me` after the external DNS record for `work` resolves.
+- Live Vercel production URL: `https://work-thearcades-me.vercel.app`.
+- The GitHub repository is connected to Vercel. Pushes to `main` create production deployments; other branches create previews.
+
+For a manual production deploy from this checkout:
+
+```bash
+vercel --prod --scope austen-tuckers-projects
+```
+
+For a concise handoff to Claude Code, open this repository and start with:
+
+```bash
+git status --short --branch
+npm run lint
+npm run build
+```
+
 ## Source record
 
 - Résumé and verified employment claims: `https://www.thearcades.me/resume` and the source repository’s `content/resume/resume.md`.
