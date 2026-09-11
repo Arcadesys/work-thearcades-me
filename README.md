@@ -20,9 +20,10 @@ npm run dev
 
 - No professional headshot was found in the approved sources. The existing illustrated creative-site avatar was not used as a substitute.
 - No verified employer logos or LinkedIn URL were found, so no logo strip or LinkedIn control is present.
-- The supplied quotation was not found in a source. The quote block uses an exact, published line from the Bunch build note instead.
+- The pull quotation and its footer are supplied self-description from the approved wireframe; they are not represented as an externally sourced quotation.
 
 ## Iteration log
 
 1. **Keep:** warm-paper/dark-text/indigo editorial implementation, typed local content, accessible navigation, and verified external links.
 2. **Revise then keep:** the initial mobile breakpoint hid section navigation. The final breakpoint keeps Work, About, Notes, Contact, and View résumé visible with 48px targets.
+3. **Keep:** the approved self-description quote and footer. The real Bunch diagram now appears in the related case study, so the selected-work section has a visual break without treating it as an unrelated gallery item.

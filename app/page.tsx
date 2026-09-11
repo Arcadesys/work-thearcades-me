@@ -34,7 +34,7 @@ export default function Home() {
                 <a className="button primary" href="#work">See my work</a>
                 <ExternalLink className="button secondary" href={site.resumeUrl}>View résumé</ExternalLink>
               </div>
-              <div className="beliefs" aria-label="Core beliefs">
+              <div className="beliefs">
                 <div className="belief"><strong>Start small. Ship fast.</strong><span>Build the smallest useful thing first, then learn from reality.</span></div>
                 <div className="belief"><strong>Make it legible.</strong><span>Useful beats impressive. If people can’t understand it, they can’t use it.</span></div>
                 <div className="belief"><strong>Build for handoff.</strong><span>Good systems should be maintainable, teachable, and bigger than one heroic person.</span></div>
@@ -53,15 +53,11 @@ export default function Home() {
             <p className="section-kicker">Selected work</p>
             <h2 id="selected-work-heading">A few problems I’ve gotten attached to.</h2>
             <div className="case-studies">
-              {caseStudies.map((study) => <article className="case-study" id={study.id} key={study.id}><p className="case-label">{study.lane}</p><div><h3>{study.title}</h3><p>{study.body}</p><ul className="tag-list" aria-label={`${study.lane} disciplines`}>{study.tags.map((tag) => <li key={tag}>{tag}</li>)}</ul></div></article>)}
+              {caseStudies.map((study) => <article className="case-study" id={study.id} key={study.id}><p className="case-label">{study.lane}</p><div><h3>{study.title}</h3><p>{study.body}</p>{study.id === 'builder-case' && <figure className="case-visual"><Image src="/images/bunch-data-model.png" width={1792} height={2316} sizes="(max-width: 840px) calc(100vw - 64px), 480px" alt="Bunch data model: people have pictures, hosting history, and fronting history; a return can have a catch-up with saved notes, tasks, decisions, and conversation summaries." /><figcaption>Bunch’s published data model. Hosting records responsibility; fronting records presence.</figcaption></figure>}<ul className="tag-list" aria-label={`${study.lane} disciplines`}>{study.tags.map((tag) => <li key={tag}>{tag}</li>)}</ul></div></article>)}
             </div>
           </section>
-          <figure className="project-visual">
-            <Image src="/images/bunch-data-model.png" width={1792} height={2316} sizes="(max-width: 720px) 100vw, 680px" alt="Bunch data model: people have pictures, hosting history, and fronting history; a return can have a catch-up with saved notes, tasks, decisions, and conversation summaries." />
-            <figcaption>Bunch’s published data model. Hosting records responsibility; fronting records presence.</figcaption>
-          </figure>
         </div>
-        <div className="shell quote-wrap"><section className="quote" aria-label="From the Bunch build note"><blockquote>“The first version does not need to be the final system. It needs to let a real person do one real thing that matters.”</blockquote><footer>From <ExternalLink href="https://www.thearcades.me/projects/arcade-blog/bunch">Bunch</ExternalLink>, September 2026</footer></section></div>
+        <div className="shell quote-wrap"><section className="quote" aria-label="Personal approach to words and systems"><blockquote>“Text isn’t just a medium for me. It’s an instrument I’ve spent thirty years learning to play.”</blockquote><footer>Writing, editing, layout, publishing, product, and now AI.</footer></section></div>
         <div className="shell">
           <section id="about" aria-labelledby="about-heading"><div className="about-grid"><div><p className="section-kicker">About</p><h2 id="about-heading">A few things about me.</h2><p className="section-lede">I’ve spent my career moving between disciplines that are usually treated as separate. That turns out to be very useful in a text-first AI world.</p></div><div className="facts"><div className="fact"><strong>16+ years delivering customer-focused software solutions.</strong><span>AI transformation leadership, program management, agile coaching, and practical building.</span></div><div className="fact"><strong>Twenty years of published writing under several names.</strong><span>Novels, short fiction, poetry, essays, and the occasional live performance.</span></div><div className="fact"><strong>I care about tools that survive contact with actual humans.</strong><span>Accessibility, legibility, and adoption are product requirements, not garnish.</span></div></div></div></section>
           <section id="notes" aria-labelledby="notes-heading"><p className="section-kicker">Notes</p><h2 id="notes-heading">What I’m thinking about.</h2><p className="section-lede">Build notes and essays from the public archive. Fiction and publishing live at The Arcades’ Lab.</p><div className="notes-grid">{notes.map((note) => <article className="note-card" key={note.href}><p className="date">{note.date}</p><h3><ExternalLink href={note.href}>{note.title}</ExternalLink></h3><p>{note.body}</p></article>)}</div></section>

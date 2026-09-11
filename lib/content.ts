@@ -68,7 +68,7 @@ export const notes = [
     title: 'Bunch',
     date: 'September 9, 2026',
     body: 'A build note about an MCP-first private companion for continuity, context, and usable handoffs.',
-    href: 'https://www.thearcades.me/projects/arcade-blog/bunch',
+    href: 'https://www.thearcades.me/projects/bunch/bunch',
   },
   {
     title: 'The Stepladder',
