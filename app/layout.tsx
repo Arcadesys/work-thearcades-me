@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono, Lora } from 'next/font/google';
 import './globals.css';
 
@@ -20,6 +20,18 @@ const lora = Lora({
   variable: '--font-serif',
   display: 'swap',
 });
+
+/**
+ * Browser chrome (the mobile address bar, the PWA title bar) follows the same
+ * system setting the stylesheet does, so it never frames a light page in a
+ * dark bar or vice versa. Colours mirror `--bg` in each palette.
+ */
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#fbf9fd' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a14' },
+  ],
+};
 
 export const metadata: Metadata = {
   title: 'Austen Tucker-Crowder — AI Builder & Evangelist',

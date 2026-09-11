@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { CaseStudy } from '@/lib/content';
+import { BrandMark } from '@/components/brand-mark';
 import { CommentForm } from '@/components/comment-form';
 import { ExternalLink } from '@/components/external-link';
 import { RevealOnScroll } from '@/components/reveal-on-scroll';
@@ -79,8 +80,7 @@ export default function Home() {
       <div className="header-wrap">
         <header className="site-header">
           <a className="brand" href="#top">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/the-arcades-logo.svg" alt="" width={139} height={26} />
+            <BrandMark />
             <span className="visually-hidden">{site.name} — back to top</span>
           </a>
           <nav className="site-nav label" aria-label="Main">
