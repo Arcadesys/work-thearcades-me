@@ -9,14 +9,52 @@ export type Lane = {
   accent: Accent;
 };
 
+export type CaseImage = {
+  src: string;
+  width: number;
+  height: number;
+  alt: string;
+  caption: string;
+};
+
+/**
+ * The long-form writeup behind a case study, in STAR order.
+ *
+ * Every part is optional and holds one entry per paragraph. The detail page
+ * renders only the parts that have content, so a half-written study is a
+ * shorter page rather than a broken one — nothing is stubbed or invented.
+ */
+export type Star = {
+  situation?: string[];
+  task?: string[];
+  action?: string[];
+  result?: string[];
+};
+
 export type CaseStudy = {
+  /** Anchor target on the home page. */
   id: string;
+  /** Detail page lives at `/work/<slug>`. */
+  slug: string;
   lane: string;
   title: string;
   body: string;
   tags: string[];
   accent: Accent;
+  image?: CaseImage;
+  star?: Star;
 };
+
+export const STAR_PARTS = [
+  { key: 'situation', label: 'Situation' },
+  { key: 'task', label: 'Task' },
+  { key: 'action', label: 'Action' },
+  { key: 'result', label: 'Result' },
+] as const satisfies ReadonlyArray<{ key: keyof Star; label: string }>;
+
+export function hasStar(study: CaseStudy): boolean {
+  return STAR_PARTS.some((part) => (study.star?.[part.key]?.length ?? 0) > 0);
+}
 
 export type Note = {
   title: string;
@@ -111,14 +149,23 @@ export const lanes: Lane[] = [
 export const caseStudies: CaseStudy[] = [
   {
     id: 'builder-case',
+    slug: 'bunch',
     lane: 'Builder',
     title: 'Bunch: a continuity tool I built because I needed it',
     body: 'I started with a deeply personal usability problem and built a practical AI-assisted system around it. The point was continuity: preserving context, reducing cognitive load, and making information available at the moment it mattered.',
     tags: ['AI systems', 'Accessibility', 'Product design', 'Rapid prototyping'],
     accent: 'pink',
+    image: {
+      src: '/images/bunch-data-model.png',
+      width: 1792,
+      height: 2316,
+      alt: 'Bunch data model: people have pictures, hosting history, and fronting history; a return can have a catch-up with saved notes, tasks, decisions, and conversation summaries.',
+      caption: 'Bunch’s published data model. Hosting records responsibility; fronting records presence.',
+    },
   },
   {
     id: 'owner-case',
+    slug: 'guaranteed-rate',
     lane: 'Owner',
     title: 'Owning delivery on a platform tied to $1.5B in locked loan volume',
     body: 'At Guaranteed Rate, I acted as product owner for a data-mining tool that generated $1.5B in locked loans. The work required turning complexity into priorities, risks, trade-offs, and a path through ambiguity.',
@@ -127,6 +174,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     id: 'evangelist-case',
+    slug: 'ai-enablement',
     lane: 'Evangelist',
     title: 'Making AI development feel safe enough to try',
     body: 'At ActiveCampaign, I design hands-on AI enablement that leaves people with working artifacts. A Cursor IDE bootcamp for non-technical staff helped participants build and judge real prototypes in the room.',
@@ -134,6 +182,10 @@ export const caseStudies: CaseStudy[] = [
     accent: 'rose',
   },
 ];
+
+export function caseStudyBySlug(slug: string): CaseStudy | undefined {
+  return caseStudies.find((study) => study.slug === slug);
+}
 
 export const ownerStat = {
   value: '$1.5B',

@@ -1,4 +1,6 @@
 import Image from 'next/image';
+import Link from 'next/link';
+import type { CaseStudy } from '@/lib/content';
 import { CommentForm } from '@/components/comment-form';
 import { ExternalLink } from '@/components/external-link';
 import { RevealOnScroll } from '@/components/reveal-on-scroll';
@@ -32,6 +34,31 @@ function Kicker({ children }: { children: React.ReactNode }) {
       <span className="dot" />
       {children}
     </p>
+  );
+}
+
+/** Left-hand column shared by all three case study cards. */
+function CaseSummary({ study }: { study: CaseStudy }) {
+  return (
+    <div>
+      <p className="label case-pill">{study.lane}</p>
+      <h3 id={`${study.id}-title`}>
+        <Link href={`/work/${study.slug}`}>{study.title}</Link>
+      </h3>
+      <p>{study.body}</p>
+      <ul className="tag-list" aria-label={`${study.lane} disciplines`}>
+        {study.tags.map((tag) => (
+          <li className="label" key={tag}>
+            {tag}
+          </li>
+        ))}
+      </ul>
+      <Link className="label case-more" href={`/work/${study.slug}`}>
+        Read the full story
+        <Arrow />
+        <span className="visually-hidden"> about {study.title}</span>
+      </Link>
+    </div>
   );
 }
 
@@ -160,32 +187,21 @@ export default function Home() {
             data-reveal="1"
             aria-labelledby={`${builder.id}-title`}
           >
-            <div>
-              <p className="label case-pill">{builder.lane}</p>
-              <h3 id={`${builder.id}-title`}>{builder.title}</h3>
-              <p>{builder.body}</p>
-              <ul className="tag-list" aria-label={`${builder.lane} disciplines`}>
-                {builder.tags.map((tag) => (
-                  <li className="label" key={tag}>
-                    {tag}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <figure className="case-figure">
-              <div>
-                <Image
-                  src="/images/bunch-data-model.png"
-                  width={1792}
-                  height={2316}
-                  sizes="(max-width: 840px) calc(100vw - 64px), 480px"
-                  alt="Bunch data model: people have pictures, hosting history, and fronting history; a return can have a catch-up with saved notes, tasks, decisions, and conversation summaries."
-                />
-              </div>
-              <figcaption>
-                Bunch’s published data model. Hosting records responsibility; fronting records presence.
-              </figcaption>
-            </figure>
+            <CaseSummary study={builder} />
+            {builder.image && (
+              <figure className="case-figure">
+                <div>
+                  <Image
+                    src={builder.image.src}
+                    width={builder.image.width}
+                    height={builder.image.height}
+                    sizes="(max-width: 840px) calc(100vw - 64px), 480px"
+                    alt={builder.image.alt}
+                  />
+                </div>
+                <figcaption>{builder.image.caption}</figcaption>
+              </figure>
+            )}
           </article>
 
           <article
@@ -195,18 +211,7 @@ export default function Home() {
             data-reveal="2"
             aria-labelledby={`${owner.id}-title`}
           >
-            <div>
-              <p className="label case-pill">{owner.lane}</p>
-              <h3 id={`${owner.id}-title`}>{owner.title}</h3>
-              <p>{owner.body}</p>
-              <ul className="tag-list" aria-label={`${owner.lane} disciplines`}>
-                {owner.tags.map((tag) => (
-                  <li className="label" key={tag}>
-                    {tag}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <CaseSummary study={owner} />
             <p className="stat">
               {ownerStat.value}
               <span className="label">{ownerStat.label}</span>
@@ -220,18 +225,7 @@ export default function Home() {
             data-reveal="3"
             aria-labelledby={`${evangelist.id}-title`}
           >
-            <div>
-              <p className="label case-pill">{evangelist.lane}</p>
-              <h3 id={`${evangelist.id}-title`}>{evangelist.title}</h3>
-              <p>{evangelist.body}</p>
-              <ul className="tag-list" aria-label={`${evangelist.lane} disciplines`}>
-                {evangelist.tags.map((tag) => (
-                  <li className="label" key={tag}>
-                    {tag}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <CaseSummary study={evangelist} />
             <div>
               <p className="label" id="takeaways-heading">
                 {evangelistTakeaways.heading}
