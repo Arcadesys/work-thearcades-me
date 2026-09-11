@@ -12,8 +12,8 @@ npm run dev
 ## Deployment and handoff
 
 - Production project: `austen-tuckers-projects/work-thearcades-me` on Vercel.
-- Custom production URL: `https://work.thearcades.me` after the external DNS record for `work` resolves.
-- Live Vercel production URL: `https://work-thearcades-me.vercel.app`.
+- Active custom production URL: `https://work.thearcades.me`.
+- Vercel production URL: `https://work-thearcades-me.vercel.app`.
 - The GitHub repository is connected to Vercel. Pushes to `main` create production deployments; other branches create previews.
 
 For a manual production deploy from this checkout:
