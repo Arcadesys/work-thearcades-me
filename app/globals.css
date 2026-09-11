@@ -824,6 +824,39 @@ textarea::placeholder {
   text-wrap: pretty;
 }
 
+.star-body strong {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.star-body em {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+}
+
+/* Closing lesson the writeup lands on. */
+.principle {
+  margin-top: clamp(30px, 4.5vw, 44px);
+  background: var(--surface);
+  border: 1px solid var(--accent-line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: clamp(20px, 3vw, 28px) clamp(22px, 3.4vw, 32px);
+}
+
+.principle-label {
+  margin-bottom: 10px;
+}
+
+.principle-text {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+  line-height: 1.4;
+  color: var(--text);
+  text-wrap: balance;
+}
+
 .case-page-footer {
   margin-top: clamp(40px, 6vw, 64px);
 }

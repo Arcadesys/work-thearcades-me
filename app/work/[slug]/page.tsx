@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ExternalLink } from '@/components/external-link';
+import { RichText } from '@/components/rich-text';
 import { STAR_PARTS, caseStudies, caseStudyBySlug, hasStar, site } from '@/lib/content';
 
 export function generateStaticParams() {
@@ -103,13 +104,24 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
                     </h2>
                     <div className="star-body">
                       {paragraphs.map((paragraph, index) => (
-                        <p key={index}>{paragraph}</p>
+                        <p key={index}>
+                          <RichText>{paragraph}</RichText>
+                        </p>
                       ))}
                     </div>
                   </section>
                 );
               })}
             </div>
+          )}
+
+          {study.principle && (
+            <aside className="principle" aria-labelledby="principle-label">
+              <p className="label principle-label" id="principle-label">
+                Principle
+              </p>
+              <p className="principle-text">{study.principle}</p>
+            </aside>
           )}
 
           <div className="case-page-footer">
