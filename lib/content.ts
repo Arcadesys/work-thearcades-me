@@ -197,7 +197,8 @@ export const caseStudies: CaseStudy[] = [
         'I needed to earn enough technical credibility to be effective with engineers, while still doing the coordination and program work I had been hired to do.',
       ],
       action: [
-        'I learned JavaScript and web development through a very practical apprenticeship with senior engineers. I built internal tools, including a lobby application that visualized loan locks happening in real time, which helped establish that I could build as well as coordinate. Later, when a major initiative was blocked through the normal engineering leadership path, I helped find an executive route to get the work approved and moving.',
+        'I learned JavaScript and web development through a very practical apprenticeship with senior engineers. I built internal tools, including a lobby application that visualized loan locks happening in real time, which helped establish that I could build as well as coordinate.',
+        'Later, when a major initiative was blocked through the normal engineering leadership path, I helped find an executive route to get the work approved and moving.',
       ],
       result: [
         'That work ultimately contributed to an initiative tied to roughly **$1.5 billion** in business value. More importantly, it shaped the way I still build today: start with the smallest useful thing, get it into people’s hands quickly, and use feedback to decide what deserves to exist next.',
