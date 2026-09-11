@@ -43,6 +43,8 @@ export type CaseStudy = {
   accent: Accent;
   image?: CaseImage;
   star?: Star;
+  /** The closing lesson the writeup lands on. */
+  principle?: string;
 };
 
 export const STAR_PARTS = [
@@ -162,6 +164,22 @@ export const caseStudies: CaseStudy[] = [
       alt: 'Bunch data model: people have pictures, hosting history, and fronting history; a return can have a catch-up with saved notes, tasks, decisions, and conversation summaries.',
       caption: 'Bunch’s published data model. Hosting records responsibility; fronting records presence.',
     },
+    star: {
+      situation: [
+        'I have spent years trying to accommodate a practical problem created by dissociative amnesia while maintaining a demanding professional career. Earlier tools helped me track who was fronting, but they were much better at looking inward than helping me recover what had happened in the outside world.',
+      ],
+      task: [
+        'I needed a way to restore working context quickly enough that memory gaps did not become missed decisions, repeated conversations, or degraded judgment at work.',
+      ],
+      action: [
+        'I experimented first with community tools like PluralKit and Simply Plural, then began building small applications against their APIs. That process taught me both API integration and the limits of identity tracking alone. Later, while working deeply with AI context management, I reframed the problem: the interface was not the important part. **Continuity of context was.** I began building Bunch as an accessibility harness designed around that idea.',
+      ],
+      result: [
+        'During one weekend, another alter was continuously fronting and I had little usable memory of what had happened. Instead of spending roughly 20 minutes asking people and reconstructing events manually, Bunch gave me a summary of everything I had worked on since I was last present in about **15 seconds**.',
+        'That changed the problem from *“How do I keep track of who I am?”* to *“How do I make sure the next version of me can keep going?”*',
+      ],
+    },
+    principle: 'The interface is not the moat. Continuity is.',
   },
   {
     id: 'owner-case',
@@ -171,6 +189,22 @@ export const caseStudies: CaseStudy[] = [
     body: 'At Guaranteed Rate, I acted as product owner for a data-mining tool that generated $1.5B in locked loans. The work required turning complexity into priorities, risks, trade-offs, and a path through ambiguity.',
     tags: ['Program ownership', 'Fintech', 'Delivery', 'Executive communication'],
     accent: 'orange',
+    star: {
+      situation: [
+        'I joined Guaranteed Rate in a high-pressure, engineering-driven culture where credibility came from shipping. I had been hired to help keep teams moving, but early on I was told pretty directly that I was not worth listening to because I could not code.',
+      ],
+      task: [
+        'I needed to earn enough technical credibility to be effective with engineers, while still doing the coordination and program work I had been hired to do.',
+      ],
+      action: [
+        'I learned JavaScript and web development through a very practical apprenticeship with senior engineers. I built internal tools, including a lobby application that visualized loan locks happening in real time, which helped establish that I could build as well as coordinate.',
+        'Later, when a major initiative was blocked through the normal engineering leadership path, I helped find an executive route to get the work approved and moving.',
+      ],
+      result: [
+        'That work ultimately contributed to an initiative tied to roughly **$1.5 billion** in business value. More importantly, it shaped the way I still build today: start with the smallest useful thing, get it into people’s hands quickly, and use feedback to decide what deserves to exist next.',
+      ],
+    },
+    principle: 'Build small. Build simple. Get feedback.',
   },
   {
     id: 'evangelist-case',
@@ -180,6 +214,21 @@ export const caseStudies: CaseStudy[] = [
     body: 'At ActiveCampaign, I design hands-on AI enablement that leaves people with working artifacts. A Cursor IDE bootcamp for non-technical staff helped participants build and judge real prototypes in the room.',
     tags: ['AI enablement', 'Agentic development', 'Teaching', 'Change leadership'],
     accent: 'rose',
+    star: {
+      situation: [
+        'The company had a strong push toward AI adoption, but very little structure around how people were supposed to learn. There was no real curriculum, and more importantly, there was no safe space to experiment, fail, and admit that something had not worked.',
+      ],
+      task: [
+        'I wanted to lower the barrier enough that product managers would actually try agentic development instead of waiting until they felt fully qualified.',
+      ],
+      action: [
+        'Without waiting for a formal program, I built and ran a practical training session for product managers focused on basic Cursor usage and early agentic development patterns. The emphasis was not on mastery. It was on making the first attempt feel normal, useful, and low-risk.',
+      ],
+      result: [
+        'After the session, the behavior changed quickly. People who had been hesitant to experiment started building prototypes of their own. Requests for engineering access increased, and AI went from something people were being told to adopt into something they were actively using to make things.',
+      ],
+    },
+    principle: 'People do not need permission to be experts. They need permission to try.',
   },
 ];
 
