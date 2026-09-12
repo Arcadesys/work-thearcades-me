@@ -40,6 +40,7 @@ export type CaseStudy = {
   title: string;
   body: string;
   tags: string[];
+  blogTags?: string[];
   accent: Accent;
   image?: CaseImage;
   star?: Star;
@@ -192,6 +193,7 @@ export const caseStudies: CaseStudy[] = [
   {
     id: 'builder-case',
     slug: 'bunch',
+    blogTags: ['bunch'],
     lane: 'Builder',
     title: 'Bunch: a continuity tool I built because I needed it',
     body: 'I started with a deeply personal usability problem and built a practical AI-assisted system around it. The point was continuity: preserving context, reducing cognitive load, and making information available at the moment it mattered.',
