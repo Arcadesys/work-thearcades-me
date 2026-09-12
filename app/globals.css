@@ -1836,3 +1836,6 @@ textarea::placeholder {
 .blog-related { margin: 2rem 0; padding: 1.25rem; background: var(--surface); border: 1px solid var(--text-muted); border-radius: 8px; line-height: 1.65; }
 .blog-provenance { margin: 3rem 0 1.5rem; line-height: 1.7; }
 .blog-page .back-link { display: inline-flex; align-items: center; min-height: 44px; font-size: 1.125rem; }
+
+.blog-tag-browser { margin: 1.5rem 0; }
+.blog-tag-browser summary { cursor: pointer; min-height: 44px; padding: .75rem 0; font-size: 1.125rem; text-decoration: underline; text-underline-offset: .2em; }
