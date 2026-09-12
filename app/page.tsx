@@ -3,7 +3,6 @@ import { publicPosts, displayDate } from '@/lib/blog';
 import Link from 'next/link';
 import type { CaseStudy } from '@/lib/content';
 import { BrandMark } from '@/components/brand-mark';
-import { CommentForm } from '@/components/comment-form';
 import { ExternalLink } from '@/components/external-link';
 import { RevealOnScroll } from '@/components/reveal-on-scroll';
 import { SubscribeForm } from '@/components/subscribe-form';
@@ -11,8 +10,6 @@ import {
   about,
   beliefs,
   caseStudies,
-  commentCount,
-  comments,
   contact,
   evangelistTakeaways,
   hero,
@@ -309,10 +306,6 @@ export default function Home() {
                 Continue reading
                 <Arrow />
               </Link>
-              <a className="label jump-comments" href="#comments">
-                {commentCount} comments
-                <Arrow dir="down" />
-              </a>
             </div>
           </article>}
 
@@ -325,33 +318,6 @@ export default function Home() {
             <p>{newsletter.body}</p>
             <SubscribeForm />
           </div>
-
-          <section className="comments" id="comments" data-reveal="2" aria-labelledby="comments-heading">
-            <p className="label kicker" id="comments-heading">
-              <span className="dot" />
-              Comments · {commentCount}
-            </p>
-            <ul className="comment-list">
-              {comments.map((comment) => (
-                <li className="comment" key={comment.author}>
-                  <Image src={comment.avatar} width={40} height={40} alt="" />
-                  <div className="comment-body">
-                    <p className="comment-meta">
-                      <span className="comment-author">{comment.author}</span>
-                      <span className="label">{comment.when}</span>
-                    </p>
-                    <p>{comment.body}</p>
-                    {comment.canReply && (
-                      <a className="label comment-reply" href="#comment-body">
-                        Reply<span className="visually-hidden"> to {comment.author}</span>
-                      </a>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <CommentForm />
-          </section>
 
           <p className="label earlier-label">Earlier</p>
           <ul className="earlier">
