@@ -1449,6 +1449,10 @@ textarea::placeholder {
   margin-bottom: 6px;
 }
 
+.subscribe + .earlier-label {
+  margin-top: 32px;
+}
+
 .earlier {
   display: flex;
   flex-direction: column;
