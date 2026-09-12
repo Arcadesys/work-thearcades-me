@@ -6,6 +6,7 @@ import { CommentForm } from '@/components/comment-form';
 import { ExternalLink } from '@/components/external-link';
 import { RevealOnScroll } from '@/components/reveal-on-scroll';
 import { SubscribeForm } from '@/components/subscribe-form';
+import { ThemeSwitch } from '@/components/theme-switch';
 import {
   about,
   beliefs,
@@ -93,6 +94,7 @@ export default function Home() {
               <Arrow />
             </ExternalLink>
           </nav>
+          <ThemeSwitch />
         </header>
       </div>
 

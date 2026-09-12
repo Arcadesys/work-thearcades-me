@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { BrandMark } from '@/components/brand-mark';
 import { ExternalLink } from '@/components/external-link';
 import { RichText } from '@/components/rich-text';
+import { ThemeSwitch } from '@/components/theme-switch';
 import { STAR_PARTS, caseStudies, caseStudyBySlug, hasStar, site } from '@/lib/content';
 
 export function generateStaticParams() {
@@ -51,6 +52,7 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
               <span aria-hidden="true"> →</span>
             </ExternalLink>
           </nav>
+          <ThemeSwitch />
         </header>
       </div>
 

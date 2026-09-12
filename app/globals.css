@@ -87,9 +87,17 @@
   --radius: 12px;
   --radius-sm: 8px;
 
-  /* Let the UA paint form controls, scrollbars and the canvas to match
-     whichever palette the operating system asked for. */
+  /* Let the UA paint form controls, scrollbars and the canvas to match the
+     palette in use. Bare :root is the pre-script state, so it defers to the
+     OS; the two rules below pin it once a palette is actually resolved. */
   color-scheme: light dark;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
 }
 
 /* Per-accent theming. Set with data-accent on a card/section.
@@ -134,75 +142,75 @@
 /* --------------------------------------------------------------------------
    Light palette
 
-   Driven purely by the operating system's appearance setting — there is no
-   toggle, no cookie and no localStorage, so the site never disagrees with the
-   rest of the machine. Dark stays the default in :root above, so a user agent
-   that cannot evaluate this query still gets the palette the site shipped with.
-   Note that per the Media Queries spec a browser reporting *no* preference
-   matches `light`, so preference-less clients now land on the light palette.
+   Keyed to `data-theme` on <html> rather than to `prefers-color-scheme`
+   directly. A blocking script in the document stamps that attribute before
+   first paint, resolving the reader's stored choice — or, when they have made
+   none, whatever the OS reports. Doing the resolution once, there, means this
+   palette needs one definition instead of one per trigger, and the theme
+   switch changes a single attribute to repaint the whole page.
+
+   Dark remains the default on bare :root, which is what a reader sees if the
+   script has not run yet or at all.
 
    The hues are the same brand neons, darkened until each one clears WCAG AA
    (4.5:1) as text on white; the neon bloom is switched off entirely, because
    a glow on a light ground blurs letterforms rather than lifting them.
    -------------------------------------------------------------------------- */
 
-@media (prefers-color-scheme: light) {
-  :root {
-    /* Surfaces */
-    --bg: #fbf9fd;
-    --surface: #ffffff;
-    --surface-hover: #f4f0f8;
-    --surface-raised: #ffffff;
-    --surface-sunken: rgb(23 18 31 / 0.05);
-    --surface-inset: rgb(23 18 31 / 0.04);
+:root[data-theme='light'] {
+  /* Surfaces */
+  --bg: #fbf9fd;
+  --surface: #ffffff;
+  --surface-hover: #f4f0f8;
+  --surface-raised: #ffffff;
+  --surface-sunken: rgb(23 18 31 / 0.05);
+  --surface-inset: rgb(23 18 31 / 0.04);
 
-    /* Text — 17.6:1, 12.8:1 and 8.8:1 on the page background. */
-    --text: #17121f;
-    --text-soft: #332b41;
-    --text-muted: #4d4459;
+  /* Text — 17.6:1, 12.8:1 and 8.8:1 on the page background. */
+  --text: #17121f;
+  --text-soft: #332b41;
+  --text-muted: #4d4459;
 
-    /* Accents — 5.5:1, 8.5:1, 5.3:1 and 5.7:1 as text on white. The "light"
-       pink is the hover state, so here it goes darker, not brighter. */
-    --pink: #c01a6f;
-    --pink-rgb: 192 26 111;
-    --pink-light: #8f1250;
-    --pink-light-rgb: 143 18 80;
-    --orange: #b34700;
-    --orange-rgb: 179 71 0;
-    --amber: #8a5a00;
-    --amber-rgb: 138 90 0;
+  /* Accents — 5.5:1, 8.5:1, 5.3:1 and 5.7:1 as text on white. The "light"
+     pink is the hover state, so here it goes darker, not brighter. */
+  --pink: #c01a6f;
+  --pink-rgb: 192 26 111;
+  --pink-light: #8f1250;
+  --pink-light-rgb: 143 18 80;
+  --orange: #b34700;
+  --orange-rgb: 179 71 0;
+  --amber: #8a5a00;
+  --amber-rgb: 138 90 0;
 
-    /* Lines carry the page's structure, so they are held at 3:1 rather than
-       left as a hairline tint. */
-    --line: rgb(var(--orange-rgb) / 0.7);
-    --link-underline: rgb(var(--pink-rgb) / 0.55);
+  /* Lines carry the page's structure, so they are held at 3:1 rather than
+     left as a hairline tint. */
+  --line: rgb(var(--orange-rgb) / 0.7);
+  --link-underline: rgb(var(--pink-rgb) / 0.55);
 
-    --wash-warm: 0.07;
-    --wash-pink: 0.07;
+  --wash-warm: 0.07;
+  --wash-pink: 0.07;
 
-    /* Chrome */
-    --header-bg: rgb(255 255 255 / 0.88);
-    --field-bg: #ffffff;
-    --field-line: rgb(23 18 31 / 0.55);
-    --selection-bg: rgb(var(--pink-rgb) / 0.22);
-    --selection-fg: #17121f;
-    --placeholder: #5b5369;
+  /* Chrome */
+  --header-bg: rgb(255 255 255 / 0.88);
+  --field-bg: #ffffff;
+  --field-line: rgb(23 18 31 / 0.55);
+  --selection-bg: rgb(var(--pink-rgb) / 0.22);
+  --selection-fg: #17121f;
+  --placeholder: #5b5369;
 
-    /* Depth comes from real shadows here instead of the neon halo. */
-    --elev-1: 0 1px 2px rgb(23 18 31 / 0.07), 0 6px 20px rgb(23 18 31 / 0.07);
-    --elev-2: 0 2px 6px rgb(23 18 31 / 0.1), 0 14px 34px rgb(23 18 31 / 0.11);
+  /* Depth comes from real shadows here instead of the neon halo. */
+  --elev-1: 0 1px 2px rgb(23 18 31 / 0.07), 0 6px 20px rgb(23 18 31 / 0.07);
+  --elev-2: 0 2px 6px rgb(23 18 31 / 0.1), 0 14px 34px rgb(23 18 31 / 0.11);
 
-    --bloom: 0;
-  }
+  --bloom: 0;
+}
 
-  /* Deeper ink needs more alpha than neon did to read at the same weight.
-     Declared after the per-accent blocks so it wins on equal specificity. */
-  [data-accent] {
-    --accent-line-alpha: 0.6;
-    --accent-wash-alpha: 0.07;
-    --accent-edge-alpha: 0.7;
-    --accent-halo-alpha: 0.18;
-  }
+/* Deeper ink needs more alpha than neon did to read at the same weight. */
+:root[data-theme='light'] [data-accent] {
+  --accent-line-alpha: 0.6;
+  --accent-wash-alpha: 0.07;
+  --accent-edge-alpha: 0.7;
+  --accent-halo-alpha: 0.18;
 }
 
 /* --------------------------------------------------------------------------
@@ -532,6 +540,66 @@ textarea::placeholder {
   color: var(--bg);
   box-shadow: 0 0 16px rgb(var(--pink-rgb) / calc(0.4 * var(--bloom)));
   text-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   Theme switch
+
+   A three-way segmented control: AUTO follows the operating system, LIGHT and
+   DARK pin a palette. All three states are on screen at once — nothing is
+   hidden behind a cycling icon — and each is labelled in words rather than a
+   sun/moon glyph, so the choice does not depend on reading fine detail.
+
+   The selected pill is driven by `data-theme-mode` on <html>, which the
+   blocking bootstrap script stamps before first paint. That means the right
+   pill is already highlighted on the very first frame, with no dependence on
+   React having hydrated, and no server/client mismatch to paper over.
+   -------------------------------------------------------------------------- */
+
+.theme-switch {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.theme-option {
+  appearance: none;
+  margin: 0;
+  background: transparent;
+  border: none;
+  border-inline-start: 1px solid var(--line);
+  color: var(--text-muted);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: var(--label-size);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  line-height: 1.6;
+  padding: 7px clamp(9px, 1.1vw, 13px);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.theme-option:first-child {
+  border-inline-start: none;
+}
+
+.theme-option:hover {
+  background: var(--surface-hover);
+  color: var(--pink);
+}
+
+/* Selected: a filled pill, so the active state reads as a block of contrast
+   rather than as a hue difference alone. */
+:root[data-theme-mode='auto'] .theme-option[data-mode='auto'],
+:root[data-theme-mode='light'] .theme-option[data-mode='light'],
+:root[data-theme-mode='dark'] .theme-option[data-mode='dark'] {
+  background: var(--pink);
+  color: var(--bg);
+  font-weight: 600;
 }
 
 /* --------------------------------------------------------------------------
@@ -1509,30 +1577,28 @@ textarea::placeholder {
    shadow in its place.
    -------------------------------------------------------------------------- */
 
-@media (prefers-color-scheme: light) {
-  .site-header,
-  .beliefs,
-  .case-featured,
-  .featured-note,
-  .subscribe {
-    box-shadow: var(--elev-1);
-  }
+:root[data-theme='light'] .site-header,
+:root[data-theme='light'] .beliefs,
+:root[data-theme='light'] .case-featured,
+:root[data-theme='light'] .featured-note,
+:root[data-theme='light'] .subscribe {
+  box-shadow: var(--elev-1);
+}
 
-  .lane:hover,
-  .case:hover,
-  .featured-note:hover {
-    box-shadow: var(--elev-2);
-  }
+:root[data-theme='light'] .lane:hover,
+:root[data-theme='light'] .case:hover,
+:root[data-theme='light'] .featured-note:hover {
+  box-shadow: var(--elev-2);
+}
 
-  /* White-on-white is not a hover state. */
-  .earlier a:hover {
-    background: var(--surface-hover);
-  }
+/* White-on-white is not a hover state. */
+:root[data-theme='light'] .earlier a:hover {
+  background: var(--surface-hover);
+}
 
-  /* Brightening a dark gradient washes it out; hover goes deeper instead. */
-  .btn-gradient:hover {
-    filter: brightness(0.92);
-  }
+/* Brightening a dark gradient washes it out; hover goes deeper instead. */
+:root[data-theme='light'] .btn-gradient:hover {
+  filter: brightness(0.92);
 }
 
 /* --------------------------------------------------------------------------
@@ -1567,8 +1633,12 @@ textarea::placeholder {
 @media (prefers-contrast: more) {
   :root {
     --bloom: 0;
-    --text-muted: #c9c9d8;
     --line: rgb(var(--orange-rgb) / 0.55);
+  }
+
+  /* Pale grey only reads as "more contrast" against the dark ground. */
+  :root:not([data-theme='light']) {
+    --text-muted: #c9c9d8;
   }
 
   body {
@@ -1599,23 +1669,25 @@ textarea::placeholder {
 }
 
 /* The block above assumes light text on a dark ground; on the light palette
-   the same request means darker ink and firmer rules. */
-@media (prefers-contrast: more) and (prefers-color-scheme: light) {
-  :root {
+   the same request means darker ink and firmer rules. Setting the elevation
+   tokens to none is what retires the light-mode card shadows, since those are
+   declared as var(--elev-*). */
+@media (prefers-contrast: more) {
+  :root[data-theme='light'] {
     --text-muted: #2f2839;
     --line: rgb(var(--orange-rgb) / 0.85);
     --elev-1: none;
     --elev-2: none;
   }
 
-  .site-header,
-  .beliefs,
-  .case-featured,
-  .featured-note,
-  .subscribe,
-  .lane:hover,
-  .case:hover,
-  .featured-note:hover {
+  :root[data-theme='light'] .site-header,
+  :root[data-theme='light'] .beliefs,
+  :root[data-theme='light'] .case-featured,
+  :root[data-theme='light'] .featured-note,
+  :root[data-theme='light'] .subscribe,
+  :root[data-theme='light'] .lane:hover,
+  :root[data-theme='light'] .case:hover,
+  :root[data-theme='light'] .featured-note:hover {
     border-color: var(--accent, var(--pink));
   }
 }

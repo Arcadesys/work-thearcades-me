@@ -40,6 +40,20 @@ export const metadata: Metadata = {
 };
 
 /**
+ * Resolves the palette before the first paint, so the page never flashes the
+ * wrong one. `data-theme` is the resolved palette the stylesheet keys off;
+ * `data-theme-mode` is the reader's choice, which decides the selected pill in
+ * the theme switch. No stored value means "follow the operating system", so
+ * the storage read and the media query are tried independently — a private
+ * window that refuses storage still gets the system's palette.
+ *
+ * The key must stay in step with THEME_STORAGE_KEY in components/theme-switch.
+ * If this script never runs, no attribute is set and :root's dark palette
+ * stands, which is what the site shipped with before either existed.
+ */
+const themeBootstrap = `(function(){var r=document.documentElement;var m="auto";try{var v=localStorage.getItem("theme");if(v==="light"||v==="dark"){m=v}}catch(e){}var t="dark";try{if(m==="auto"){t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}else{t=m}}catch(e){t=m==="light"?"light":"dark"}r.setAttribute("data-theme-mode",m);r.setAttribute("data-theme",t)})()`;
+
+/**
  * Runs synchronously while the browser parses `<body>`, so `[data-reveal]`
  * elements are hidden before the first paint instead of flashing in after
  * hydration. If motion is reduced — or this script never runs — the class is
@@ -55,6 +69,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       suppressHydrationWarning
     >
       <body>
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
         <script dangerouslySetInnerHTML={{ __html: revealBootstrap }} />
         {children}
       </body>
