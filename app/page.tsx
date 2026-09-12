@@ -89,10 +89,7 @@ export default function Home() {
             <a href="#notes">Notes</a>
             <a href="#contact">Contact</a>
             <a className="nav-cta" href="#subscribe">Build notes</a>
-            <ExternalLink href={site.resumeUrl}>
-              Résumé
-              <Arrow />
-            </ExternalLink>
+            <a href={site.resumeUrl}>Résumé</a>
           </nav>
         </header>
       </div>

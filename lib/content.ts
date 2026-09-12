@@ -78,7 +78,7 @@ export const site = {
   role: 'AI Builder & Evangelist',
   email: 'austen@thearcades.me',
   bookingUrl: 'https://cal.com/austen-tucker-crowder/30min',
-  resumeUrl: 'https://www.thearcades.me/resume',
+  resumeUrl: '/resume',
   creativeUrl: 'https://www.thearcades.me',
   publishingUrl: 'https://freeplaypublishing.com',
   githubUrl: 'https://github.com/Arcadesys',

@@ -49,10 +49,7 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
             <Link href="/#notes">Notes</Link>
             <Link href="/#contact">Contact</Link>
             <Link className="nav-cta" href="/#subscribe">Build notes</Link>
-            <ExternalLink href={site.resumeUrl}>
-              Résumé
-              <span aria-hidden="true"> →</span>
-            </ExternalLink>
+            <a href={site.resumeUrl}>Résumé</a>
           </nav>
         </header>
       </div>
