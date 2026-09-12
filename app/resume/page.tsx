@@ -68,7 +68,7 @@ export default function ResumePage() {
           <a href={RESUME_PROFILE.siteUrl}>{RESUME_PROFILE.site}</a>
           <a href={RESUME_PROFILE.githubUrl}>{RESUME_PROFILE.github}</a>
         </div>
-        <a href={RESUME_PDF_PATH}>Download résumé PDF</a>
+        <a className={`btn btn-gradient ${styles.download}`} href={RESUME_PDF_PATH} download>Download résumé PDF</a>
       </header>
 
       <section className={styles.section} aria-labelledby="resume-summary">

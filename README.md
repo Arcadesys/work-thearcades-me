@@ -47,11 +47,13 @@ npm run build
 
 ### 2026-09-12 — Native professional résumé
 
+- **Download button refinement:** promoted the PDF link to the existing gradient button style, with 18px text, a minimum 48px target, keyboard focus, and native download behavior. Lint/build passed; preview measured 51px button height and 18px text with visible keyboard focus.
+
 - **Metric/budget:** one focused pass; Résumé navigation displays the résumé directly at `/resume` on this site, with no redirect or intermediary page.
 - **Source:** verified the live `https://www.thearcades.me/resume` against `Arcadesys/arcadeprofile` commit `fffd951ead7911d71e6c83b48ac462aa50164424`, `lib/resume.ts` and its résumé page. The older `content/resume/resume.md` is stale and was not copied. Structured factual content is preserved verbatim; a script checked parity. The existing PDF was downloaded from the live `/resume/pdf` endpoint and is served as `/resume.pdf` here. It is a snapshot and should be refreshed alongside future résumé edits.
 - **Keep:** static server-rendered résumé, portfolio header/footer and light/dark tokens, 18px body text, persistent underlined links, 48px link targets, local canonical URL, and same-tab local Résumé navigation on homepage, services and case studies. Case-study links now lead to this portfolio; existing project links retain their original destination.
 - **Passed:** lint, production build, whitespace check, preview homepage/services/Bunch navigation to `/resume`, keyboard skip link and 3px focus, dark desktop and light 320px rendering (document 305px, viewport 320px; no overflow). All résumé paragraphs/list items measured 18px. Authenticated Vercel requests return HTTP 200 for `/resume` and HTTP 200/application-pdf for `/resume.pdf`; unauthenticated preview requests encounter Vercel deployment protection rather than an application redirect.
-- **Preview:** https://work-thearcades-ctsv6pq5h-austen-tuckers-projects.vercel.app/resume
+- **Preview:** https://work-thearcades-cmi3m61xi-austen-tuckers-projects.vercel.app/resume
 - **Boundary:** review only; production release and removing the original résumé remain separate. No essays migrated. The résumé retains its canonical source contact details; the rest of the site's contact settings are unchanged.
 
 ### 2026-09-12 — Work with me
