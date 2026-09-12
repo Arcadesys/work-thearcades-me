@@ -582,6 +582,15 @@ textarea::placeholder {
   margin-bottom: 32px;
 }
 
+.hero-payoff {
+  max-width: 52ch;
+  margin-bottom: 20px;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--text);
+  text-wrap: pretty;
+}
+
 .beliefs {
   display: grid;
   gap: 1px;
@@ -1362,6 +1371,7 @@ textarea::placeholder {
 /* Subscribe */
 
 .subscribe {
+  scroll-margin-top: 8rem;
   max-width: 820px;
   margin-inline: auto;
   background: var(--surface);
@@ -1371,10 +1381,22 @@ textarea::placeholder {
   padding: clamp(24px, 4vw, 32px);
 }
 
+.case-page > .subscribe {
+  margin-top: clamp(40px, 6vw, 64px);
+}
+
+/* Leave room for the navigation when it wraps onto multiple lines. */
+@media (max-width: 900px) {
+  .subscribe {
+    scroll-margin-top: 14rem;
+  }
+}
+
 .subscribe .kicker {
   margin-bottom: 16px;
 }
 
+.subscribe h2,
 .subscribe h3 {
   font-weight: 300;
   font-size: clamp(1.5rem, 3.2vw, 2.1rem);
@@ -1388,7 +1410,7 @@ textarea::placeholder {
 .subscribe > p {
   font-size: 1rem;
   line-height: 1.65;
-  color: var(--text-muted);
+  color: var(--text-soft);
   max-width: 56ch;
   text-wrap: pretty;
   margin-bottom: 24px;
@@ -1401,15 +1423,51 @@ textarea::placeholder {
   align-items: center;
 }
 
+.subscribe label {
+  flex-basis: 100%;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--text);
+}
+
 .subscribe .field {
   flex: 1 1 240px;
   min-width: 0;
   width: auto;
   padding: 13px 16px;
+  min-height: 48px;
+  border: 2px solid var(--text-muted);
+}
+
+.subscribe .field::placeholder {
+  color: var(--text-muted);
+}
+
+.subscribe .btn {
+  min-height: 48px;
+  font-size: 1rem;
+}
+
+.subscribe :is(input, button):focus-visible {
+  outline: 3px solid var(--text);
+  outline-offset: 4px;
+}
+
+.subscribe .btn:disabled {
+  cursor: wait;
+  box-shadow: none;
+  filter: none;
 }
 
 .subscribe .form-note {
   margin-top: 14px;
+  margin-bottom: 0;
+  font-family: var(--font-sans), -apple-system, 'Segoe UI', sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text);
+  overflow-wrap: anywhere;
 }
 
 /* --------------------------------------------------------------------------
