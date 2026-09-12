@@ -91,6 +91,7 @@ export const hero = {
   headingAccent: 'useful',
   headingAfter: ' things.',
   tagline: 'Finding elegant solutions to inelegant problems for twenty years.',
+  signupPayoff: 'I write about building AI systems—what worked, what broke, and what I’d do differently. Get the build notes by email.',
   intro:
     'I build AI systems, own messy problems end to end, and help people get comfortable enough with new technology to actually use it. I’m happiest where product, engineering, communication, and a slightly unreasonable amount of curiosity overlap.',
 } as const;
@@ -319,10 +320,9 @@ export const notes: Note[] = [
 
 export const newsletter = {
   kicker: 'The newsletter',
-  heading: 'Build notes, delivered to your mailbox.',
-  body: 'I write about building AI systems in public — what worked, what broke, and what I’d do differently. Roughly monthly, no drip sequences, unsubscribe whenever.',
-  idleNote: 'Sent with Postmark. Your address stays with me.',
-  doneNote: 'Thanks — check your inbox to confirm.',
+  heading: 'Get the build notes.',
+  body: 'I write about building AI systems in public—what worked, what broke, and what I’d do differently.',
+  idleNote: 'Unsubscribe whenever.',
 } as const;
 
 export const commentBox = {

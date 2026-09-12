@@ -10,7 +10,6 @@ import {
   about,
   beliefs,
   caseStudies,
-  commentBox,
   commentCount,
   comments,
   contact,
@@ -88,7 +87,8 @@ export default function Home() {
             <a href="#about">About</a>
             <a href="#notes">Notes</a>
             <a href="#contact">Contact</a>
-            <ExternalLink className="nav-cta" href={site.resumeUrl}>
+            <a className="nav-cta" href="#subscribe">Build notes</a>
+            <ExternalLink href={site.resumeUrl}>
               Résumé
               <Arrow />
             </ExternalLink>
@@ -116,6 +116,9 @@ export default function Home() {
               <p className="hero-intro" data-reveal="4">
                 {hero.intro}
               </p>
+              <p className="hero-payoff" data-reveal="5">
+                {hero.signupPayoff}
+              </p>
               <div className="btn-row" data-reveal="5">
                 <a className="btn btn-gradient" href="#subscribe">
                   Get the build notes
@@ -124,10 +127,6 @@ export default function Home() {
                 <a className="btn btn-outline" href="#work">
                   See my work
                 </a>
-                <ExternalLink className="btn btn-ghost" href={site.bookingUrl}>
-                  Book time
-                  <Arrow />
-                </ExternalLink>
               </div>
             </div>
 
@@ -317,6 +316,16 @@ export default function Home() {
             </div>
           </article>
 
+          <div className="subscribe" id="subscribe" data-reveal="1">
+            <p className="label kicker">
+              <span className="dot" />
+              {newsletter.kicker}
+            </p>
+            <h3>{newsletter.heading}</h3>
+            <p>{newsletter.body}</p>
+            <SubscribeForm />
+          </div>
+
           <section className="comments" id="comments" data-reveal="2" aria-labelledby="comments-heading">
             <p className="label kicker" id="comments-heading">
               <span className="dot" />
@@ -358,16 +367,6 @@ export default function Home() {
               </li>
             ))}
           </ul>
-
-          <div className="subscribe" id="subscribe" data-reveal="1">
-            <p className="label kicker">
-              <span className="dot" />
-              {newsletter.kicker}
-            </p>
-            <h3>{newsletter.heading}</h3>
-            <p>{newsletter.body}</p>
-            <SubscribeForm />
-          </div>
         </section>
 
         {/* Contact */}
