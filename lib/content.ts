@@ -76,7 +76,7 @@ export type Comment = {
 export const site = {
   name: 'Austen Tucker-Crowder',
   role: 'AI Builder & Evangelist',
-  email: 'austen.crowder@gmail.com',
+  email: 'austen@thearcades.me',
   bookingUrl: 'https://cal.com/austen-tucker-crowder/30min',
   resumeUrl: 'https://www.thearcades.me/resume',
   creativeUrl: 'https://www.thearcades.me',
