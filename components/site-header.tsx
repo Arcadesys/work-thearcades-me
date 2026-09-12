@@ -41,9 +41,13 @@ export function SiteHeader({ home = false, current }: { home?: boolean; current?
   }
 
   function navigation(label: string) {
+    // The services page historically links directly to the build-log section.
+    const destinations = links.map(([text, href]) =>
+      current === '/work-with-me' && text === 'Blog' ? ['Notes', '/#notes'] : [text, href],
+    );
     return (
       <nav className="site-nav" aria-label={label}>
-        {links.map(([text, destination]) => (
+        {destinations.map(([text, destination]) => (
           <a
             key={text}
             href={home && destination.startsWith('/#') ? destination.slice(1) : destination}
