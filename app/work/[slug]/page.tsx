@@ -1,3 +1,5 @@
+import { relatedPosts } from '@/lib/blog';
+import { BlogPostList } from '@/components/blog-post-list';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -46,7 +48,7 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
             <Link href="/#work">Work</Link>
             <Link href="/work-with-me">Work with me</Link>
             <Link href="/#about">About</Link>
-            <Link href="/#notes">Notes</Link>
+            <Link href="/blog">Blog</Link>
             <Link href="/#contact">Contact</Link>
             <Link className="nav-cta" href="/#subscribe">Build notes</Link>
             <ExternalLink href={site.resumeUrl}>
@@ -126,6 +128,8 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
               <p className="principle-text">{study.principle}</p>
             </aside>
           )}
+
+          {relatedPosts(study).length > 0 && <section className="blog-related" aria-labelledby="related-build-logs"><h2 id="related-build-logs">Related build logs</h2><BlogPostList posts={relatedPosts(study)} /></section>}
 
           <div className="subscribe" id="subscribe">
             <p className="label kicker">

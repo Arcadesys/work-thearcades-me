@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { publicPosts, displayDate } from '@/lib/blog';
 import Link from 'next/link';
 import type { CaseStudy } from '@/lib/content';
 import { BrandMark } from '@/components/brand-mark';
@@ -14,7 +15,6 @@ import {
   comments,
   contact,
   evangelistTakeaways,
-  featuredNote,
   hero,
   lanes,
   newsletter,
@@ -65,6 +65,8 @@ function CaseSummary({ study }: { study: CaseStudy }) {
 const caseById = Object.fromEntries(caseStudies.map((study) => [study.id, study]));
 
 export default function Home() {
+  const latestPost = publicPosts()[0];
+  const featuredNote = latestPost ? { badge: 'Latest', date: displayDate(latestPost.publishDate), kind: 'Blog post', title: latestPost.title, body: latestPost.excerpt, href: `/blog/${latestPost.slug}` } : null;
   const builder = caseById['builder-case'];
   const owner = caseById['owner-case'];
   const evangelist = caseById['evangelist-case'];
@@ -86,7 +88,7 @@ export default function Home() {
             <a href="#work">Work</a>
             <a href="/work-with-me">Work with me</a>
             <a href="#about">About</a>
-            <a href="#notes">Notes</a>
+            <Link href="/blog">Blog</Link>
             <a href="#contact">Contact</a>
             <a className="nav-cta" href="#subscribe">Build notes</a>
             <ExternalLink href={site.resumeUrl}>
@@ -288,13 +290,13 @@ export default function Home() {
               </ExternalLink>
               .
             </p>
-            <ExternalLink className="label notes-all" href={site.blogUrl}>
+            <Link className="label notes-all" href="/blog">
               All posts
               <Arrow />
-            </ExternalLink>
+            </Link>
           </div>
 
-          <article className="featured-note" data-reveal="1" aria-labelledby="featured-note-title">
+          {featuredNote && <article className="featured-note" data-reveal="1" aria-labelledby="featured-note-title">
             <p className="label featured-meta">
               <span className="badge">{featuredNote.badge}</span>
               <span>{featuredNote.date}</span>
@@ -302,20 +304,20 @@ export default function Home() {
               <span>{featuredNote.kind}</span>
             </p>
             <h3 id="featured-note-title">
-              <ExternalLink href={featuredNote.href}>{featuredNote.title}</ExternalLink>
+              <Link href={featuredNote.href}>{featuredNote.title}</Link>
             </h3>
             <p>{featuredNote.body}</p>
             <div className="featured-actions">
-              <ExternalLink className="btn btn-outline" href={featuredNote.href}>
+              <Link className="btn btn-outline" href={featuredNote.href}>
                 Continue reading
                 <Arrow />
-              </ExternalLink>
+              </Link>
               <a className="label jump-comments" href="#comments">
                 {commentCount} comments
                 <Arrow dir="down" />
               </a>
             </div>
-          </article>
+          </article>}
 
           <div className="subscribe" id="subscribe" data-reveal="1">
             <p className="label kicker">
