@@ -92,9 +92,10 @@ export const hero = {
   headingAccent: 'useful',
   headingAfter: ' things.',
   tagline: 'Finding elegant solutions to inelegant problems for twenty years.',
+  curiosity: 'I’m happiest where product, engineering, communication, and a slightly unreasonable amount of curiosity overlap.',
   signupPayoff: 'I write about building AI systems—what worked, what broke, and what I’d do differently. Get the build notes by email.',
   intro:
-    'I build AI systems, own messy problems end to end, and help people get comfortable enough with new technology to actually use it. I’m happiest where product, engineering, communication, and a slightly unreasonable amount of curiosity overlap.',
+    'I build AI systems, own messy problems end to end, and help people get comfortable enough with new technology to actually use it.',
 } as const;
 
 export const workWithMe = {

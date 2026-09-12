@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { BrandMark } from '@/components/brand-mark';
+import { SiteHeader } from '@/components/site-header';
 import { ExternalLink } from '@/components/external-link';
 import { RichText } from '@/components/rich-text';
 import { SubscribeForm } from '@/components/subscribe-form';
@@ -38,23 +38,7 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
         Skip to content
       </a>
 
-      <div className="header-wrap">
-        <header className="site-header">
-          <Link className="brand" href="/">
-            <BrandMark />
-            <span className="visually-hidden">{site.name} — home</span>
-          </Link>
-          <nav className="site-nav label" aria-label="Main">
-            <Link href="/#work">Work</Link>
-            <Link href="/work-with-me">Work with me</Link>
-            <Link href="/#about">About</Link>
-            <Link href="/blog">Blog</Link>
-            <Link href="/#contact">Contact</Link>
-            <Link className="nav-cta" href="/#subscribe">Build notes</Link>
-            <a href={site.resumeUrl}>Résumé</a>
-          </nav>
-        </header>
-      </div>
+      <SiteHeader />
 
       <main id="main" tabIndex={-1}>
         <article className="shell case-page" data-accent={study.accent}>

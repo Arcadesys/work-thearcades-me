@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { publicPosts, displayDate } from '@/lib/blog';
 import Link from 'next/link';
 import type { CaseStudy } from '@/lib/content';
-import { BrandMark } from '@/components/brand-mark';
+import { SiteHeader } from '@/components/site-header';
 import { ExternalLink } from '@/components/external-link';
 import { RevealOnScroll } from '@/components/reveal-on-scroll';
 import { SubscribeForm } from '@/components/subscribe-form';
@@ -75,25 +75,9 @@ export default function Home() {
         Skip to content
       </a>
 
-      <div className="header-wrap">
-        <header className="site-header">
-          <a className="brand" href="#top">
-            <BrandMark />
-            <span className="visually-hidden">{site.name} — back to top</span>
-          </a>
-          <nav className="site-nav label" aria-label="Main">
-            <a href="#work">Work</a>
-            <a href="/work-with-me">Work with me</a>
-            <a href="#about">About</a>
-            <Link href="/blog">Blog</Link>
-            <a href="#contact">Contact</a>
-            <a className="nav-cta" href="#subscribe">Build notes</a>
-            <a href={site.resumeUrl}>Résumé</a>
-          </nav>
-        </header>
-      </div>
+      <SiteHeader home />
 
-      <main id="main" tabIndex={-1}>
+      <main className="home-page" id="main" tabIndex={-1}>
         {/* Hero */}
         <section className="shell section-top hero" id="top" aria-labelledby="hero-heading">
           <div className="hero-grid">
@@ -113,61 +97,24 @@ export default function Home() {
               <p className="hero-intro" data-reveal="4">
                 {hero.intro}
               </p>
-              <p className="hero-payoff" data-reveal="5">
-                {hero.signupPayoff}
-              </p>
               <div className="btn-row" data-reveal="5">
-                <a className="btn btn-gradient" href="#subscribe">
-                  Get the build notes
+                <a className="btn btn-gradient" href="#work">
+                  See my work
                   <Arrow />
                 </a>
-                <a className="btn btn-outline" href="#work">
-                  See my work
+                <a className="btn btn-outline" href="/work-with-me">
+                  Work with me
                 </a>
               </div>
             </div>
 
-            <ul className="beliefs" data-reveal="6" aria-label="How I build">
-              {beliefs.map((belief) => (
-                <li className="belief" key={belief.title} data-accent={belief.accent}>
-                  <p className="belief-title">
-                    <span className="dot-sm" />
-                    {belief.title}
-                  </p>
-                  <p>{belief.body}</p>
-                </li>
-              ))}
-            </ul>
+
           </div>
         </section>
 
         <div className="shell">
           <hr className="rule" />
         </div>
-
-        {/* How I work */}
-        <section className="shell section" aria-labelledby="lanes-heading">
-          <Kicker>How I work</Kicker>
-          <h2 className="h2" id="lanes-heading">
-            Builder. Owner. Evangelist. Advocate.
-          </h2>
-          <p className="lede">
-            Four lanes, one operating system: understand the real problem, make the thing, and bring people with me.
-          </p>
-          <div className="lane-grid">
-            {lanes.map((lane, index) => (
-              <div className="lane" key={lane.number} data-accent={lane.accent} data-reveal={index + 1}>
-                <span className="lane-number">{lane.number}</span>
-                <h3>{lane.title}</h3>
-                <p>{lane.body}</p>
-                <a className="label lane-link" href={lane.href}>
-                  {lane.link}
-                  <Arrow />
-                </a>
-              </div>
-            ))}
-          </div>
-        </section>
 
         {/* Selected work */}
         <section className="shell section-flush-top" id="work" aria-labelledby="work-heading">
@@ -238,6 +185,41 @@ export default function Home() {
           </article>
         </section>
 
+        {/* How I work */}
+        <section className="shell section" aria-labelledby="lanes-heading">
+          <Kicker>How I work</Kicker>
+          <h2 className="h2" id="lanes-heading">
+            Builder. Owner. Evangelist. Advocate.
+          </h2>
+          <p className="lede">
+            Four lanes, one operating system: understand the real problem, make the thing, and bring people with me.
+          </p>
+          <div className="lane-grid">
+            {lanes.map((lane, index) => (
+              <div className="lane" key={lane.number} data-accent={lane.accent} data-reveal={index + 1}>
+                <span className="lane-number">{lane.number}</span>
+                <h3>{lane.title}</h3>
+                <p>{lane.body}</p>
+                <a className="label lane-link" href={lane.href}>
+                  {lane.link}
+                  <Arrow />
+                </a>
+              </div>
+            ))}
+          </div>
+            <ul className="beliefs" data-reveal="6" aria-label="How I build">
+              {beliefs.map((belief) => (
+                <li className="belief" key={belief.title} data-accent={belief.accent}>
+                  <p className="belief-title">
+                    <span className="dot-sm" />
+                    {belief.title}
+                  </p>
+                  <p>{belief.body}</p>
+                </li>
+              ))}
+            </ul>
+        </section>
+
         {/* Quote */}
         <section className="quote-band" aria-label="How I think about text">
           <div className="quote-inner">
@@ -258,6 +240,7 @@ export default function Home() {
                 {about.heading}
               </h2>
               <p className="lede">{about.lede}</p>
+              <p className="lede about-curiosity">{hero.curiosity}</p>
             </div>
             <ul className="facts">
               {about.facts.map((fact, index) => (
