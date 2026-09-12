@@ -6,7 +6,8 @@ import { BrandMark } from '@/components/brand-mark';
 import { ExternalLink } from '@/components/external-link';
 import { RichText } from '@/components/rich-text';
 import { ThemeSwitch } from '@/components/theme-switch';
-import { STAR_PARTS, caseStudies, caseStudyBySlug, hasStar, site } from '@/lib/content';
+import { SubscribeForm } from '@/components/subscribe-form';
+import { STAR_PARTS, caseStudies, caseStudyBySlug, hasStar, newsletter, site } from '@/lib/content';
 
 export function generateStaticParams() {
   return caseStudies.map((study) => ({ slug: study.slug }));
@@ -47,7 +48,8 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
             <Link href="/#about">About</Link>
             <Link href="/#notes">Notes</Link>
             <Link href="/#contact">Contact</Link>
-            <ExternalLink className="nav-cta" href={site.resumeUrl}>
+            <Link className="nav-cta" href="/#subscribe">Build notes</Link>
+            <ExternalLink href={site.resumeUrl}>
               Résumé
               <span aria-hidden="true"> →</span>
             </ExternalLink>
@@ -126,17 +128,27 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
             </aside>
           )}
 
+          <div className="subscribe" id="subscribe">
+            <p className="label kicker">
+              <span className="dot" />
+              {newsletter.kicker}
+            </p>
+            <h2>{newsletter.heading}</h2>
+            <p>{newsletter.body}</p>
+            <SubscribeForm />
+          </div>
+
           <div className="case-page-footer">
             <p className="lede">
               Want the longer version, or the parts that don’t fit on a page? I’m happy to walk
               through it.
             </p>
             <div className="btn-row">
-              <ExternalLink className="btn btn-gradient" href={site.bookingUrl}>
+              <ExternalLink className="btn btn-outline" href={site.bookingUrl}>
                 Grab time on my calendar
                 <span aria-hidden="true"> →</span>
               </ExternalLink>
-              <Link className="btn btn-outline" href="/#work">
+              <Link className="btn btn-ghost" href="/#work">
                 See the other work
               </Link>
             </div>
