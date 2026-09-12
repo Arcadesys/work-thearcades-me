@@ -96,6 +96,46 @@ export const hero = {
     'I build AI systems, own messy problems end to end, and help people get comfortable enough with new technology to actually use it. I’m happiest where product, engineering, communication, and a slightly unreasonable amount of curiosity overlap.',
 } as const;
 
+export const workWithMe = {
+  title: 'Work with me',
+  description: 'AI enablement, team workshops, and websites and apps for business, personal, and creative projects. Sliding-scale pricing available.',
+  intro: 'Give your team AI superpowers. Get that website or app built. I help people learn useful tools and turn ideas into things they can actually use.',
+  bookingLabel: 'Let’s talk about your project',
+  services: [
+    {
+      id: 'ai-enablement',
+      title: 'Give your team AI superpowers',
+      body: 'I help teams put AI to work: finding useful starting points, building practical workflows, and teaching people how to use the tools and check the results.',
+      includes: ['Team workshops', 'Workflow coaching', 'Hands-on prototyping'],
+      detail: 'Bring one recurring task to a workshop and leave with an AI-assisted approach you have tried and know how to check.',
+      exampleSlug: 'ai-enablement',
+    },
+    {
+      id: 'websites-and-apps',
+      title: 'Websites and apps',
+      body: 'Business tools, personal projects, creative ideas—or an existing website that needs help. Tell me what you want to make or improve, and we’ll define a useful first version.',
+      includes: ['Website improvements', 'Small custom applications', 'Prototypes'],
+      detail: 'Not every project needs AI. We’ll choose the tools that fit yours.',
+      exampleSlug: 'bunch',
+    },
+  ],
+  firstStep: {
+    title: 'A useful first step',
+    steps: [
+      'Start with a free 30-minute introductory call.',
+      'Agree on the scope and price before work begins.',
+      'Work in a bounded project with a clear finish.',
+    ],
+    support: 'Ongoing support is agreed separately.',
+  },
+  pricing: {
+    title: 'Pricing that fits the project',
+    body: 'Pricing depends on scope. Sliding-scale options are available, especially for individuals, artists, and small community organizations. If money is tight, tell me what you have in mind and we’ll see what we can work out.',
+    welcome: 'Small nonprofits and LGBTQ organizations are especially welcome.',
+  },
+  closing: 'Bring an idea, a recurring headache, or a website that needs some attention.',
+} as const;
+
 export const beliefs = [
   {
     title: 'Start small. Ship fast.',

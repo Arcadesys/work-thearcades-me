@@ -511,6 +511,133 @@ textarea::placeholder {
 
 .site-nav a {
   color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+}
+
+.site-nav a[aria-current="page"] {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 2px;
+}
+
+.contact-services-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  margin-bottom: 18px;
+  font-size: 1.125rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Consulting offers share the portfolio palette without reveal animations. */
+.services-main {
+  padding-block: clamp(48px, 7vw, 96px);
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+.services-intro {
+  max-width: 48rem;
+  margin-bottom: 48px;
+}
+
+.services-intro h1 {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  line-height: 1.15;
+  margin-bottom: 24px;
+}
+
+.services-main h2 {
+  font-size: clamp(1.6rem, 3vw, 2rem);
+  line-height: 1.3;
+}
+
+.services-main p,
+.services-main li {
+  color: var(--text-soft);
+}
+
+.service-panels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+}
+
+.service-panel {
+  padding: clamp(24px, 3vw, 40px);
+  border: 1px solid var(--text-muted);
+  border-radius: var(--radius);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  min-width: 0;
+}
+
+.services-main ul,
+.services-main ol {
+  list-style: revert;
+  padding-left: 1.5em;
+}
+
+.services-main li + li {
+  margin-top: 10px;
+}
+
+.services-main .btn {
+  min-height: 48px;
+  white-space: normal;
+  text-align: center;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  max-width: 100%;
+}
+
+.service-example {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.services-details {
+  max-width: 48rem;
+  margin: 64px auto 0;
+  display: grid;
+  gap: 64px;
+}
+
+.services-details section > * + * {
+  margin-top: 24px;
+}
+
+.services-page a:focus-visible,
+.contact-services-link:focus-visible {
+  outline: 3px solid var(--text);
+  outline-offset: 5px;
+}
+
+.services-page .footer-row {
+  font-size: 1.125rem;
+}
+
+.services-page .footer-row a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+}
+
+@media (max-width: 900px) {
+  .service-panels {
+    grid-template-columns: 1fr;
+  }
 }
 
 .site-nav a:hover {

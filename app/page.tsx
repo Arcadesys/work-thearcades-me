@@ -84,6 +84,7 @@ export default function Home() {
           </a>
           <nav className="site-nav label" aria-label="Main">
             <a href="#work">Work</a>
+            <a href="/work-with-me">Work with me</a>
             <a href="#about">About</a>
             <a href="#notes">Notes</a>
             <a href="#contact">Contact</a>
@@ -379,6 +380,7 @@ export default function Home() {
               {contact.headingAfter}
             </h2>
             <p>{contact.body}</p>
+            <a className="contact-services-link" href="/work-with-me">Work with me <Arrow /></a>
             <div className="btn-row">
               <ExternalLink className="btn btn-lg btn-gradient" href={site.bookingUrl}>
                 Grab time on my calendar
