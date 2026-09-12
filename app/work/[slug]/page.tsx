@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { BrandMark } from '@/components/brand-mark';
 import { ExternalLink } from '@/components/external-link';
 import { RichText } from '@/components/rich-text';
 import { STAR_PARTS, caseStudies, caseStudyBySlug, hasStar, site } from '@/lib/content';
@@ -37,8 +38,7 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
       <div className="header-wrap">
         <header className="site-header">
           <Link className="brand" href="/">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/the-arcades-logo.svg" alt="" width={244} height={34} />
+            <BrandMark />
             <span className="visually-hidden">{site.name} — home</span>
           </Link>
           <nav className="site-nav label" aria-label="Main">

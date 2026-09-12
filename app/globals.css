@@ -16,24 +16,64 @@
   --text-soft: #c9c9d8;
   --text-muted: #9a9ab0;
 
-  /* Accents */
+  /* Accents. Each keeps an `-rgb` channel triple alongside it so washes,
+     borders and glows can be mixed at any alpha from the same source of
+     truth — swap the palette once and every derived colour follows. */
   --pink: #ff3cac;
+  --pink-rgb: 255 60 172;
   --pink-light: #ff6b9d;
+  --pink-light-rgb: 255 107 157;
   --orange: #ff8a00;
+  --orange-rgb: 255 138 0;
   --amber: #ffaa00;
+  --amber-rgb: 255 170 0;
   --gradient: linear-gradient(135deg, var(--orange), var(--pink));
 
   /* Lines */
-  --line: rgba(255, 138, 0, 0.2);
+  --line: rgb(var(--orange-rgb) / 0.2);
+  --link-underline: rgb(var(--pink-rgb) / 0.4);
 
-  /* Glow — neutralised in the high-contrast / reduced-transparency blocks
-     at the bottom of this file. */
-  --glow-pink: 0 0 10px var(--pink), 0 0 20px var(--pink), 0 0 40px var(--pink-light);
-  --glow-pink-sm: 0 0 10px var(--pink), 0 0 20px var(--pink);
-  --glow-orange-sm: 0 0 10px var(--orange), 0 0 24px var(--amber);
-  --glow-rose-sm: 0 0 10px var(--pink-light), 0 0 20px var(--pink-light);
-  --glow-amber-sm: 0 0 10px var(--amber), 0 0 24px var(--orange);
-  --ring-pink: 0 0 20px rgba(255, 60, 172, 0.4);
+  /* Background washes behind the page. */
+  --wash-warm: 0.1;
+  --wash-pink: 0.12;
+
+  /* Chrome */
+  --header-bg: rgba(10, 5, 20, 0.85);
+  --surface-inset: rgba(0, 0, 0, 0.3);
+  --field-bg: var(--bg);
+  --field-line: var(--line);
+  --selection-bg: rgb(var(--pink-rgb) / 0.35);
+  --selection-fg: #fff;
+  --placeholder: #6f6f88;
+
+  /* Elevation. Dark mode leans on the neon bloom instead, so these stay
+     off until the light palette switches them on. */
+  --elev-1: none;
+  --elev-2: none;
+
+  /* Neon bloom master switch: 1 = on, 0 = off. Every glow below multiplies
+     its alpha by this, so the light palette and the high-contrast block can
+     retire the whole effect by flipping one number. */
+  --bloom: 1;
+
+  --glow-pink:
+    0 0 10px rgb(var(--pink-rgb) / var(--bloom)),
+    0 0 20px rgb(var(--pink-rgb) / var(--bloom)),
+    0 0 40px rgb(var(--pink-light-rgb) / var(--bloom));
+  --glow-pink-sm:
+    0 0 10px rgb(var(--pink-rgb) / var(--bloom)),
+    0 0 20px rgb(var(--pink-rgb) / var(--bloom));
+  --glow-orange-sm:
+    0 0 10px rgb(var(--orange-rgb) / var(--bloom)),
+    0 0 24px rgb(var(--amber-rgb) / var(--bloom));
+  --glow-rose-sm:
+    0 0 10px rgb(var(--pink-light-rgb) / var(--bloom)),
+    0 0 20px rgb(var(--pink-light-rgb) / var(--bloom));
+  --glow-amber-sm:
+    0 0 10px rgb(var(--amber-rgb) / var(--bloom)),
+    0 0 24px rgb(var(--orange-rgb) / var(--bloom));
+  --glow-brand: drop-shadow(0 0 8px rgb(var(--pink-rgb) / calc(0.45 * var(--bloom))));
+  --ring-pink: 0 0 20px rgb(var(--pink-rgb) / calc(0.4 * var(--bloom)));
 
   /* Type
      NOTE: the design specifies 10px for these mono micro-labels. Raised to
@@ -47,41 +87,122 @@
   --radius: 12px;
   --radius-sm: 8px;
 
-  color-scheme: dark;
+  /* Let the UA paint form controls, scrollbars and the canvas to match
+     whichever palette the operating system asked for. */
+  color-scheme: light dark;
 }
 
-/* Per-accent theming. Set with data-accent on a card/section. */
+/* Per-accent theming. Set with data-accent on a card/section.
+   Each variant supplies only its hue; the shared block below mixes the
+   border/wash/halo from that hue and the alpha tokens, so the light palette
+   can re-tune every accent at once by overriding the alphas. */
+[data-accent] {
+  --accent-line-alpha: 0.28;
+  --accent-wash-alpha: 0.08;
+  --accent-edge-alpha: 0.45;
+  --accent-halo-alpha: 0.25;
+
+  --accent-line: rgb(var(--accent-rgb) / var(--accent-line-alpha));
+  --accent-wash: rgb(var(--accent-rgb) / var(--accent-wash-alpha));
+  --accent-edge: rgb(var(--accent-rgb) / var(--accent-edge-alpha));
+  --accent-halo: rgb(var(--accent-rgb) / var(--accent-halo-alpha));
+}
 [data-accent='pink'] {
   --accent: var(--pink);
-  --accent-line: rgba(255, 60, 172, 0.28);
-  --accent-wash: rgba(255, 60, 172, 0.08);
-  --accent-edge: rgba(255, 60, 172, 0.4);
-  --accent-halo: rgba(255, 60, 172, 0.25);
+  --accent-rgb: var(--pink-rgb);
+  --accent-edge-alpha: 0.4;
   --accent-glow: var(--glow-pink-sm);
 }
 [data-accent='orange'] {
   --accent: var(--orange);
-  --accent-line: rgba(255, 138, 0, 0.28);
-  --accent-wash: rgba(255, 138, 0, 0.08);
-  --accent-edge: rgba(255, 138, 0, 0.45);
-  --accent-halo: rgba(255, 138, 0, 0.22);
+  --accent-rgb: var(--orange-rgb);
+  --accent-halo-alpha: 0.22;
   --accent-glow: var(--glow-orange-sm);
 }
 [data-accent='rose'] {
   --accent: var(--pink-light);
-  --accent-line: rgba(255, 107, 157, 0.28);
-  --accent-wash: rgba(255, 107, 157, 0.08);
-  --accent-edge: rgba(255, 107, 157, 0.45);
-  --accent-halo: rgba(255, 107, 157, 0.25);
+  --accent-rgb: var(--pink-light-rgb);
   --accent-glow: var(--glow-rose-sm);
 }
 [data-accent='amber'] {
   --accent: var(--amber);
-  --accent-line: rgba(255, 170, 0, 0.28);
-  --accent-wash: rgba(255, 170, 0, 0.08);
-  --accent-edge: rgba(255, 170, 0, 0.45);
-  --accent-halo: rgba(255, 170, 0, 0.22);
+  --accent-rgb: var(--amber-rgb);
+  --accent-halo-alpha: 0.22;
   --accent-glow: var(--glow-amber-sm);
+}
+
+/* --------------------------------------------------------------------------
+   Light palette
+
+   Driven purely by the operating system's appearance setting — there is no
+   toggle, no cookie and no localStorage, so the site never disagrees with the
+   rest of the machine. Dark stays the default in :root above, so a user agent
+   that cannot evaluate this query still gets the palette the site shipped with.
+   Note that per the Media Queries spec a browser reporting *no* preference
+   matches `light`, so preference-less clients now land on the light palette.
+
+   The hues are the same brand neons, darkened until each one clears WCAG AA
+   (4.5:1) as text on white; the neon bloom is switched off entirely, because
+   a glow on a light ground blurs letterforms rather than lifting them.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* Surfaces */
+    --bg: #fbf9fd;
+    --surface: #ffffff;
+    --surface-hover: #f4f0f8;
+    --surface-raised: #ffffff;
+    --surface-sunken: rgb(23 18 31 / 0.05);
+    --surface-inset: rgb(23 18 31 / 0.04);
+
+    /* Text — 17.6:1, 12.8:1 and 8.8:1 on the page background. */
+    --text: #17121f;
+    --text-soft: #332b41;
+    --text-muted: #4d4459;
+
+    /* Accents — 5.5:1, 8.5:1, 5.3:1 and 5.7:1 as text on white. The "light"
+       pink is the hover state, so here it goes darker, not brighter. */
+    --pink: #c01a6f;
+    --pink-rgb: 192 26 111;
+    --pink-light: #8f1250;
+    --pink-light-rgb: 143 18 80;
+    --orange: #b34700;
+    --orange-rgb: 179 71 0;
+    --amber: #8a5a00;
+    --amber-rgb: 138 90 0;
+
+    /* Lines carry the page's structure, so they are held at 3:1 rather than
+       left as a hairline tint. */
+    --line: rgb(var(--orange-rgb) / 0.7);
+    --link-underline: rgb(var(--pink-rgb) / 0.55);
+
+    --wash-warm: 0.07;
+    --wash-pink: 0.07;
+
+    /* Chrome */
+    --header-bg: rgb(255 255 255 / 0.88);
+    --field-bg: #ffffff;
+    --field-line: rgb(23 18 31 / 0.55);
+    --selection-bg: rgb(var(--pink-rgb) / 0.22);
+    --selection-fg: #17121f;
+    --placeholder: #5b5369;
+
+    /* Depth comes from real shadows here instead of the neon halo. */
+    --elev-1: 0 1px 2px rgb(23 18 31 / 0.07), 0 6px 20px rgb(23 18 31 / 0.07);
+    --elev-2: 0 2px 6px rgb(23 18 31 / 0.1), 0 14px 34px rgb(23 18 31 / 0.11);
+
+    --bloom: 0;
+  }
+
+  /* Deeper ink needs more alpha than neon did to read at the same weight.
+     Declared after the per-accent blocks so it wins on equal specificity. */
+  [data-accent] {
+    --accent-line-alpha: 0.6;
+    --accent-wash-alpha: 0.07;
+    --accent-edge-alpha: 0.7;
+    --accent-halo-alpha: 0.18;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -104,8 +225,8 @@ body {
   overflow-x: hidden;
   background-color: var(--bg);
   background-image:
-    radial-gradient(60rem 40rem at 18% 28%, rgba(255, 138, 0, 0.1), transparent 70%),
-    radial-gradient(55rem 38rem at 82% 18%, rgba(255, 60, 172, 0.12), transparent 70%);
+    radial-gradient(60rem 40rem at 18% 28%, rgb(var(--orange-rgb) / var(--wash-warm)), transparent 70%),
+    radial-gradient(55rem 38rem at 82% 18%, rgb(var(--pink-rgb) / var(--wash-pink)), transparent 70%);
   background-attachment: fixed;
   color: var(--text);
   font-family: var(--font-sans), -apple-system, 'Segoe UI', sans-serif;
@@ -157,13 +278,13 @@ textarea:focus-visible {
 }
 
 ::selection {
-  background: rgba(255, 60, 172, 0.35);
-  color: #fff;
+  background: var(--selection-bg);
+  color: var(--selection-fg);
 }
 
 input::placeholder,
 textarea::placeholder {
-  color: #6f6f88;
+  color: var(--placeholder);
 }
 
 /* --------------------------------------------------------------------------
@@ -217,7 +338,7 @@ textarea::placeholder {
   height: 9px;
   border-radius: 999px;
   background: var(--gradient);
-  box-shadow: 0 0 12px rgba(255, 60, 172, 0.7);
+  box-shadow: 0 0 12px rgb(var(--pink-rgb) / calc(0.7 * var(--bloom)));
   flex-shrink: 0;
 }
 
@@ -249,7 +370,7 @@ textarea::placeholder {
 
 .prose-link {
   color: var(--pink);
-  border-bottom: 1px solid rgba(255, 60, 172, 0.4);
+  border-bottom: 1px solid var(--link-underline);
 }
 
 .prose-link:hover {
@@ -330,7 +451,7 @@ textarea::placeholder {
   padding: 12px 18px;
   background: var(--surface);
   color: var(--text);
-  border: 1px solid rgba(255, 138, 0, 0.45);
+  border: 1px solid rgb(var(--orange-rgb) / 0.45);
   border-radius: var(--radius-sm);
   z-index: 99;
 }
@@ -350,7 +471,7 @@ textarea::placeholder {
 .site-header {
   max-width: var(--shell);
   margin-inline: auto;
-  background: rgba(10, 5, 20, 0.85);
+  background: var(--header-bg);
   backdrop-filter: blur(12px);
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -368,10 +489,16 @@ textarea::placeholder {
   flex-shrink: 0;
 }
 
+/* The wordmark is wrapped in <picture> so the palette can swap the asset;
+   the wrapper must not become a layout box of its own. */
+.brand picture {
+  display: flex;
+}
+
 .brand img {
   height: 34px;
   width: auto;
-  filter: drop-shadow(0 0 8px rgba(255, 60, 172, 0.45));
+  filter: var(--glow-brand);
 }
 
 .site-nav {
@@ -403,7 +530,7 @@ textarea::placeholder {
 .site-nav .nav-cta:hover {
   background: var(--pink);
   color: var(--bg);
-  box-shadow: 0 0 16px rgba(255, 60, 172, 0.4);
+  box-shadow: 0 0 16px rgb(var(--pink-rgb) / calc(0.4 * var(--bloom)));
   text-shadow: none;
 }
 
@@ -462,7 +589,7 @@ textarea::placeholder {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
-  box-shadow: 0 0 30px rgba(255, 60, 172, 0.12);
+  box-shadow: 0 0 30px rgb(var(--pink-rgb) / calc(0.12 * var(--bloom)));
 }
 
 .belief {
@@ -525,7 +652,7 @@ textarea::placeholder {
   font-size: 0.8rem;
   letter-spacing: var(--label-tracking);
   color: var(--accent);
-  text-shadow: 0 0 10px var(--accent-halo);
+  text-shadow: 0 0 10px rgb(var(--accent-rgb) / calc(var(--accent-halo-alpha) * var(--bloom)));
 }
 
 .lane h3 {
@@ -584,7 +711,7 @@ textarea::placeholder {
 .case-featured {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
   align-items: start;
-  box-shadow: 0 0 30px rgba(255, 60, 172, 0.16);
+  box-shadow: 0 0 30px rgb(var(--pink-rgb) / calc(0.16 * var(--bloom)));
 }
 
 .case-split {
@@ -976,9 +1103,9 @@ textarea::placeholder {
 
 .featured-note {
   background: var(--surface);
-  border: 1px solid rgba(255, 60, 172, 0.28);
+  border: 1px solid rgb(var(--pink-rgb) / 0.28);
   border-radius: var(--radius);
-  box-shadow: 0 0 30px rgba(255, 60, 172, 0.18);
+  box-shadow: 0 0 30px rgb(var(--pink-rgb) / calc(0.18 * var(--bloom)));
   padding: clamp(24px, 3.4vw, 40px);
   margin-bottom: 18px;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -986,7 +1113,7 @@ textarea::placeholder {
 
 .featured-note:hover {
   border-color: var(--pink);
-  box-shadow: 0 0 34px rgba(255, 60, 172, 0.28);
+  box-shadow: 0 0 34px rgb(var(--pink-rgb) / calc(0.28 * var(--bloom)));
 }
 
 .featured-meta {
@@ -999,8 +1126,8 @@ textarea::placeholder {
 
 .badge {
   color: var(--pink);
-  border: 1px solid rgba(255, 60, 172, 0.4);
-  background: rgba(255, 60, 172, 0.08);
+  border: 1px solid rgb(var(--pink-rgb) / 0.4);
+  background: rgb(var(--pink-rgb) / 0.08);
   border-radius: 999px;
   padding: 6px 12px;
 }
@@ -1055,7 +1182,7 @@ textarea::placeholder {
 /* Comments */
 
 .comments {
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--surface-inset);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: clamp(22px, 3vw, 32px);
@@ -1085,7 +1212,9 @@ textarea::placeholder {
   border-radius: 999px;
   object-fit: cover;
   border: 2px solid var(--pink);
-  box-shadow: 0 0 10px rgba(255, 60, 172, 0.4), 0 0 18px rgba(255, 138, 0, 0.25);
+  box-shadow:
+    0 0 10px rgb(var(--pink-rgb) / calc(0.4 * var(--bloom))),
+    0 0 18px rgb(var(--orange-rgb) / calc(0.25 * var(--bloom)));
   flex-shrink: 0;
 }
 
@@ -1137,8 +1266,8 @@ textarea::placeholder {
 
 .field {
   width: 100%;
-  background: var(--bg);
-  border: 1px solid var(--line);
+  background: var(--field-bg);
+  border: 1px solid var(--field-line);
   border-radius: var(--radius-sm);
   padding: 14px 16px;
   color: var(--text);
@@ -1238,7 +1367,7 @@ textarea::placeholder {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  box-shadow: 0 0 30px rgba(255, 60, 172, 0.3);
+  box-shadow: 0 0 30px rgb(var(--pink-rgb) / calc(0.3 * var(--bloom)));
   padding: clamp(24px, 4vw, 32px);
 }
 
@@ -1373,6 +1502,40 @@ textarea::placeholder {
 }
 
 /* --------------------------------------------------------------------------
+   Light palette — component adjustments
+
+   Tokens cover most of the switch; these are the few places where dark mode
+   used the neon bloom itself as the depth cue and light mode needs a real
+   shadow in its place.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-color-scheme: light) {
+  .site-header,
+  .beliefs,
+  .case-featured,
+  .featured-note,
+  .subscribe {
+    box-shadow: var(--elev-1);
+  }
+
+  .lane:hover,
+  .case:hover,
+  .featured-note:hover {
+    box-shadow: var(--elev-2);
+  }
+
+  /* White-on-white is not a hover state. */
+  .earlier a:hover {
+    background: var(--surface-hover);
+  }
+
+  /* Brightening a dark gradient washes it out; hover goes deeper instead. */
+  .btn-gradient:hover {
+    filter: brightness(0.92);
+  }
+}
+
+/* --------------------------------------------------------------------------
    Accessibility preferences
    -------------------------------------------------------------------------- */
 
@@ -1403,13 +1566,9 @@ textarea::placeholder {
    contrast — glow blurs letterforms, which hurts low-vision reading. */
 @media (prefers-contrast: more) {
   :root {
-    --glow-pink: none;
-    --glow-pink-sm: none;
-    --glow-orange-sm: none;
-    --glow-rose-sm: none;
-    --glow-amber-sm: none;
+    --bloom: 0;
     --text-muted: #c9c9d8;
-    --line: rgba(255, 138, 0, 0.55);
+    --line: rgb(var(--orange-rgb) / 0.55);
   }
 
   body {
@@ -1436,6 +1595,28 @@ textarea::placeholder {
   .lane-number,
   .stat {
     text-shadow: none;
+  }
+}
+
+/* The block above assumes light text on a dark ground; on the light palette
+   the same request means darker ink and firmer rules. */
+@media (prefers-contrast: more) and (prefers-color-scheme: light) {
+  :root {
+    --text-muted: #2f2839;
+    --line: rgb(var(--orange-rgb) / 0.85);
+    --elev-1: none;
+    --elev-2: none;
+  }
+
+  .site-header,
+  .beliefs,
+  .case-featured,
+  .featured-note,
+  .subscribe,
+  .lane:hover,
+  .case:hover,
+  .featured-note:hover {
+    border-color: var(--accent, var(--pink));
   }
 }
 
