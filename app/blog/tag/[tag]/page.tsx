@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { allTags, publicPosts, postTags } from '@/lib/blog';
 import { BlogPostList } from '@/components/blog-post-list';
+export const dynamicParams = false;
 export function generateStaticParams() { return allTags().map(tag => ({ tag })); }
 export async function generateMetadata({ params }: PageProps<'/blog/tag/[tag]'>) {
   const { tag } = await params;

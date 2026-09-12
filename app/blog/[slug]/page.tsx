@@ -5,6 +5,7 @@ import remarkGfm from 'remark-gfm';
 import { PostTags } from '@/components/blog-post-list';
 import { publicPosts, postBySlug, displayDate, displayBuildDate, relatedWork } from '@/lib/blog';
 import sources from '@/content/blog-sources.json';
+export const dynamicParams = false;
 export function generateStaticParams() { return publicPosts().map(post => ({ slug: post.slug })); }
 export async function generateMetadata({ params }: PageProps<'/blog/[slug]'>) {
   const post = postBySlug((await params).slug);
