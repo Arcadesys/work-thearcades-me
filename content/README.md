@@ -30,3 +30,22 @@ the separate publishDate is the site's publication timestamp, not the build date
 Clear work/AI essays are in scope for later batches. Personal crossover pieces
 remain subject to editorial review. No redirects or original-page retirement in
 this slice. Newsletter delivery, comments, RSS and sitemap are not added here.
+
+## September 12 archive batch
+
+The user selected eleven articles, including the two previously held editorial
+candidates. Nine archive manuscripts receive a first publication date on this
+site; Four Stages and Novel T retain their exact published ArcadeProfile files
+and dates. Original sources remain intact. This batch does not retire old URLs.
+
+blog-sources.json records exact file hashes for published imports and exact
+Markdown-body hashes for archive imports. Archive metadata is adapted to this
+site; the prose remains unchanged. The page suppresses an identical leading title
+to avoid duplicate h1s. Suggested topic/project tags are metadata only.
+
+Bunch Part III uses the full Group Photo draft; its alternative outline is not
+published. The Fox and the Eval keeps the Moxie image with a byte-identical local
+copy. Its link to the unselected Photos Aren't Sticky draft renders as plain text;
+Bunch II's handoff-document link resolves to the imported Fox and the Eval article.
+The older publishing-pipeline accounts remain historical descriptions, not new
+claims about the current site architecture. No email is sent by this import.

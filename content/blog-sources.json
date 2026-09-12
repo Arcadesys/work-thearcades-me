@@ -5,5 +5,111 @@
     "path": "content/posts/bunch/bunch.md",
     "commit": "fffd951ead7911d71e6c83b48ac462aa50164424",
     "sha256": "6701b5ac28add1a7251aeefb1c538239089676c7033b069c3a1f3ee8bc990e37"
+  },
+  "context-engineering-is-a-soda-gun": {
+    "kind": "archive",
+    "repository": "Arcadesys/writing-archive",
+    "path": "arcade-blog/context-engineering-is-a-soda-gun.md",
+    "sourceStatus": "draft",
+    "sourceSha256": "ea75b0ffcd89f13cd27d0a1527b2ed4e4c7b067dd027dee429d64625a5b6614e",
+    "bodySha256": "7ca112d35dbc8cfd5c66da6c070b152c832415b722940485e7cf05fc6794bd3f",
+    "importedAt": "2026-09-12T16:55:26.466Z"
+  },
+  "bunch-part-two": {
+    "kind": "archive",
+    "repository": "Arcadesys/writing-archive",
+    "path": "blog/arcadesblog/bunch-part-two.md",
+    "sourceStatus": "draft",
+    "sourceSha256": "50edb212e04b6620941b1e6849748ae1fcb4568c4514c644751e77b43a62c288",
+    "bodySha256": "66cbfad29883418d66430d9df7be785ecbf7741441c6d629a83327ae645a33e1",
+    "importedAt": "2026-09-12T16:55:26.466Z"
+  },
+  "the-fox-and-the-eval": {
+    "kind": "archive",
+    "repository": "Arcadesys/writing-archive",
+    "path": "essays/singularity-log/_drafts/the-fox-and-the-eval.md",
+    "sourceStatus": "draft",
+    "sourceSha256": "55b1f586c1d696e6f4deec7189f75bc1f2201f0da8c2bf2bfdffc455f15e93d6",
+    "bodySha256": "c9c6ce40ce90f1ba3a6f16d6095e820957af3e3eee0161e35133368849a26072",
+    "importedAt": "2026-09-12T16:55:26.466Z",
+    "media": [
+      {
+        "source": "essays/singularity-log/assets/essays/moxie-arcade-kitchen.jpg",
+        "destination": "/images/blog/moxie-arcade-kitchen.jpg",
+        "sha256": "c3a0daa5e4d3879f56791e8a5c767762ac6bdc97c7ad34466a93ae20cfc433b4"
+      }
+    ]
+  },
+  "my-writing-harness": {
+    "kind": "archive",
+    "repository": "Arcadesys/writing-archive",
+    "path": "blog/arcadesblog/my-writing-harness.md",
+    "sourceStatus": "draft",
+    "sourceSha256": "4adcb284407be5e81c486fea8f84b4d459bcf1c3c292243d641b0f4672b8bc59",
+    "bodySha256": "8fca7ecd05921dd8a3148a08c3fe7921682add2428fe481ffcba5c4ebd59341e",
+    "importedAt": "2026-09-12T16:55:26.466Z"
+  },
+  "my-printing-press-has-an-mcp-harness": {
+    "kind": "archive",
+    "repository": "Arcadesys/writing-archive",
+    "path": "essays/singularity-log/01-printing-press-mcp-harness.md",
+    "sourceStatus": "draft",
+    "sourceSha256": "1f9c6b736400c04c27cde7f208956777a6da59602066b9b357094bdf649cbe53",
+    "bodySha256": "4e1b80998d622df5798549de8fe2e4fe9d0e1d66ede2fe92999aaf39088a9ab6",
+    "importedAt": "2026-09-12T16:55:26.466Z"
+  },
+  "this-is-what-ai-assisted-actually-looks-like": {
+    "kind": "archive",
+    "repository": "Arcadesys/writing-archive",
+    "path": "blog/arcadesblog/aiassistedruleset feb 2026.md",
+    "sourceStatus": "draft",
+    "sourceSha256": "855e43623fbcbfbbfc754b28c5a77af43e5ba4270fba1c48752ccc93d28f4109",
+    "bodySha256": "e0feb38e1fecc8323d378be592b845260c5e967c3bfddc4b5c3a526ca29ac68f",
+    "importedAt": "2026-09-12T16:55:26.466Z"
+  },
+  "four-stages-nobody-tells-you-about": {
+    "url": "https://www.thearcades.me/projects/arcade-blog/four-stages-nobody-tells-you-about",
+    "repository": "Arcadesys/arcadeprofile",
+    "path": "content/posts/arcade-blog/four-stages-nobody-tells-you-about.md",
+    "commit": "01b1b6a7f84ed644640e49fc6e09822db2c08011",
+    "sha256": "325f61a28ba2fd029d4d2808379d92fac377426c0f3d1681cdfb37533c5305a9",
+    "archivePath": "blog/arcadesblog/four-quadrants-ai-maturity.md",
+    "kind": "published"
+  },
+  "claude-design-and-the-novel-t": {
+    "url": "https://www.thearcades.me/projects/the-singularity-log/claude-design-and-the-novel-t",
+    "repository": "Arcadesys/arcadeprofile",
+    "path": "content/posts/the-singularity-log/claude-design-and-the-novel-t.md",
+    "commit": "01b1b6a7f84ed644640e49fc6e09822db2c08011",
+    "sha256": "99394c759dfbdd7fe9a0ae050ec74bfbfa06420798f154d27ef61da1b6d68548",
+    "archivePath": "essays/singularity-log/03-claude-design-novel-t.md",
+    "kind": "published"
+  },
+  "building-my-own-publishing-pipeline-with-agents": {
+    "kind": "archive",
+    "repository": "Arcadesys/writing-archive",
+    "path": "essays/singularity-log/02-publishing-pipeline-with-agents.md",
+    "sourceStatus": "draft",
+    "sourceSha256": "71253b952b974ac4bff2abf92d1fe214bfeab6af7fc565fa6f34f300c03beeea",
+    "bodySha256": "e907b32295518afdc558c64053c42eff4bf223b8f9a39b592d68e20970a016c2",
+    "importedAt": "2026-09-12T16:55:26.466Z"
+  },
+  "bunch-part-three": {
+    "kind": "archive",
+    "repository": "Arcadesys/writing-archive",
+    "path": "blog/arcadesblog/bunch-part-three.md",
+    "sourceStatus": "draft",
+    "sourceSha256": "8a275dee62336f865990bc3ed603e6ebb273cb7adc63115da468ef7d2497a1e2",
+    "bodySha256": "348135b35fde8822cc70c14b1197994925a050f6a5c4b1c141ba5d882281b100",
+    "importedAt": "2026-09-12T16:55:26.466Z"
+  },
+  "ai-accessibility-revolution": {
+    "kind": "archive",
+    "repository": "Arcadesys/writing-archive",
+    "path": "arcade-blog/ai-accessibility-revolution.md",
+    "sourceStatus": "draft",
+    "sourceSha256": "eca38f374f3ea954516d26b947149c1f6085a76bf03ae0f13c453fd0ec4de9e0",
+    "bodySha256": "81ff2448e8f755e5253c0c7a6b8bdf7016471a764498b924f90dee1b9e5af783",
+    "importedAt": "2026-09-12T16:55:26.466Z"
   }
 }
