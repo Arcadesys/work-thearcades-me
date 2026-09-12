@@ -251,6 +251,7 @@ export const caseStudies: CaseStudy[] = [
   {
     id: 'evangelist-case',
     slug: 'ai-enablement',
+    blogTags: ['ai-enablement'],
     lane: 'Evangelist',
     title: 'Making AI development feel safe enough to try',
     body: 'At ActiveCampaign, I design hands-on AI enablement that leaves people with working artifacts. A Cursor IDE bootcamp for non-technical staff helped participants build and judge real prototypes in the room.',

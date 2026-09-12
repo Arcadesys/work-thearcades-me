@@ -35,7 +35,13 @@ export function postTags(post: BlogPost) {
   return [...new Set([...post.tags, ...(projectTags[post.slug] ?? [])])];
 }
 // Explicit editorial associations; generic topic tags never imply a project relationship.
-const projectTags: Record<string, string[]> = { bunch: ['bunch'] };
+const projectTags: Record<string, string[]> = {
+  bunch: ['bunch'],
+  'bunch-part-two': ['bunch'],
+  'bunch-part-three': ['bunch'],
+  'four-stages-nobody-tells-you-about': ['ai-enablement'],
+  'claude-design-and-the-novel-t': ['novel-t'],
+};
 export function relatedPosts(study: typeof caseStudies[number]) {
   return publicPosts().filter(post => study.blogTags?.some(tag => postTags(post).includes(tag)));
 }
@@ -53,3 +59,19 @@ export function displayBuildDate(value: string) {
   if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(value)) throw new Error('Invalid partial build date');
   return new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${value}-01T00:00:00Z`));
 }
+
+/** The source body keeps its title; the page already renders that title as h1. */
+export function articleBody(post: BlogPost) {
+  const heading = post.body.match(/^\s*# ([^\n]+)\r?\n/);
+  return heading?.[1] === post.title ? post.body.slice(heading[0].length) : post.body;
+}
+
+// Resolve archive-only paths without modifying the stored manuscript.
+export const archiveLinks: Record<string, Record<string, string>> = {
+  'bunch-part-two': { 'the-fox-and-the-eval-publishing.md': '/blog/the-fox-and-the-eval' },
+  'the-fox-and-the-eval': {
+    '../assets/essays/moxie-arcade-kitchen.jpg': '/images/blog/moxie-arcade-kitchen.jpg',
+    // The referenced essay remains a separate draft; keep its title as plain text.
+    'photos-arent-sticky.md': '',
+  },
+};
