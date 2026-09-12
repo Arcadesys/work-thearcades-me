@@ -45,6 +45,16 @@ npm run build
 
 ## Iteration log
 
+### 2026-09-12 — Work with me
+
+- **Metric and budget:** one bounded implementation pass; visitors can discover both services and reach the existing 30-minute calendar. Deliver one PR and preview; production release is separate.
+- **Keep:** static `/work-with-me` page with the approved AI enablement and website/app offers, negotiable sliding-scale pricing, current case-study examples, and three booking links from `site.bookingUrl`. Copy lives in `lib/content.ts`. Header and Contact entries preserve the newsletter-focused homepage.
+- **Passed:** lint and production build (new route prerendered); exact title, description and canonical; homepage header and Contact navigation; both case-study links and their return navigation. All three booking buttons opened the existing Cal.com 30-minute meeting page in Chrome; no booking submitted.
+- **Accessibility checks:** light/dark desktop and 320 CSS-pixel rendering; two panels on wide screens and one on narrow screens; no horizontal document overflow or hidden navigation. Actual Chrome zoom was set to 200% and confirmed in the browser toolbar (devicePixelRatio 2, viewport 932px, document 924px); navigation remained visible. Keyboard Tab traversal reached the header and booking action with visible 3px focus outlines. Main paragraphs/list items measure 18px; navigation, examples and booking controls have minimum 48px targets. Reduced-motion emulation reports automatic scrolling and no animations in the new content.
+- **Targeted contrast:** resolved colors give body/panel contrast 11.03:1 dark and 13.44:1 light. Gradient endpoint minima: button text 6.09:1 dark / 5.26:1 light; button boundaries 5.58:1 dark / 5.50:1 light. Links are underlined and current navigation uses `aria-current` plus an underline.
+- **Limits:** these are targeted rendered checks, not a full site accessibility certification. Existing newsletter behavior and its earlier acceptance record are outside this change. Production has not been released.
+- **Preview:** https://work-thearcades-9xo44polg-austen-tuckers-projects.vercel.app/work-with-me — ready; homepage-to-page navigation, rendered layout, title and canonical verified on the deployment.
+
 ### 2026-09-12 — AI practice newsletter funnel
 
 - **Keep:** clearer build-notes promise, signup before comments and after every case study, visible email label, 48px controls, readable feedback, and sticky-header anchor clearance. Personal hero and system appearance retained.

@@ -44,6 +44,7 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
           </Link>
           <nav className="site-nav label" aria-label="Main">
             <Link href="/#work">Work</Link>
+            <Link href="/work-with-me">Work with me</Link>
             <Link href="/#about">About</Link>
             <Link href="/#notes">Notes</Link>
             <Link href="/#contact">Contact</Link>
