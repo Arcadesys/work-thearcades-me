@@ -120,13 +120,12 @@ export const workWithMe = {
     },
   ],
   firstStep: {
-    title: 'A useful first step',
+    title: 'How this works',
     steps: [
-      'Start with a free 30-minute introductory call.',
-      'Agree on the scope and price before work begins.',
-      'Work in a bounded project with a clear finish.',
+      'We have a 30-minute chat about what you need.',
+      'I put together a statement of work and an estimate.',
+      'We talk it through and agree on how to move forward.',
     ],
-    support: 'Ongoing support is agreed separately.',
   },
   pricing: {
     title: 'Pricing that fits the project',

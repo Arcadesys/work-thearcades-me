@@ -55,7 +55,6 @@ export default function WorkWithMePage() {
           <section aria-labelledby="first-step">
             <h2 id="first-step">{workWithMe.firstStep.title}</h2>
             <ol>{workWithMe.firstStep.steps.map((step) => <li key={step}>{step}</li>)}</ol>
-            <p>{workWithMe.firstStep.support}</p>
           </section>
           <section aria-labelledby="pricing">
             <h2 id="pricing">{workWithMe.pricing.title}</h2>
