@@ -811,7 +811,7 @@ textarea::placeholder {
 
 .glow-accent {
   color: var(--pink);
-  text-shadow: var(--glow-pink);
+  text-shadow: none;
 }
 
 .hero-tagline {
