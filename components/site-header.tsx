@@ -11,6 +11,7 @@ const links = [
   ['About', '/#about'],
   ['Blog', '/blog'],
   ['Contact', '/#contact'],
+  ['Build notes', '/#subscribe'],
   ['Résumé', '/resume'],
 ] as const;
 
@@ -45,9 +46,13 @@ export function SiteHeader({ home = false, current }: SiteHeaderProps) {
   }
 
   function navigation(label: string) {
+    const destinations = links.map(([text, destination]) =>
+      current === '/work-with-me' && text === 'Blog' ? ['Notes', '/#notes'] : [text, destination],
+    );
+
     return (
       <nav className="site-nav" aria-label={label}>
-        {links.map(([text, destination]) => (
+        {destinations.map(([text, destination]) => (
           <a key={text} href={href(destination)} aria-current={current === destination ? 'page' : undefined}>
             {text}
           </a>

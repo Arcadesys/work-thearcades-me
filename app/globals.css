@@ -79,8 +79,8 @@
   /* Type
      NOTE: the design specifies 10px for these mono micro-labels. Raised to
      12px for low-vision legibility — change this one value to go back. */
-  --label-size: 0.75rem;
-  --label-tracking: 0.16em;
+  --label-size: 0.875rem;
+  --label-tracking: 0.04em;
 
   /* Rhythm */
   --shell: 1160px;
@@ -471,7 +471,7 @@ textarea::placeholder {
 }
 
 .header-wrap {
-  position: relative;
+  position: sticky;
   z-index: 40;
   padding: 12px clamp(12px, 3vw, 28px) 0;
 }
@@ -564,12 +564,16 @@ textarea::placeholder {
   margin: 10px auto 2px;
 }
 
-@media (min-width: 901px) {
+@media (min-width: 1200px) {
   .site-header { grid-template-columns: auto minmax(0, 1fr) auto; }
   .desktop-navigation { display: block; min-width: 0; }
-  .desktop-navigation .site-nav { justify-content: flex-end; gap: clamp(12px, 1.8vw, 22px); }
+  .desktop-navigation .site-nav { justify-content: flex-end; gap: 8px; flex-wrap: nowrap; }
   .desktop-theme { display: block; }
   .mobile-navigation { display: none; }
+}
+
+@media (max-width: 1199px) {
+  .header-wrap { position: relative; }
 }
 
 .site-nav a[aria-current="page"] {
@@ -698,7 +702,7 @@ textarea::placeholder {
 
 .site-nav a:hover {
   color: var(--pink);
-  text-shadow: var(--glow-pink-sm);
+  text-shadow: none;
 }
 
 .site-nav .nav-cta {
@@ -786,6 +790,10 @@ textarea::placeholder {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
   gap: clamp(34px, 5vw, 68px);
   align-items: start;
+}
+
+.hero-grid > :only-child {
+  max-width: 52rem;
 }
 
 .hero-eyebrow {
@@ -964,6 +972,10 @@ textarea::placeholder {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
   align-items: start;
   box-shadow: 0 0 30px rgb(var(--pink-rgb) / calc(0.16 * var(--bloom)));
+}
+
+.case-featured:not(:has(.case-figure)) {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .case-split {
@@ -1618,7 +1630,7 @@ textarea::placeholder {
 /* Subscribe */
 
 .subscribe {
-  scroll-margin-top: max(2rem, var(--header-clearance));
+  scroll-margin-top: 16px;
   max-width: 820px;
   margin-inline: auto;
   background: var(--surface);
@@ -1632,7 +1644,12 @@ textarea::placeholder {
   margin-top: clamp(40px, 6vw, 64px);
 }
 
-.section[id], .case-page [id] { scroll-margin-top: max(2rem, var(--header-clearance)); }
+main [id] { scroll-margin-top: 16px; }
+
+@media (min-width: 1200px) {
+  .subscribe,
+  main [id] { scroll-margin-top: max(2rem, var(--header-clearance)); }
+}
 
 .case-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
 .case-links a { display: inline-flex; align-items: center; min-height: 48px; padding: 8px 14px; border: 1px solid var(--line); border-radius: var(--radius-sm); color: var(--text); font-size: 1rem; text-decoration: underline; text-underline-offset: 4px; }
