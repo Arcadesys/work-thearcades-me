@@ -61,7 +61,7 @@ export const RESUME_ACCOMPLISHMENTS: ResumeAccomplishment[] = [
   { text: 'Within four days of arrival, facilitated an onsite that multiple attendees called one of their best' },
   { text: 'Reduced planning time by 50% at Arity via data-driven prioritization for 50+ engineers' },
   { text: 'Increased feature throughput by 400% at WorkTango during merger-driven agile transformation' },
-  { text: 'Generated $1.5B in locked-loan volume with one sprint of work at Guaranteed Rate' },
+  { text: 'Served as product owner for a Guaranteed Rate data-mining tool associated with $1.5B in locked loan volume' },
 ];
 
 export const RESUME_EXPERIENCE: ResumeRole[] = [
@@ -122,7 +122,7 @@ export const RESUME_EXPERIENCE: ResumeRole[] = [
     dates: '11/2015 – 12/2018',
     bullets: [
       'Rescoped a delayed initiative to deliver an MVP in two months, cutting production time by 75%',
-      'Acted as product owner for a data mining tool, generating $1.5B in locked-loan volume',
+      'Acted as product owner for a data-mining tool associated with $1.5B in locked loan volume',
       'Developed a measurement plan that streamlined app functionality and elevated user engagement',
     ],
   },
