@@ -7,6 +7,7 @@ import { notFound } from 'next/navigation';
 import { BrandMark } from '@/components/brand-mark';
 import { ExternalLink } from '@/components/external-link';
 import { RichText } from '@/components/rich-text';
+import { ThemeSwitch } from '@/components/theme-switch';
 import { SubscribeForm } from '@/components/subscribe-form';
 import { STAR_PARTS, caseStudies, caseStudyBySlug, hasStar, newsletter, site } from '@/lib/content';
 
@@ -53,6 +54,7 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
             <Link className="nav-cta" href="/#subscribe">Build notes</Link>
             <a href={site.resumeUrl}>Résumé</a>
           </nav>
+          <ThemeSwitch />
         </header>
       </div>
 

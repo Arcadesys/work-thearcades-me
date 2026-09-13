@@ -7,20 +7,40 @@ export function SubscribeForm() {
   const emailId = useId();
   const pending = useRef(false);
   const recoveryTimer = useRef<number | undefined>(undefined);
+  const mounted = useRef(true);
+  const recoveryExpired = useRef(false);
   const [submitting, setSubmitting] = useState(false);
   const [navigationDelayed, setNavigationDelayed] = useState(false);
 
   useEffect(() => {
+    mounted.current = true;
+    const unlockRetry = () => {
+      pending.current = false;
+      if (!mounted.current) return;
+      setSubmitting(false);
+      setNavigationDelayed(true);
+    };
     const reset = () => {
       window.clearTimeout(recoveryTimer.current);
+      recoveryExpired.current = false;
       pending.current = false;
+      if (!mounted.current) return;
       setSubmitting(false);
       setNavigationDelayed(false);
     };
+    const onVisibilityChange = () => {
+      if (document.visibilityState !== 'visible') return;
+      if (!recoveryExpired.current) return;
+      recoveryExpired.current = false;
+      unlockRetry();
+    };
     window.addEventListener('pageshow', reset);
+    document.addEventListener('visibilitychange', onVisibilityChange);
     return () => {
+      mounted.current = false;
       window.clearTimeout(recoveryTimer.current);
       window.removeEventListener('pageshow', reset);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
     };
   }, []);
 
@@ -35,12 +55,17 @@ export function SubscribeForm() {
             return;
           }
           pending.current = true;
+          recoveryExpired.current = false;
           setSubmitting(true);
           setNavigationDelayed(false);
           // Cancelled navigation can leave this document open without pageshow.
           // Unlock retry without claiming whether the provider received the POST.
           window.clearTimeout(recoveryTimer.current);
           recoveryTimer.current = window.setTimeout(() => {
+            if (!mounted.current) return;
+            recoveryExpired.current = true;
+            if (document.visibilityState !== 'visible') return;
+            recoveryExpired.current = false;
             pending.current = false;
             setSubmitting(false);
             setNavigationDelayed(true);

@@ -6,6 +6,7 @@ import { BrandMark } from '@/components/brand-mark';
 import { ExternalLink } from '@/components/external-link';
 import { RevealOnScroll } from '@/components/reveal-on-scroll';
 import { SubscribeForm } from '@/components/subscribe-form';
+import { ThemeSwitch } from '@/components/theme-switch';
 import {
   about,
   beliefs,
@@ -90,6 +91,7 @@ export default function Home() {
             <a className="nav-cta" href="#subscribe">Build notes</a>
             <a href={site.resumeUrl}>Résumé</a>
           </nav>
+          <ThemeSwitch />
         </header>
       </div>
 
