@@ -307,25 +307,26 @@ export default function Home() {
         <section className="contact" id="contact" aria-labelledby="contact-heading">
           <div className="contact-inner">
             <p className="label">{contact.kicker}</p>
-            <h2 id="contact-heading">
-              {contact.headingBefore}
-              <span className="glow-accent">{contact.headingAccent}</span>
-              {contact.headingAfter}
-            </h2>
+            <h2 id="contact-heading">{contact.heading}</h2>
             <p>{contact.body}</p>
-            <a className="contact-services-link" href="/work-with-me">Work with me <Arrow /></a>
             <div className="btn-row">
-              <ExternalLink className="btn btn-lg btn-gradient" href={site.bookingUrl}>
-                Grab time on my calendar
+              <a className="btn btn-lg btn-gradient" href={`mailto:${site.email}`} style={{ fontSize: '1.125rem' }}>
+                Discuss a leadership role
+                <Arrow />
+              </a>
+              <ExternalLink className="btn btn-lg btn-outline" href={site.bookingUrl} style={{ fontSize: '1.125rem' }}>
+                Discuss a consulting project
                 <Arrow />
               </ExternalLink>
-              <a className="btn btn-lg btn-outline" href={`mailto:${site.email}`}>
-                Email me
-              </a>
-              <ExternalLink className="btn btn-lg btn-ghost" href={site.githubUrl}>
-                GitHub
-              </ExternalLink>
             </div>
+            <nav className="btn-row" aria-label="Contact options">
+              <Link className="contact-services-link" href={site.resumeUrl}>View résumé <Arrow /></Link>
+              <Link className="contact-services-link" href="/work-with-me">Explore consulting services <Arrow /></Link>
+              <ExternalLink className="contact-services-link" href={site.githubUrl}>
+                GitHub
+                <Arrow />
+              </ExternalLink>
+            </nav>
           </div>
         </section>
       </main>
