@@ -4,10 +4,9 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { BrandMark } from '@/components/brand-mark';
 import { ExternalLink } from '@/components/external-link';
 import { RichText } from '@/components/rich-text';
-import { ThemeSwitch } from '@/components/theme-switch';
+import { SiteHeader } from '@/components/site-header';
 import { SubscribeForm } from '@/components/subscribe-form';
 import { STAR_PARTS, caseStudies, caseStudyBySlug, hasStar, newsletter, site } from '@/lib/content';
 
@@ -32,6 +31,7 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
   if (!study) notFound();
 
   const written = hasStar(study);
+  const links = (study as typeof study & { links?: { label: string; href: string }[] }).links;
 
   return (
     <>
@@ -39,24 +39,7 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
         Skip to content
       </a>
 
-      <div className="header-wrap">
-        <header className="site-header">
-          <Link className="brand" href="/">
-            <BrandMark />
-            <span className="visually-hidden">{site.name} — home</span>
-          </Link>
-          <nav className="site-nav label" aria-label="Main">
-            <Link href="/#work">Work</Link>
-            <Link href="/work-with-me">Work with me</Link>
-            <Link href="/#about">About</Link>
-            <Link href="/blog">Blog</Link>
-            <Link href="/#contact">Contact</Link>
-            <Link className="nav-cta" href="/#subscribe">Build notes</Link>
-            <a href={site.resumeUrl}>Résumé</a>
-          </nav>
-          <ThemeSwitch />
-        </header>
-      </div>
+      <SiteHeader />
 
       <main id="main" tabIndex={-1}>
         <article className="shell case-page" data-accent={study.accent}>
@@ -75,6 +58,14 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
               </li>
             ))}
           </ul>
+
+          {links?.length ? (
+            <ul className="case-links" aria-label={`${study.title} links`}>
+              {links.map((link) => (
+                <li key={link.href}><ExternalLink href={link.href}>{link.label}<span aria-hidden="true"> ↗</span></ExternalLink></li>
+              ))}
+            </ul>
+          ) : null}
 
           {study.image && (
             <figure className="case-figure case-page-figure">
