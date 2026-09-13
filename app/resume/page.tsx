@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import { SiteHeader } from '@/components/site-header';
 import { ExternalLink } from '@/components/external-link';
-import { site } from '@/lib/content';
+import { hero, site } from '@/lib/content';
 import {
   RESUME_ACCOMPLISHMENTS,
   RESUME_CANONICAL_PATH,
@@ -49,12 +49,18 @@ export default function ResumePage() {
         <h1 className={styles.name}>{RESUME_PROFILE.name}</h1>
         <p className={styles.titleLine}>{RESUME_PROFILE.titleLine}</p>
         <p className={styles.location}>{RESUME_PROFILE.location}</p>
+        <p className={styles.roleIntro}>{hero.intro}</p>
         <div className={styles.contact}>
           <a href={`mailto:${RESUME_PROFILE.email}`}>{RESUME_PROFILE.email}</a>
           <a href={RESUME_PROFILE.siteUrl}>{RESUME_PROFILE.site}</a>
           <a href={RESUME_PROFILE.githubUrl}>{RESUME_PROFILE.github}</a>
         </div>
-        <a className={`btn btn-gradient ${styles.download}`} href={RESUME_PDF_PATH} download>Download résumé PDF</a>
+        <div className={styles.roleActions}>
+          <a className={`btn btn-gradient ${styles.rolePrimary}`} href={`mailto:${RESUME_PROFILE.email}`}>
+            Discuss a leadership role <span aria-hidden="true">→</span>
+          </a>
+          <a className={styles.roleSecondary} href={RESUME_PDF_PATH} download>Download résumé PDF</a>
+        </div>
       </header>
 
       <section className={styles.section} aria-labelledby="resume-summary">
@@ -139,16 +145,12 @@ export default function ResumePage() {
       </section>
 
       <section className={styles.section} aria-labelledby="resume-hire">
-        <h2 id="resume-hire" className={styles.sectionHeading}>Work with me</h2>
+        <h2 id="resume-hire" className={styles.sectionHeading}>Discuss a leadership role</h2>
         <div className={styles.hire}>
-          <p className={styles.hireCopy}>
-            I help engineering and product organizations make AI useful in everyday work —
-            through working tools, clear goals, and learning experiences that leave people with
-            something they built. If that&rsquo;s the problem on your desk, get in touch.
-          </p>
+          <p className={styles.hireCopy}>{hero.intro}</p>
           <div className={styles.hireActions}>
             <a className={styles.hirePrimary} href={`mailto:${RESUME_PROFILE.email}`}>
-              Email me <span aria-hidden="true">→</span>
+              Discuss a leadership role <span aria-hidden="true">→</span>
             </a>
             <Link className={styles.hireSecondary} href="/#work">Read the case studies</Link>
             <Link className={styles.hireSecondary} href="https://www.thearcades.me/projects">See what I build</Link>
