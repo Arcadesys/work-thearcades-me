@@ -35,7 +35,12 @@ export default function WorkWithMePage() {
         <div className="services-intro">
           <h1>{workWithMe.title}</h1>
           <p>{workWithMe.intro}</p>
+          <a className="btn btn-gradient" href={`mailto:${site.email}`}>{workWithMe.roleLabel}<span aria-hidden="true"> →</span></a>
         </div>
+        <section className="services-intro" aria-labelledby="consulting-heading">
+          <h2 id="consulting-heading">{workWithMe.consultingTitle}</h2>
+          <p>{workWithMe.consultingIntro}</p>
+        </section>
         <div className="service-panels">
           {workWithMe.services.map((service) => {
             const example = caseStudyBySlug(service.exampleSlug)!;

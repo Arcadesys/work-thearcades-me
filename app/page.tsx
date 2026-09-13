@@ -12,7 +12,6 @@ import {
   beliefs,
   caseStudies,
   contact,
-  evangelistTakeaways,
   hero,
   lanes,
   newsletter,
@@ -65,9 +64,9 @@ const caseById = Object.fromEntries(caseStudies.map((study) => [study.id, study]
 export default function Home() {
   const latestPost = publicPosts()[0];
   const featuredNote = latestPost ? { badge: 'Latest', date: displayDate(latestPost.publishDate), kind: 'Blog post', title: latestPost.title, body: latestPost.excerpt, href: `/blog/${latestPost.slug}` } : null;
-  const builder = caseById['builder-case'];
-  const owner = caseById['owner-case'];
-  const evangelist = caseById['evangelist-case'];
+  const bunch = caseById['builder-case'];
+  const guaranteedRate = caseById['owner-case'];
+  const aiEnablement = caseById['evangelist-case'];
 
   return (
     <>
@@ -109,67 +108,28 @@ export default function Home() {
                 <span className="glow-accent">{hero.headingAccent}</span>
                 {hero.headingAfter}
               </h1>
-              <p className="hero-tagline" data-reveal="3">
-                {hero.tagline}
-              </p>
-              <p className="hero-intro" data-reveal="4">
+              <p className="hero-intro" data-reveal="3">
                 {hero.intro}
               </p>
-              <p className="hero-payoff" data-reveal="5">
-                {hero.signupPayoff}
+              <p className="hero-payoff" data-reveal="4">
+                <Link href="/work/ai-enablement">{hero.evidence}</Link>.
               </p>
               <div className="btn-row" data-reveal="5">
-                <a className="btn btn-gradient" href="#subscribe">
-                  Get the build notes
+                <a className="btn btn-gradient" href={`mailto:${site.email}`}>
+                  Discuss a role
                   <Arrow />
                 </a>
-                <a className="btn btn-outline" href="#work">
-                  See my work
+                <a className="btn btn-outline" href={site.resumeUrl}>
+                  View résumé
                 </a>
               </div>
             </div>
-
-            <ul className="beliefs" data-reveal="6" aria-label="How I build">
-              {beliefs.map((belief) => (
-                <li className="belief" key={belief.title} data-accent={belief.accent}>
-                  <p className="belief-title">
-                    <span className="dot-sm" />
-                    {belief.title}
-                  </p>
-                  <p>{belief.body}</p>
-                </li>
-              ))}
-            </ul>
           </div>
         </section>
 
         <div className="shell">
           <hr className="rule" />
         </div>
-
-        {/* How I work */}
-        <section className="shell section" aria-labelledby="lanes-heading">
-          <Kicker>How I work</Kicker>
-          <h2 className="h2" id="lanes-heading">
-            Builder. Owner. Evangelist. Advocate.
-          </h2>
-          <p className="lede">
-            Four lanes, one operating system: understand the real problem, make the thing, and bring people with me.
-          </p>
-          <div className="lane-grid">
-            {lanes.map((lane, index) => (
-              <div className="lane" key={lane.number} data-accent={lane.accent} data-reveal={index + 1}>
-                <span className="lane-number">{lane.number}</span>
-                <h3>{lane.title}</h3>
-                <p>{lane.body}</p>
-                <a className="label lane-link" href={lane.href}>
-                  {lane.link}
-                  <Arrow />
-                </a>
-              </div>
-            ))}
-          </div>
-        </section>
 
         {/* Selected work */}
         <section className="shell section-flush-top" id="work" aria-labelledby="work-heading">
@@ -180,36 +140,36 @@ export default function Home() {
 
           <article
             className="case case-featured"
-            id={builder.id}
-            data-accent={builder.accent}
+            id={aiEnablement.id}
+            data-accent={aiEnablement.accent}
             data-reveal="1"
-            aria-labelledby={`${builder.id}-title`}
+            aria-labelledby={`${aiEnablement.id}-title`}
           >
-            <CaseSummary study={builder} />
-            {builder.image && (
+            <CaseSummary study={aiEnablement} />
+            {aiEnablement.image && (
               <figure className="case-figure">
                 <div>
                   <Image
-                    src={builder.image.src}
-                    width={builder.image.width}
-                    height={builder.image.height}
+                    src={aiEnablement.image.src}
+                    width={aiEnablement.image.width}
+                    height={aiEnablement.image.height}
                     sizes="(max-width: 840px) calc(100vw - 64px), 480px"
-                    alt={builder.image.alt}
+                    alt={aiEnablement.image.alt}
                   />
                 </div>
-                <figcaption>{builder.image.caption}</figcaption>
+                <figcaption>{aiEnablement.image.caption}</figcaption>
               </figure>
             )}
           </article>
 
           <article
             className="case case-split"
-            id={owner.id}
-            data-accent={owner.accent}
+            id={guaranteedRate.id}
+            data-accent={guaranteedRate.accent}
             data-reveal="2"
-            aria-labelledby={`${owner.id}-title`}
+            aria-labelledby={`${guaranteedRate.id}-title`}
           >
-            <CaseSummary study={owner} />
+            <CaseSummary study={guaranteedRate} />
             <p className="stat">
               {ownerStat.value}
               <span className="label">{ownerStat.label}</span>
@@ -218,26 +178,50 @@ export default function Home() {
 
           <article
             className="case case-split-top"
-            id={evangelist.id}
-            data-accent={evangelist.accent}
+            id={bunch.id}
+            data-accent={bunch.accent}
             data-reveal="3"
-            aria-labelledby={`${evangelist.id}-title`}
+            aria-labelledby={`${bunch.id}-title`}
           >
-            <CaseSummary study={evangelist} />
-            <div>
-              <p className="label" id="takeaways-heading">
-                {evangelistTakeaways.heading}
-              </p>
-              <ul className="takeaways" aria-labelledby="takeaways-heading">
-                {evangelistTakeaways.items.map((item) => (
-                  <li key={item}>
-                    <span className="dot-sm" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <CaseSummary study={bunch} />
+            {bunch.image && (
+              <figure className="case-figure">
+                <div>
+                  <Image src={bunch.image.src} width={bunch.image.width} height={bunch.image.height} sizes="(max-width: 840px) calc(100vw - 64px), 480px" alt={bunch.image.alt} />
+                </div>
+                <figcaption>{bunch.image.caption}</figcaption>
+              </figure>
+            )}
           </article>
+        </section>
+
+        {/* Working principles and lanes */}
+        <section className="shell section" aria-labelledby="lanes-heading">
+          <Kicker>How I work</Kicker>
+          <h2 className="h2" id="lanes-heading">
+            Builder. Owner. Evangelist. Advocate.
+          </h2>
+          <p className="lede">
+            Four lanes, one operating system: understand the real problem, make the thing, and bring people with me.
+          </p>
+          <ul className="beliefs" data-reveal="1" aria-label="Working principles">
+            {beliefs.map((belief) => (
+              <li className="belief" key={belief.title} data-accent={belief.accent}>
+                <p className="belief-title"><span className="dot-sm" />{belief.title}</p>
+                <p>{belief.body}</p>
+              </li>
+            ))}
+          </ul>
+          <div className="lane-grid">
+            {lanes.map((lane, index) => (
+              <div className="lane" key={lane.number} data-accent={lane.accent} data-reveal={index + 2}>
+                <span className="lane-number">{lane.number}</span>
+                <h3>{lane.title}</h3>
+                <p>{lane.body}</p>
+                <a className="label lane-link" href={lane.href}>{lane.link}<Arrow /></a>
+              </div>
+            ))}
+          </div>
         </section>
 
         {/* Quote */}
@@ -259,7 +243,7 @@ export default function Home() {
               <h2 className="h2" id="about-heading">
                 {about.heading}
               </h2>
-              <p className="lede">{about.lede}</p>
+              <p className="lede">{about.lede} I’m happiest where product, engineering, communication, and a slightly unreasonable amount of curiosity overlap.</p>
             </div>
             <ul className="facts">
               {about.facts.map((fact, index) => (
