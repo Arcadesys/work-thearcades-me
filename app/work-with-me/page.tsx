@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { BrandMark } from '@/components/brand-mark';
+import { SiteHeader } from '@/components/site-header';
 import { ExternalLink } from '@/components/external-link';
 import { caseStudyBySlug, site, workWithMe } from '@/lib/content';
 
@@ -14,28 +14,18 @@ export default function WorkWithMePage() {
   return (
     <div className="services-page">
       <a className="skip-link" href="#main">Skip to content</a>
-      <div className="header-wrap">
-        <header className="site-header">
-          <Link className="brand" href="/">
-            <BrandMark />
-            <span className="visually-hidden">{site.name} — home</span>
-          </Link>
-          <nav className="site-nav label" aria-label="Main">
-            <Link href="/#work">Work</Link>
-            <Link href="/work-with-me" aria-current="page">Work with me</Link>
-            <Link href="/#about">About</Link>
-            <Link href="/#notes">Notes</Link>
-            <Link href="/#contact">Contact</Link>
-            <Link className="nav-cta" href="/#subscribe">Build notes</Link>
-            <a href={site.resumeUrl}>Résumé</a>
-          </nav>
-        </header>
-      </div>
+      <SiteHeader current="/work-with-me" />
+
       <main className="shell services-main" id="main" tabIndex={-1}>
         <div className="services-intro">
           <h1>{workWithMe.title}</h1>
           <p>{workWithMe.intro}</p>
+          <a className="btn btn-gradient" href={`mailto:${site.email}`}>{workWithMe.roleLabel}<span aria-hidden="true"> →</span></a>
         </div>
+        <section className="services-intro" aria-labelledby="consulting-heading">
+          <h2 id="consulting-heading">{workWithMe.consultingTitle}</h2>
+          <p>{workWithMe.consultingIntro}</p>
+        </section>
         <div className="service-panels">
           {workWithMe.services.map((service) => {
             const example = caseStudyBySlug(service.exampleSlug)!;

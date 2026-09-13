@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { BrandMark } from '@/components/brand-mark';
+import { SiteHeader } from '@/components/site-header';
 import { ExternalLink } from '@/components/external-link';
 import { site } from '@/lib/content';
 import {
@@ -22,7 +22,7 @@ import styles from './resume.module.css';
 
 export const metadata: Metadata = {
   title: 'Résumé — Austen Tucker-Crowder',
-  description: `Professional resume of ${RESUME_PROFILE.name} — builder, AI enablement leader, program manager, and accessibility-first facilitator.`,
+  description: RESUME_DESCRIPTION,
   alternates: { canonical: RESUME_CANONICAL_PATH },
   openGraph: {
     type: 'profile',
@@ -41,23 +41,8 @@ export default function ResumePage() {
   return (
     <div className="services-page">
       <a className="skip-link" href="#main">Skip to content</a>
-      <div className="header-wrap">
-        <header className="site-header">
-          <Link className="brand" href="/">
-            <BrandMark />
-            <span className="visually-hidden">{site.name} — home</span>
-          </Link>
-          <nav className="site-nav label" aria-label="Main">
-            <Link href="/#work">Work</Link>
-            <Link href="/work-with-me">Work with me</Link>
-            <Link href="/#about">About</Link>
-            <Link href="/#notes">Notes</Link>
-            <Link href="/#contact">Contact</Link>
-            <Link className="nav-cta" href="/#subscribe">Build notes</Link>
-            <Link href={site.resumeUrl} aria-current="page">Résumé</Link>
-          </nav>
-        </header>
-      </div>
+      <SiteHeader current="/resume" />
+
       <main className={styles.page} id="main" tabIndex={-1}>
 
       <header className={styles.header}>

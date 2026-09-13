@@ -34,8 +34,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'Austen Tucker-Crowder — AI Builder & Evangelist',
-  description: 'AI transformation leadership, practical building, and accessible enablement by Austen Tucker-Crowder.',
+  title: 'Austen Tucker-Crowder — AI Enablement & Engineering Transformation Leader',
+  description: 'AI enablement and engineering transformation leadership for teams adopting AI in their everyday work.',
   metadataBase: new URL('https://work.thearcades.me'),
 };
 

@@ -17,6 +17,11 @@ export type CaseImage = {
   caption: string;
 };
 
+export type CaseLink = {
+  label: string;
+  href: string;
+};
+
 /**
  * The long-form writeup behind a case study, in STAR order.
  *
@@ -40,6 +45,8 @@ export type CaseStudy = {
   title: string;
   body: string;
   tags: string[];
+  /** Public primary-source links, displayed on the full case-study page. */
+  links?: CaseLink[];
   blogTags?: string[];
   accent: Accent;
   image?: CaseImage;
@@ -76,7 +83,7 @@ export type Comment = {
 
 export const site = {
   name: 'Austen Tucker-Crowder',
-  role: 'AI Builder & Evangelist',
+  role: 'AI Enablement & Engineering Transformation Leader',
   email: 'austen@thearcades.me',
   bookingUrl: 'https://cal.com/austen-tucker-crowder/30min',
   resumeUrl: '/resume',
@@ -87,21 +94,23 @@ export const site = {
 } as const;
 
 export const hero = {
-  eyebrow: 'AI Builder & Evangelist',
+  eyebrow: 'AI Enablement & Engineering Transformation Leader',
   headingBefore: 'Hi. I make ',
   headingAccent: 'useful',
   headingAfter: ' things.',
-  tagline: 'Finding elegant solutions to inelegant problems for twenty years.',
-  signupPayoff: 'I write about building AI systems—what worked, what broke, and what I’d do differently. Get the build notes by email.',
+  evidence: 'Helped raise agentic-coding adoption from roughly 2% to 43% of merge requests',
   intro:
-    'I build AI systems, own messy problems end to end, and help people get comfortable enough with new technology to actually use it. I’m happiest where product, engineering, communication, and a slightly unreasonable amount of curiosity overlap.',
+    'I’m seeking a leadership role in AI enablement or engineering transformation, helping teams turn AI ambition into measurable, repeatable practice.',
 } as const;
 
 export const workWithMe = {
-  title: 'Work with me',
-  description: 'AI enablement, team workshops, and websites and apps for business, personal, and creative projects. Sliding-scale pricing available.',
-  intro: 'Give your team AI superpowers. Get that website or app built. I help people learn useful tools and turn ideas into things they can actually use.',
-  bookingLabel: 'Let’s talk about your project',
+  title: 'AI enablement and engineering transformation leadership',
+  description: 'Austen Tucker-Crowder is seeking AI enablement or engineering transformation leadership roles, and also offers limited consulting engagements.',
+  intro: 'I’m looking for a leadership role where I can help engineering and product organizations turn AI ambition into measurable, repeatable practice.',
+  roleLabel: 'Discuss a role',
+  consultingTitle: 'Consulting for teams and small organizations',
+  consultingIntro: 'I also take on select consulting engagements for teams that need practical AI enablement, a useful website or app, or a clear first version of an idea.',
+  bookingLabel: 'Discuss a consulting project',
   services: [
     {
       id: 'ai-enablement',
@@ -198,6 +207,10 @@ export const caseStudies: CaseStudy[] = [
     title: 'Bunch: free, open continuity software for a community nobody builds for',
     body: "I built Bunch for a small community that commercial software has never bothered to serve. It's free, open, and published in the open, data model included. The engineering problem was continuity: preserving context across gaps so the right information surfaces at the moment it matters. The accessibility problem turned out to be the same problem in a different hat.",
     tags: ['Accessibility', 'Public interest', 'AI systems', 'Rapid prototyping'],
+    links: [
+      { label: 'Explore the demo in Codex', href: 'https://github.com/Arcadesys/bunch/blob/main/docs/demo-install.md' },
+      { label: 'View the source code', href: 'https://github.com/Arcadesys/bunch' },
+    ],
     accent: 'pink',
     image: {
       src: '/images/bunch-data-model.png',
@@ -228,7 +241,7 @@ export const caseStudies: CaseStudy[] = [
     slug: 'guaranteed-rate',
     lane: 'Owner',
     title: 'Owning delivery on a platform tied to $1.5B in locked loan volume',
-    body: 'At Guaranteed Rate, I acted as product owner for a data-mining tool that generated $1.5B in locked loans. The work required turning complexity into priorities, risks, trade-offs, and a path through ambiguity.',
+    body: 'At Guaranteed Rate, I acted as product owner for a data-mining tool associated with $1.5B in locked loan volume. The work required turning complexity into priorities, risks, trade-offs, and a path through ambiguity.',
     tags: ['Program ownership', 'Fintech', 'Delivery', 'Executive communication'],
     accent: 'orange',
     star: {
@@ -243,7 +256,7 @@ export const caseStudies: CaseStudy[] = [
         'Later, when a major initiative was blocked through the normal engineering leadership path, I helped find an executive route to get the work approved and moving.',
       ],
       result: [
-        'That work ultimately contributed to an initiative tied to roughly **$1.5 billion** in business value. More importantly, it shaped the way I still build today: start with the smallest useful thing, get it into people’s hands quickly, and use feedback to decide what deserves to exist next.',
+        'That work ultimately contributed to a data-mining tool associated with roughly **$1.5 billion in locked loan volume**. More importantly, it shaped the way I still build today: start with the smallest useful thing, get it into people’s hands quickly, and use feedback to decide what deserves to exist next.',
       ],
     },
     principle: 'Build small. Build simple. Get feedback.',
@@ -253,22 +266,23 @@ export const caseStudies: CaseStudy[] = [
     slug: 'ai-enablement',
     blogTags: ['ai-enablement'],
     lane: 'Evangelist',
-    title: 'Making AI development feel safe enough to try',
-    body: 'At ActiveCampaign, I design hands-on AI enablement that leaves people with working artifacts. A Cursor IDE bootcamp for non-technical staff helped participants build and judge real prototypes in the room.',
+    title: 'Turning AI adoption into measurable, repeatable practice',
+    body: 'At ActiveCampaign, I led AI enablement and transformation across engineering, product, and leadership. I paired adoption goals and operating metrics with accessibility-first learning experiences that made practical experimentation possible.',
     tags: ['AI enablement', 'Agentic development', 'Teaching', 'Change leadership'],
     accent: 'rose',
     star: {
       situation: [
-        'The company had a strong push toward AI adoption, but very little structure around how people were supposed to learn. There was no real curriculum, and more importantly, there was no safe space to experiment, fail, and admit that something had not worked.',
+        'ActiveCampaign had a strong push toward AI adoption, but little shared structure for how engineering, product, and leadership would learn, measure progress, and act on it.',
       ],
       task: [
-        'I wanted to lower the barrier enough that product managers would actually try agentic development instead of waiting until they felt fully qualified.',
+        'I needed to turn that ambition into measurable, repeatable practice while lowering the barrier for product managers to try agentic development before they felt fully qualified.',
       ],
       action: [
-        'Without waiting for a formal program, I built and ran a practical training session for product managers focused on basic Cursor usage and early agentic development patterns. The emphasis was not on mastery. It was on making the first attempt feel normal, useful, and low-risk.',
+        'I led Devin adoption with goals and KPIs, coordinated cross-pillar transformation work around outcomes and north-star metrics, and built operational artifacts for shared decisions and program visibility. I also led a March 2026 roadshow for product managers across three continents, introducing Cursor and agentic AI through accessibility-first, hands-on learning experiences.',
       ],
       result: [
-        'After the session, the behavior changed quickly. People who had been hesitant to experiment started building prototypes of their own. Requests for engineering access increased, and AI went from something people were being told to adopt into something they were actively using to make things.',
+        'I helped raise agentic-coding adoption from roughly **2% to 43% of merge requests** across the broader transformation work; it was still climbing at departure.',
+        'Following the March 2026 roadshow, product managers began producing prototypes of their own.',
       ],
     },
     principle: 'People do not need permission to be experts. They need permission to try.',

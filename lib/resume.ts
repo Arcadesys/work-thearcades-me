@@ -37,18 +37,18 @@ export interface ResumeSkillGroup {
 
 export const RESUME_PROFILE: ResumeProfile = {
   name: 'Austen Tucker-Crowder',
-  titleLine: 'AI Enablement and Transformation · Program Manager · Agile Coach',
+  titleLine: 'AI Enablement & Engineering Transformation Leader',
   location: 'Chicago, IL',
-  email: 'austen.crowder@gmail.com',
-  site: 'www.thearcades.me',
-  siteUrl: 'https://www.thearcades.me',
+  email: 'austen@thearcades.me',
+  site: 'work.thearcades.me',
+  siteUrl: 'https://work.thearcades.me',
   github: 'github.com/Arcadesys',
   githubUrl: 'https://github.com/Arcadesys',
 };
 
 export const RESUME_SUMMARY =
-  'Builder, AI enablement leader, program manager, and agile coach with 16+ years delivering '
-  + 'customer-focused software. I build the operating systems, learning experiences, and '
+  'AI enablement and engineering transformation leader, builder, program manager, and agile coach '
+  + 'with 16+ years delivering customer-focused software. I build the operating systems, learning experiences, and '
   + 'decision-making practices that help teams adopt AI in their everyday work. An '
   + 'accessibility-first facilitator, I turn complex transformation work into usable tools, '
   + 'shared goals, and concrete next steps.';
@@ -61,7 +61,7 @@ export const RESUME_ACCOMPLISHMENTS: ResumeAccomplishment[] = [
   { text: 'Within four days of arrival, facilitated an onsite that multiple attendees called one of their best' },
   { text: 'Reduced planning time by 50% at Arity via data-driven prioritization for 50+ engineers' },
   { text: 'Increased feature throughput by 400% at WorkTango during merger-driven agile transformation' },
-  { text: 'Generated $1.5B in locked loans with one sprint of work at Guaranteed Rate' },
+  { text: 'Generated $1.5B in locked-loan volume with one sprint of work at Guaranteed Rate' },
 ];
 
 export const RESUME_EXPERIENCE: ResumeRole[] = [
@@ -122,7 +122,7 @@ export const RESUME_EXPERIENCE: ResumeRole[] = [
     dates: '11/2015 – 12/2018',
     bullets: [
       'Rescoped a delayed initiative to deliver an MVP in two months, cutting production time by 75%',
-      'Acted as product owner for a data mining tool, generating $1.5B in locked loans',
+      'Acted as product owner for a data mining tool, generating $1.5B in locked-loan volume',
       'Developed a measurement plan that streamlined app functionality and elevated user engagement',
     ],
   },
@@ -151,7 +151,7 @@ export const RESUME_CANONICAL_PATH = '/resume';
 export const RESUME_PDF_PATH = '/resume.pdf';
 
 export const RESUME_DESCRIPTION =
-  'Builder, AI enablement leader, program manager, and accessibility-first facilitator with '
+  'AI enablement and engineering transformation leader, builder, program manager, and accessibility-first facilitator with '
   + '16+ years delivering customer-focused software.';
 
 export const RESUME_COMMUNITY = {
