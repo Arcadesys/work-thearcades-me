@@ -194,10 +194,10 @@ export const caseStudies: CaseStudy[] = [
     id: 'builder-case',
     slug: 'bunch',
     blogTags: ['bunch'],
-    lane: 'Builder',
-    title: 'Bunch: a continuity tool I built because I needed it',
-    body: 'I started with a deeply personal usability problem and built a practical AI-assisted system around it. The point was continuity: preserving context, reducing cognitive load, and making information available at the moment it mattered.',
-    tags: ['AI systems', 'Accessibility', 'Product design', 'Rapid prototyping'],
+    lane: 'Accessibility · Public interest',
+    title: 'Bunch: free, open continuity software for a community nobody builds for',
+    body: "I built Bunch for a small community that commercial software has never bothered to serve. It's free, open, and published in the open, data model included. The engineering problem was continuity: preserving context across gaps so the right information surfaces at the moment it matters. The accessibility problem turned out to be the same problem in a different hat.",
+    tags: ['Accessibility', 'Public interest', 'AI systems', 'Rapid prototyping'],
     accent: 'pink',
     image: {
       src: '/images/bunch-data-model.png',
@@ -313,6 +313,10 @@ export const about = {
     {
       title: 'I care about tools that survive contact with actual humans.',
       body: 'Accessibility, legibility, and adoption are product requirements, not garnish.',
+    },
+    {
+      title: 'Unpaid work that ships.',
+      body: 'Free accessibility software and nonprofit conference operations, because the through-line has always been building for people the tools ignore.',
     },
   ],
 } as const;

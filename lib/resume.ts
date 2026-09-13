@@ -154,3 +154,9 @@ export const RESUME_DESCRIPTION =
   'Builder, AI enablement leader, program manager, and accessibility-first facilitator with '
   + '16+ years delivering customer-focused software.';
 
+export const RESUME_COMMUNITY = {
+  organization: 'Midwest FurFest',
+  title: 'Operations Volunteer',
+  location: 'Chicago, IL',
+  description: 'Staff role at a registered 501(c)(3) running a 15,000-attendee annual conference. Volunteer coordination, on-site operations, and logistics at scale under a hard, immovable deadline.',
+} as const;

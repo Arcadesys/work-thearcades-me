@@ -7,6 +7,7 @@ import { site } from '@/lib/content';
 import {
   RESUME_ACCOMPLISHMENTS,
   RESUME_CANONICAL_PATH,
+  RESUME_COMMUNITY,
   RESUME_DESCRIPTION,
   RESUME_EARLIER,
   RESUME_EDUCATION,
@@ -120,6 +121,16 @@ export default function ResumePage() {
             ))}
           </ul>
         </div>
+      </section>
+
+      <section className={styles.section} aria-labelledby="resume-community">
+        <h2 id="resume-community" className={styles.sectionHeading}>Community &amp; Volunteer Work</h2>
+        <article className={styles.card}>
+          <h3 className={styles.jobCompany}>{RESUME_COMMUNITY.organization}</h3>
+          <p className={styles.jobTitle}>{RESUME_COMMUNITY.title}</p>
+          <p className={styles.jobMeta}>{RESUME_COMMUNITY.location}</p>
+          <p className={styles.summary}>{RESUME_COMMUNITY.description}</p>
+        </article>
       </section>
 
       <section className={styles.section} aria-labelledby="resume-skills">
