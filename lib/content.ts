@@ -208,7 +208,7 @@ export const caseStudies: CaseStudy[] = [
     body: "I built Bunch for a small community that commercial software has never bothered to serve. It's free, open, and published in the open, data model included. The engineering problem was continuity: preserving context across gaps so the right information surfaces at the moment it matters. The accessibility problem turned out to be the same problem in a different hat.",
     tags: ['Accessibility', 'Public interest', 'AI systems', 'Rapid prototyping'],
     links: [
-      { label: 'Try the public demo', href: 'https://system.thearcades.me/' },
+      { label: 'Explore the demo in Codex', href: 'https://github.com/Arcadesys/bunch/blob/main/docs/demo-install.md' },
       { label: 'View the source code', href: 'https://github.com/Arcadesys/bunch' },
     ],
     accent: 'pink',
@@ -281,7 +281,8 @@ export const caseStudies: CaseStudy[] = [
         'I led Devin adoption with goals and KPIs, coordinated cross-pillar transformation work around outcomes and north-star metrics, and built operational artifacts for shared decisions and program visibility. I also led a March 2026 roadshow for product managers across three continents, introducing Cursor and agentic AI through accessibility-first, hands-on learning experiences.',
       ],
       result: [
-        'Across the broader transformation work, agentic-coding adoption rose from roughly **2% to 43% of merge requests** and was still climbing at departure. Separately, roadshow attendees began producing prototypes afterward—an outcome of that learning experience, not the sole cause of the wider adoption change.',
+        'I helped raise agentic-coding adoption from roughly **2% to 43% of merge requests** across the broader transformation work; it was still climbing at departure.',
+        'Following the March 2026 roadshow, product managers began producing prototypes of their own.',
       ],
     },
     principle: 'People do not need permission to be experts. They need permission to try.',

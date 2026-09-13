@@ -53,11 +53,10 @@ export function SiteHeader({ home = false, current }: SiteHeaderProps) {
     return (
       <nav className="site-nav" aria-label={label}>
         {destinations.map(([text, destination]) => (
-          <a key={text} href={href(destination)} aria-current={current === destination ? 'page' : undefined}>
+          <a key={text} href={href(destination)} className={destination === '/work-with-me' ? 'nav-cta' : undefined} aria-current={current === destination ? 'page' : undefined}>
             {text}
           </a>
         ))}
-        <a className="nav-cta" href="mailto:austen@thearcades.me">Discuss a role</a>
       </nav>
     );
   }

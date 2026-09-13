@@ -31,7 +31,7 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
   if (!study) notFound();
 
   const written = hasStar(study);
-  const links = (study as typeof study & { links?: { label: string; href: string }[] }).links;
+  const links = study.links;
 
   return (
     <>

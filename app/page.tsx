@@ -2,11 +2,10 @@ import Image from 'next/image';
 import { publicPosts, displayDate } from '@/lib/blog';
 import Link from 'next/link';
 import type { CaseStudy } from '@/lib/content';
-import { BrandMark } from '@/components/brand-mark';
+import { SiteHeader } from '@/components/site-header';
 import { ExternalLink } from '@/components/external-link';
 import { RevealOnScroll } from '@/components/reveal-on-scroll';
 import { SubscribeForm } from '@/components/subscribe-form';
-import { ThemeSwitch } from '@/components/theme-switch';
 import {
   about,
   beliefs,
@@ -75,24 +74,7 @@ export default function Home() {
         Skip to content
       </a>
 
-      <div className="header-wrap">
-        <header className="site-header">
-          <a className="brand" href="#top">
-            <BrandMark />
-            <span className="visually-hidden">{site.name} — back to top</span>
-          </a>
-          <nav className="site-nav label" aria-label="Main">
-            <a href="#work">Work</a>
-            <a href="/work-with-me">Work with me</a>
-            <a href="#about">About</a>
-            <Link href="/blog">Blog</Link>
-            <a href="#contact">Contact</a>
-            <a className="nav-cta" href="#subscribe">Build notes</a>
-            <a href={site.resumeUrl}>Résumé</a>
-          </nav>
-          <ThemeSwitch />
-        </header>
-      </div>
+      <SiteHeader home />
 
       <main id="main" tabIndex={-1}>
         {/* Hero */}
