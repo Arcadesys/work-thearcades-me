@@ -394,8 +394,6 @@ export const commentBox = {
 
 export const contact = {
   kicker: 'Say hello',
-  headingBefore: 'If you’ve got an inelegant problem, I’m ',
-  headingAccent: 'interested',
-  headingAfter: '.',
-  body: 'I’m looking for work where AI, product thinking, communication, and practical building all belong in the same room.',
+  heading: 'Let’s talk about your next role or project.',
+  body: 'I’m seeking a leadership role in AI enablement or engineering transformation. I also take on select consulting projects.',
 } as const;
