@@ -370,7 +370,7 @@ textarea::placeholder {
 }
 
 .lede {
-  font-size: 1.0625rem;
+  font-size: 1.125rem;
   line-height: 1.65;
   color: var(--text-muted);
   max-width: 56ch;
@@ -1215,7 +1215,7 @@ textarea::placeholder {
 }
 
 .star-body p {
-  font-size: 1.0625rem;
+  font-size: 1.125rem;
   line-height: 1.7;
   color: var(--text-soft);
   max-width: 68ch;
@@ -1422,7 +1422,7 @@ textarea::placeholder {
 }
 
 .featured-note > p {
-  font-size: 1.0625rem;
+  font-size: 1.125rem;
   line-height: 1.65;
   color: var(--text-muted);
   max-width: 62ch;
@@ -1678,7 +1678,7 @@ main [id] { scroll-margin-top: 16px; }
 }
 
 .subscribe > p {
-  font-size: 1rem;
+  font-size: 1.125rem;
   line-height: 1.65;
   color: var(--text-soft);
   max-width: 56ch;
@@ -1770,7 +1770,7 @@ main [id] { scroll-margin-top: 16px; }
 }
 
 .contact > div > p:last-of-type {
-  font-size: 1.0625rem;
+  font-size: 1.125rem;
   line-height: 1.65;
   color: var(--text-muted);
   max-width: 50ch;
