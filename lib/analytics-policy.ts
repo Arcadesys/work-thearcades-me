@@ -1,5 +1,11 @@
 export const eventNames = ['$pageview', 'case_study_view', 'resume_click', 'contact_click', 'booking_click', 'campaign_landing'] as const;
 export type AnalyticsEvent = typeof eventNames[number];
+type CapturedEvent = {
+  event: string;
+  uuid?: string;
+  timestamp?: Date;
+  properties?: Record<string, unknown>;
+};
 const safeValue = /^[a-z0-9_-]{1,64}$/;
 export function campaignProperties(search: string): Record<string, string> {
   const parameters = new URLSearchParams(search);
@@ -39,4 +45,15 @@ export function sanitizeProperties(properties: Record<string, unknown>) {
   clean.$process_person_profile = false;
   clean.$geoip_disable = true;
   return clean;
+}
+
+export function outgoingEvent(event: CapturedEvent | null, token: string) {
+  if (!event || !event.uuid || !event.timestamp || !eventNames.includes(event.event as AnalyticsEvent)) return null;
+  return {
+    event: event.event,
+    uuid: event.uuid,
+    timestamp: event.timestamp,
+    // Reconstruct the SDK payload so top-level $set/$set_once cannot update people.
+    properties: { ...sanitizeProperties(event.properties ?? {}), token },
+  };
 }
