@@ -1,5 +1,5 @@
 import posthog from 'posthog-js';
-import { campaignProperties, collectionEnvironment, eventNames, referrerDomain, safePath, sanitizeProperties, type AnalyticsEvent } from './analytics-policy';
+import { campaignProperties, collectionEnvironment, outgoingEvent, referrerDomain, safePath, sanitizeProperties, type AnalyticsEvent } from './analytics-policy';
 let enabled = false;
 let entry: Record<string, string> = {};
 let lastPath: string | undefined;
@@ -24,11 +24,12 @@ export function initializeAnalytics() {
       autocapture: false, capture_pageview: false, capture_pageleave: false,
       capture_dead_clicks: false, rageclick: false, capture_exceptions: false,
       capture_heatmaps: false, capture_performance: false, disable_session_recording: true,
-      disable_surveys: true, disable_external_dependency_loading: true,
+      disable_capture_url_hashes: true, disable_scroll_properties: true,
+      enable_recording_console_log: false, disable_surveys: true, disable_product_tours: true,
+      disable_conversations: true, disable_web_experiments: true, disable_external_dependency_loading: true,
       advanced_disable_flags: true, advanced_disable_toolbar_metrics: true,
       save_referrer: false, save_campaign_params: false, ip: false,
-      before_send: event => event && eventNames.includes(event.event as AnalyticsEvent)
-        ? { event: event.event, uuid: event.uuid, timestamp: event.timestamp, properties: { ...sanitizeProperties(event.properties), token } } : null,
+      before_send: event => outgoingEvent(event, token),
     });
     enabled = true;
   } catch { enabled = false; }
