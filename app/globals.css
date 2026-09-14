@@ -1996,3 +1996,9 @@ main [id] { scroll-margin-top: 16px; }
   letter-spacing: 0.04em;
 }
 .case h3, .lane h3, .stat, .site-nav a { text-shadow: none; }
+
+.privacy-copy { max-width: 48rem; margin: 0 auto; padding: 3rem var(--gutter); font-size: 1.125rem; line-height: 1.7; }
+.privacy-copy h1 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.2; }
+.privacy-copy p { margin-block: 1.5rem; }
+.analytics-privacy-link { padding: 1rem var(--gutter); text-align: center; }
+.analytics-privacy-link a { display: inline-flex; align-items: center; min-height: 44px; font-size: 1.125rem; text-decoration: underline; }
