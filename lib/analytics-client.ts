@@ -28,7 +28,7 @@ export function initializeAnalytics() {
       advanced_disable_flags: true, advanced_disable_toolbar_metrics: true,
       save_referrer: false, save_campaign_params: false, ip: false,
       before_send: event => event && eventNames.includes(event.event as AnalyticsEvent)
-        ? { ...event, properties: sanitizeProperties(event.properties) } : null,
+        ? { event: event.event, uuid: event.uuid, timestamp: event.timestamp, properties: { ...sanitizeProperties(event.properties), token } } : null,
     });
     enabled = true;
   } catch { enabled = false; }
