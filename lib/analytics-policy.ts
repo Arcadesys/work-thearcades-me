@@ -44,6 +44,7 @@ export function sanitizeProperties(properties: Record<string, unknown>) {
   if (properties.environment === 'production' || properties.environment === 'preview') clean.environment = properties.environment;
   clean.$process_person_profile = false;
   clean.$geoip_disable = true;
+  clean.$ip = '0.0.0.0';
   return clean;
 }
 

@@ -14,7 +14,7 @@ test('campaigns discard private fields and unsafe values', () => {
 });
 test('outgoing SDK properties fail closed', () => {
  const result = sanitizeProperties({distinct_id:'abc-123', $session_id:'session-123', $current_url:'https://work.thearcades.me/?email=private@example.com#secret', $referrer:'https://example.com/private?token=secret', $set:{email:'private@example.com'}, email:'private@example.com', placement:'hero', pathname:'/resume', environment:'preview', arbitrary:'secret'});
- assert.deepEqual(result, {distinct_id:'abc-123',$session_id:'session-123',placement:'hero',pathname:'/resume',environment:'preview',$process_person_profile:false,$geoip_disable:true});
+ assert.deepEqual(result, {distinct_id:'abc-123',$session_id:'session-123',placement:'hero',pathname:'/resume',environment:'preview',$process_person_profile:false,$geoip_disable:true,$ip:'0.0.0.0'});
  assert.equal(safePath('/private@example.com'), '/other');
  assert.equal(referrerDomain('https://example.com/private?token=secret#fragment'), 'example.com');
  assert.equal(referrerDomain('mailto:private@example.com'), '');
@@ -26,6 +26,6 @@ test('outgoing events retain only the token and session identity required for in
   properties: { token: 'untrusted-token', distinct_id: 'visitor-123', $session_id: 'session-123', $current_url: 'https://work.thearcades.me/?email=private@example.com', pathname: '/resume' },
   $set: { email: 'private@example.com' }, $set_once: { name: 'Private Name' },
  } as Parameters<typeof outgoingEvent>[0], 'project-token');
- assert.deepEqual(result, { event: '$pageview', uuid: 'event-id', timestamp, properties: { distinct_id: 'visitor-123', $session_id: 'session-123', pathname: '/resume', $process_person_profile: false, $geoip_disable: true, token: 'project-token' } });
+ assert.deepEqual(result, { event: '$pageview', uuid: 'event-id', timestamp, properties: { distinct_id: 'visitor-123', $session_id: 'session-123', pathname: '/resume', $process_person_profile: false, $geoip_disable: true, $ip: '0.0.0.0', token: 'project-token' } });
  assert.equal(outgoingEvent({ event: '$identify', uuid: 'event-id', timestamp }, 'project-token'), null);
 });
