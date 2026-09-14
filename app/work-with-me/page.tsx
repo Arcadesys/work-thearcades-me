@@ -20,7 +20,7 @@ export default function WorkWithMePage() {
         <div className="services-intro">
           <h1>{workWithMe.title}</h1>
           <p>{workWithMe.intro}</p>
-          <a className="btn btn-gradient" href={`mailto:${site.email}`}>{workWithMe.roleLabel}<span aria-hidden="true"> →</span></a>
+          <a className="btn btn-gradient" href={`mailto:${site.email}`} data-funnel-event="contact_click" data-funnel-placement="work_with_me_intro">{workWithMe.roleLabel}<span aria-hidden="true"> →</span></a>
         </div>
         <section className="services-intro" aria-labelledby="consulting-heading">
           <h2 id="consulting-heading">{workWithMe.consultingTitle}</h2>
@@ -35,7 +35,7 @@ export default function WorkWithMePage() {
                 <p>{service.body}</p>
                 <ul>{service.includes.map((item) => <li key={item}>{item}</li>)}</ul>
                 <p>{service.detail}</p>
-                <ExternalLink className="btn btn-gradient" href={site.bookingUrl}>{workWithMe.bookingLabel}</ExternalLink>
+                <ExternalLink className="btn btn-gradient" href={site.bookingUrl} data-funnel-event="booking_click" data-funnel-placement="service_panel">{workWithMe.bookingLabel}</ExternalLink>
                 <Link className="service-example" href={`/work/${example.slug}`}>{example.title}<span aria-hidden="true"> →</span></Link>
               </section>
             );
@@ -54,7 +54,7 @@ export default function WorkWithMePage() {
           <section aria-labelledby="talk-project">
             <h2 id="talk-project">{workWithMe.bookingLabel}</h2>
             <p>{workWithMe.closing}</p>
-            <ExternalLink className="btn btn-gradient" href={site.bookingUrl}>{workWithMe.bookingLabel}</ExternalLink>
+            <ExternalLink className="btn btn-gradient" href={site.bookingUrl} data-funnel-event="booking_click" data-funnel-placement="work_with_me_footer">{workWithMe.bookingLabel}</ExternalLink>
           </section>
         </div>
       </main>

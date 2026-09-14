@@ -56,10 +56,10 @@ export default function ResumePage() {
           <a href={RESUME_PROFILE.githubUrl}>{RESUME_PROFILE.github}</a>
         </div>
         <div className={styles.roleActions}>
-          <a className={`btn btn-gradient ${styles.rolePrimary}`} href={`mailto:${RESUME_PROFILE.email}`}>
+          <a className={`btn btn-gradient ${styles.rolePrimary}`} href={`mailto:${RESUME_PROFILE.email}`} data-funnel-event="contact_click" data-funnel-placement="resume_header">
             Discuss a leadership role <span aria-hidden="true">→</span>
           </a>
-          <a className={styles.roleSecondary} href={RESUME_PDF_PATH} download>Download résumé PDF</a>
+          <a className={styles.roleSecondary} href={RESUME_PDF_PATH} download data-funnel-event="resume_click" data-funnel-placement="resume_pdf">Download résumé PDF</a>
         </div>
       </header>
 
@@ -149,7 +149,7 @@ export default function ResumePage() {
         <div className={styles.hire}>
           <p className={styles.hireCopy}>{hero.intro}</p>
           <div className={styles.hireActions}>
-            <a className={styles.hirePrimary} href={`mailto:${RESUME_PROFILE.email}`}>
+            <a className={styles.hirePrimary} href={`mailto:${RESUME_PROFILE.email}`} data-funnel-event="contact_click" data-funnel-placement="resume_footer">
               Discuss a leadership role <span aria-hidden="true">→</span>
             </a>
             <Link className={styles.hireSecondary} href="/#work">Read the case studies</Link>
