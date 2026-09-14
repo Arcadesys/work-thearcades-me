@@ -8,7 +8,6 @@ import { ExternalLink } from '@/components/external-link';
 import { RichText } from '@/components/rich-text';
 import { SiteHeader } from '@/components/site-header';
 import { SubscribeForm } from '@/components/subscribe-form';
-import { CaseStudyView } from '@/components/analytics-events';
 import { STAR_PARTS, caseStudies, caseStudyBySlug, hasStar, newsletter, site } from '@/lib/content';
 
 export function generateStaticParams() {
@@ -36,7 +35,6 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
 
   return (
     <>
-      <CaseStudyView slug={study.slug} />
       <a className="skip-link" href="#main">
         Skip to content
       </a>
