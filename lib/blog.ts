@@ -48,6 +48,57 @@ export function relatedPosts(study: typeof caseStudies[number]) {
 export function relatedWork(post: BlogPost) {
   return caseStudies.filter(study => study.blogTags?.some(tag => postTags(post).includes(tag)));
 }
+
+export type RelatedReadingItem = { slug: string; title: string; kind: 'series' | 'topic' };
+
+/**
+ * "More like this" for the end of a post: posts explicitly mapped to the
+ * same named project via `projectTags` first (a real series, e.g. the Bunch
+ * posts) — matched by the mapping itself, not by tag string, since a
+ * generic tag can coincidentally equal a project name without implying a
+ * relationship (see the note on `projectTags` above). Then posts sharing
+ * any other topic tag, excluding the post itself and never repeating a
+ * slug. Closes the stage-03 leak in the reader journey — most posts had no
+ * related-content link at all before this.
+ */
+export function relatedReading(post: BlogPost, limit = 3): RelatedReadingItem[] {
+  const seen = new Set([post.slug]);
+  const items: RelatedReadingItem[] = [];
+  const others = publicPosts().filter(candidate => candidate.slug !== post.slug);
+  const postProjects = new Set(projectTags[post.slug] ?? []);
+
+  if (postProjects.size > 0) {
+    for (const candidate of others) {
+      if (items.length >= limit || seen.has(candidate.slug)) continue;
+      if (!(projectTags[candidate.slug] ?? []).some(project => postProjects.has(project))) continue;
+      seen.add(candidate.slug);
+      items.push({ slug: candidate.slug, title: candidate.title, kind: 'series' });
+    }
+  }
+
+  const postTagSet = new Set(postTags(post));
+  for (const candidate of others) {
+    if (items.length >= limit || seen.has(candidate.slug)) continue;
+    if (!postTags(candidate).some(tag => postTagSet.has(tag))) continue;
+    seen.add(candidate.slug);
+    items.push({ slug: candidate.slug, title: candidate.title, kind: 'topic' });
+  }
+
+  return items;
+}
+
+/**
+ * Splits rendered article body at a paragraph boundary near the 60% mark, so
+ * an inline subscribe card can sit at the point interest peaks rather than
+ * only at the end. Falls back to `[body, '']` when there's too little text
+ * to split meaningfully (the card is then appended, not inserted).
+ */
+export function splitAtReadingPeak(body: string): [string, string] {
+  const paragraphs = body.split(/\n{2,}/);
+  if (paragraphs.length < 4) return [body, ''];
+  const targetIndex = Math.min(paragraphs.length - 2, Math.max(1, Math.round(paragraphs.length * 0.6)));
+  return [paragraphs.slice(0, targetIndex).join('\n\n'), paragraphs.slice(targetIndex).join('\n\n')];
+}
 export function allTags() { return [...new Set(publicPosts().flatMap(postTags))].sort(); }
 export function tagHref(tag: string) { return `/blog/tag/${encodeURIComponent(tag)}`; }
 export function displayDate(date: string) {
