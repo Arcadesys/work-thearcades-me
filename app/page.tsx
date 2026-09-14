@@ -97,11 +97,11 @@ export default function Home() {
                 <Link href="/work/ai-enablement">{hero.evidence}</Link>.
               </p>
               <div className="btn-row" data-reveal="5">
-                <a className="btn btn-gradient" href={`mailto:${site.email}`}>
+                <a className="btn btn-gradient" href={`mailto:${site.email}`} data-funnel-event="contact_click" data-funnel-placement="hero">
                   Discuss a role
                   <Arrow />
                 </a>
-                <a className="btn btn-outline" href={site.resumeUrl}>
+                <a className="btn btn-outline" href={site.resumeUrl} data-funnel-event="resume_click" data-funnel-placement="hero">
                   View résumé
                 </a>
               </div>
@@ -310,17 +310,17 @@ export default function Home() {
             <h2 id="contact-heading">{contact.heading}</h2>
             <p>{contact.body}</p>
             <div className="btn-row">
-              <a className="btn btn-lg btn-gradient" href={`mailto:${site.email}`} style={{ fontSize: '1.125rem' }}>
+              <a className="btn btn-lg btn-gradient" href={`mailto:${site.email}`} data-funnel-event="contact_click" data-funnel-placement="contact_section" style={{ fontSize: '1.125rem' }}>
                 Discuss a leadership role
                 <Arrow />
               </a>
-              <ExternalLink className="btn btn-lg btn-outline" href={site.bookingUrl} style={{ fontSize: '1.125rem' }}>
+              <ExternalLink className="btn btn-lg btn-outline" href={site.bookingUrl} data-funnel-event="booking_click" data-funnel-placement="contact_section" style={{ fontSize: '1.125rem' }}>
                 Discuss a consulting project
                 <Arrow />
               </ExternalLink>
             </div>
             <nav className="btn-row" aria-label="Contact options">
-              <Link className="contact-services-link" href={site.resumeUrl}>View résumé <Arrow /></Link>
+              <Link className="contact-services-link" href={site.resumeUrl} data-funnel-event="resume_click" data-funnel-placement="contact_section">View résumé <Arrow /></Link>
               <Link className="contact-services-link" href="/work-with-me">Explore consulting services <Arrow /></Link>
               <ExternalLink className="contact-services-link" href={site.githubUrl}>
                 GitHub

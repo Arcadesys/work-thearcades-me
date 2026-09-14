@@ -8,6 +8,7 @@ import { ExternalLink } from '@/components/external-link';
 import { RichText } from '@/components/rich-text';
 import { SiteHeader } from '@/components/site-header';
 import { SubscribeForm } from '@/components/subscribe-form';
+import { CaseStudyView } from '@/components/analytics-events';
 import { STAR_PARTS, caseStudies, caseStudyBySlug, hasStar, newsletter, site } from '@/lib/content';
 
 export function generateStaticParams() {
@@ -35,6 +36,7 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
 
   return (
     <>
+      <CaseStudyView slug={study.slug} />
       <a className="skip-link" href="#main">
         Skip to content
       </a>
@@ -137,7 +139,7 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
               through it.
             </p>
             <div className="btn-row">
-              <ExternalLink className="btn btn-outline" href={site.bookingUrl}>
+              <ExternalLink className="btn btn-outline" href={site.bookingUrl} data-funnel-event="booking_click" data-funnel-placement="case_study">
                 Grab time on my calendar
                 <span aria-hidden="true"> →</span>
               </ExternalLink>
