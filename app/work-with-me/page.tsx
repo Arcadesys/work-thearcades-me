@@ -35,8 +35,9 @@ export default function WorkWithMePage() {
                 <p>{service.body}</p>
                 <ul>{service.includes.map((item) => <li key={item}>{item}</li>)}</ul>
                 <p>{service.detail}</p>
+                {example.principle && <p className="service-proof">“{example.principle}”</p>}
                 <ExternalLink className="btn btn-gradient" href={site.bookingUrl} data-funnel-event="booking_click" data-funnel-placement="service_panel">{workWithMe.bookingLabel}</ExternalLink>
-                <Link className="service-example" href={`/work/${example.slug}`}>{example.title}<span aria-hidden="true"> →</span></Link>
+                <Link className="service-example" href={`/work/${example.slug}`}>See how it played out: {example.title}<span aria-hidden="true"> →</span></Link>
               </section>
             );
           })}

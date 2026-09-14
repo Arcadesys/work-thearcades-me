@@ -1,7 +1,25 @@
 import Link from 'next/link';
-import { BlogPost, displayDate, postTags, tagHref } from '@/lib/blog';
+import { BlogPost, RelatedReadingItem, displayDate, postTags, tagHref } from '@/lib/blog';
 export function PostTags({ post }: { post: BlogPost }) {
   return <ul className="blog-tags" aria-label="Post tags">{postTags(post).map(tag => <li key={tag}><Link href={tagHref(tag)}>{tag}</Link></li>)}</ul>;
+}
+export function RelatedReading({ items }: { items: RelatedReadingItem[] }) {
+  if (items.length === 0) return null;
+  return (
+    <aside className="blog-related-posts" aria-label="More like this">
+      <p className="label">More like this</p>
+      <ul>
+        {items.map(item => (
+          <li key={item.slug}>
+            <Link href={`/blog/${item.slug}`}>
+              <span className="related-kind">{item.kind === 'series' ? 'Same series' : 'Related'}</span>
+              {item.title}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  );
 }
 export function BlogPostList({ posts }: { posts: BlogPost[] }) {
   return <ul className="blog-list">{posts.map(post => <li key={post.slug}>

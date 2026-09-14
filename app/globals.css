@@ -663,6 +663,12 @@ textarea::placeholder {
   max-width: 100%;
 }
 
+.service-proof {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  color: var(--text-soft);
+}
+
 .service-example {
   display: inline-flex;
   align-items: center;
@@ -1996,3 +2002,305 @@ main [id] { scroll-margin-top: 16px; }
   letter-spacing: 0.04em;
 }
 .case h3, .lane h3, .stat, .site-nav a { text-shadow: none; }
+
+/* --------------------------------------------------------------------------
+   Blog: inline subscribe + related reading
+   -------------------------------------------------------------------------- */
+
+.blog-page .subscribe {
+  margin: clamp(32px, 5vw, 48px) 0;
+}
+
+.blog-related-posts {
+  margin: clamp(32px, 5vw, 48px) 0;
+  padding: clamp(20px, 3vw, 28px);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.blog-related-posts .label {
+  margin-bottom: 14px;
+}
+
+.blog-related-posts ul {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.blog-related-posts li {
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+
+.blog-related-posts li:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.blog-related-posts a {
+  display: block;
+  color: var(--text);
+  font-size: 1.05rem;
+  min-height: 44px;
+  padding: 2px 0;
+}
+
+.blog-related-posts a:hover {
+  color: var(--pink);
+}
+
+.blog-related-posts .related-kind {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-right: 8px;
+}
+
+/* --------------------------------------------------------------------------
+   /journeys — internal design brief, unlinked from nav
+   -------------------------------------------------------------------------- */
+
+.journeys-main {
+  padding-block: clamp(48px, 7vw, 96px) clamp(56px, 8vw, 104px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(40px, 6vw, 64px);
+}
+
+.journeys-intro {
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.journey-section {
+  background: var(--surface);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius);
+  padding: clamp(22px, 3.4vw, 36px);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.journey-section-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.journey-section-head h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.journey-lane-label {
+  color: var(--accent);
+}
+
+.journey-status-pill {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: var(--label-size);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  border: 1px solid var(--accent-edge);
+  border-radius: 999px;
+  padding: 5px 12px;
+}
+
+.journey-goal {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--text-soft);
+  max-width: 68ch;
+}
+
+.journey-scroll-hint {
+  display: none;
+  margin: -8px 0 0;
+}
+
+.journey-grid-scroll {
+  position: relative;
+  overflow-x: auto;
+  margin: 0 -8px;
+  padding: 0 8px;
+}
+
+/* A cut-off edge alone is easy to miss with central vision loss — name the
+   scroll affordance in words, and back it with a visible fade at the edge. */
+@media (max-width: 900px) {
+  .journey-scroll-hint {
+    display: block;
+    color: var(--accent);
+  }
+
+  .journey-grid-scroll::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 28px;
+    background: linear-gradient(90deg, transparent, var(--surface));
+    pointer-events: none;
+  }
+}
+
+.journey-grid {
+  display: grid;
+  grid-template-columns: 150px repeat(4, minmax(230px, 1fr));
+  min-width: 1080px;
+}
+
+.journey-corner {
+  border-top: none;
+}
+
+.journey-stage-head {
+  padding: 0 18px 16px 0;
+}
+
+.journey-stage-number {
+  color: var(--accent);
+}
+
+.journey-stage-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-top: 6px;
+}
+
+.journey-row-label {
+  padding: 16px 18px 16px 0;
+  border-top: 1px solid var(--line);
+  color: var(--text-muted);
+}
+
+.journey-cell {
+  padding: 16px 18px 16px 0;
+  border-top: 1px solid var(--line);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--text-soft);
+}
+
+.journey-quote {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  color: var(--text);
+}
+
+.journey-feeling-track {
+  height: 4px;
+  border-radius: 999px;
+  background: color-mix(in srgb, currentColor 8%, transparent);
+}
+
+.journey-feeling-fill {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.journey-feeling-fill[data-live='false'] {
+  background: var(--text-muted);
+}
+
+.journey-feeling-word {
+  margin-top: 9px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+}
+
+.journey-feeling-word[data-live='false'] {
+  color: var(--text-muted);
+}
+
+.journey-status {
+  display: inline-block;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 4px;
+  padding: 3px 8px;
+  margin-bottom: 8px;
+}
+
+.journey-status-resolved {
+  color: var(--accent);
+  background: var(--accent-wash);
+  border: 1px solid var(--accent-edge);
+}
+
+.journey-status-fixed {
+  color: var(--pink);
+  background: rgb(var(--pink-rgb) / 0.1);
+  border: 1px solid rgb(var(--pink-rgb) / 0.45);
+}
+
+.journey-status-needs-call {
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px dashed var(--text-muted);
+}
+
+.journey-note {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.journey-metric {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--amber);
+}
+
+.journey-priority {
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.journey-priority-label {
+  color: var(--amber);
+  padding-top: 3px;
+}
+
+.journey-priority p {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: var(--text);
+  max-width: 740px;
+}
+
+.journey-verified {
+  margin: 0;
+  opacity: 0.7;
+}
+
+.journeys-summary {
+  max-width: 820px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
