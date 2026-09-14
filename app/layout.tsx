@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono, Lora } from 'next/font/google';
+import { AnalyticsEvents } from '@/components/analytics-events';
+import { PublicAnalytics } from '@/components/public-analytics';
 import './globals.css';
 
 const inter = Inter({
@@ -72,6 +74,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
         <script dangerouslySetInnerHTML={{ __html: revealBootstrap }} />
         {children}
+        <PublicAnalytics />
+        <AnalyticsEvents />
       </body>
     </html>
   );
