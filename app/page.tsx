@@ -311,11 +311,11 @@ export default function Home() {
             <p>{contact.body}</p>
             <div className="btn-row">
               <a className="btn btn-lg btn-gradient" href={`mailto:${site.email}`} data-funnel-event="contact_click" data-funnel-placement="contact_section" style={{ fontSize: '1.125rem' }}>
-                Discuss a leadership role
+                Hire Me
                 <Arrow />
               </a>
               <ExternalLink className="btn btn-lg btn-outline" href={site.bookingUrl} data-funnel-event="booking_click" data-funnel-placement="contact_section" style={{ fontSize: '1.125rem' }}>
-                Discuss a consulting project
+                Consulting Opportunities
                 <Arrow />
               </ExternalLink>
             </div>
