@@ -380,10 +380,10 @@ export default function Home() {
               {contact.headingAfter}
             </h2>
             <p>{contact.body}</p>
-            <a className="contact-services-link" href="/work-with-me">Work with me <Arrow /></a>
+            <a className="contact-services-link" href="/work-with-me">Consulting Opportunities <Arrow /></a>
             <div className="btn-row">
               <ExternalLink className="btn btn-lg btn-gradient" href={site.bookingUrl}>
-                Grab time on my calendar
+                Hire Me
                 <Arrow />
               </ExternalLink>
               <a className="btn btn-lg btn-outline" href={`mailto:${site.email}`}>
