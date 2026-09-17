@@ -216,8 +216,8 @@ export const caseStudies: CaseStudy[] = [
       src: '/images/bunch-data-model.png',
       width: 1792,
       height: 2316,
-      alt: 'Bunch data model: people have pictures, hosting history, and fronting history; a return can have a catch-up with saved notes, tasks, decisions, and conversation summaries.',
-      caption: 'Bunch’s published data model. Hosting records responsibility; fronting records presence.',
+      alt: 'Diagram of Bunch’s data model linking people to hosting and fronting history.',
+      caption: 'Bunch’s published data model: people have pictures, hosting history, and fronting history; a return can have a catch-up with saved notes, tasks, decisions, and conversation summaries. Hosting records responsibility; fronting records presence.',
     },
     star: {
       situation: [

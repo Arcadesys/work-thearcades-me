@@ -38,9 +38,7 @@ function CaseSummary({ study }: { study: CaseStudy }) {
   return (
     <div>
       <p className="label case-pill">{study.lane}</p>
-      <h3 id={`${study.id}-title`}>
-        <Link href={`/work/${study.slug}`}>{study.title}</Link>
-      </h3>
+      <h3 id={`${study.id}-title`}>{study.title}</h3>
       <p>{study.body}</p>
       <ul className="tag-list" aria-label={`${study.lane} disciplines`}>
         {study.tags.map((tag) => (
@@ -152,10 +150,9 @@ export default function Home() {
             aria-labelledby={`${guaranteedRate.id}-title`}
           >
             <CaseSummary study={guaranteedRate} />
-            <p className="stat">
-              {ownerStat.value}
-              <span className="label">{ownerStat.label}</span>
-            </p>
+            <h4 className="stat">
+              {ownerStat.value} <span className="label">{ownerStat.label}</span>
+            </h4>
           </article>
 
           <article
@@ -265,9 +262,7 @@ export default function Home() {
               <span aria-hidden="true">·</span>
               <span>{featuredNote.kind}</span>
             </p>
-            <h3 id="featured-note-title">
-              <Link href={featuredNote.href}>{featuredNote.title}</Link>
-            </h3>
+            <h3 id="featured-note-title">{featuredNote.title}</h3>
             <p>{featuredNote.body}</p>
             <div className="featured-actions">
               <Link className="btn btn-outline" href={featuredNote.href}>
