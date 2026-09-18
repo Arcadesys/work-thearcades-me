@@ -1,0 +1,56 @@
+.post {
+  display: grid;
+  grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 2rem);
+  align-items: start;
+}
+
+.imageLink {
+  display: block;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.imageLink:focus-visible {
+  outline: 3px solid var(--pink);
+  outline-offset: 4px;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1200 / 630;
+  object-fit: cover;
+  transition: transform 180ms ease, filter 180ms ease;
+}
+
+.imageLink:hover .image {
+  transform: scale(1.02);
+  filter: brightness(1.06);
+}
+
+.copy {
+  min-width: 0;
+}
+
+@media (max-width: 700px) {
+  .post {
+    grid-template-columns: 1fr;
+  }
+
+  .imageLink {
+    max-width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image {
+    transition: none;
+  }
+
+  .imageLink:hover .image {
+    transform: none;
+  }
+}
