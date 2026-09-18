@@ -317,6 +317,10 @@ export default function Home() {
             <nav className="btn-row" aria-label="Contact options">
               <Link className="contact-services-link" href={site.resumeUrl} data-funnel-event="resume_click" data-funnel-placement="contact_section">View résumé <Arrow /></Link>
               <Link className="contact-services-link" href="/work-with-me">Explore consulting services <Arrow /></Link>
+              <ExternalLink className="contact-services-link" href={site.linkedinUrl}>
+                LinkedIn
+                <Arrow />
+              </ExternalLink>
               <ExternalLink className="contact-services-link" href={site.githubUrl}>
                 GitHub
                 <Arrow />
