@@ -35,8 +35,7 @@ this slice. Newsletter delivery and comments are not added here.
 
 The first post written for this site rather than migrated from one. Its
 Layoff Triage Skill download and `/layoff-triage` landing page ship in the
-same change (see `docs/image-prompts.md` for the one placeholder image on
-that page). Sitemap (`app/sitemap.ts`), robots (`app/robots.ts`), and an RSS
+same change. Its finished tea hero is documented in `docs/image-prompts.md`. Sitemap (`app/sitemap.ts`), robots (`app/robots.ts`), and an RSS
 feed (`app/feed.xml/route.ts`) are added in this pass; every post also gets an
 automatic social-preview card from `app/blog/[slug]/opengraph-image.tsx`
 unless it sets its own `hero`.
