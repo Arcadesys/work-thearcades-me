@@ -25,7 +25,6 @@ export default function LayoffTriagePage() {
         <div className="services-intro">
           <p className="label kicker"><span className="dot" />Free download</p>
           <h1>{TITLE}</h1>
-          {/* eslint-disable-next-line @next/next/no-img-element -- placeholder art; see docs/image-prompts.md */}
           <img src="/images/layoff-triage-hero.svg" alt="" width={1200} height={630} style={{ width: '100%', height: 'auto', borderRadius: 12 }} />
           <p>{DESCRIPTION}</p>
           <a
