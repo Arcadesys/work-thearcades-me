@@ -3,7 +3,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { newsletter } from '@/lib/content';
 
-export function SubscribeForm() {
+export function SubscribeForm({ placement = 'blog_post' }: { placement?: string }) {
   const emailId = useId();
   const pending = useRef(false);
   const recoveryTimer = useRef<number | undefined>(undefined);
@@ -94,7 +94,13 @@ export function SubscribeForm() {
           autoComplete="email"
           placeholder="you@company.com"
         />
-        <button className="btn btn-gradient" type="submit" disabled={submitting}>
+        <button
+          className="btn btn-gradient"
+          type="submit"
+          disabled={submitting}
+          data-funnel-event="subscribe_submit"
+          data-funnel-placement={placement}
+        >
           {submitting ? 'Opening confirmation…' : 'Get the build notes'}
         </button>
       </form>

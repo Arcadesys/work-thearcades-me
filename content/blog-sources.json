@@ -111,5 +111,15 @@
     "sourceSha256": "eca38f374f3ea954516d26b947149c1f6085a76bf03ae0f13c453fd0ec4de9e0",
     "bodySha256": "81ff2448e8f755e5253c0c7a6b8bdf7016471a764498b924f90dee1b9e5af783",
     "importedAt": "2026-09-12T16:55:26.466Z"
+  },
+  "when-in-crisis-make-tea": {
+    "kind": "archive",
+    "repository": "Arcadesys/writing-archive",
+    "path": "when-in-crisis-make-tea.md",
+    "sourceStatus": "draft",
+    "sourceSha256": "0185e3bc17fda0b2dc1f16b7ce11fc58774577991e4a136291f62bd0045c8866",
+    "bodySha256": "5ba13db2f9f700024db2cfd81c81d563ffd8d48bbdc5ee8b546a05399227dac2",
+    "importedAt": "2026-09-17T13:00:00.000Z",
+    "note": "First post written for this site rather than migrated from a prior one. The single change from the source file: the bold 'Download the free Layoff Triage Skill' line is now a real link to /layoff-triage, since that page and download now exist. Prose is otherwise unchanged, including its typos."
   }
 }

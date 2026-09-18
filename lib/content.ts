@@ -382,7 +382,7 @@ export const newsletter = {
   kicker: 'The newsletter',
   heading: 'Get the build notes.',
   body: 'I write about building AI systems in public—what worked, what broke, and what I’d do differently.',
-  idleNote: 'Unsubscribe whenever.',
+  idleNote: 'One email a week. Unsubscribe whenever.',
 } as const;
 
 export const commentBox = {

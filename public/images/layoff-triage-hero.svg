@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="Placeholder illustration: a mug of tea. Real art pending.">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0a14" />
+      <stop offset="100%" stop-color="#1e1e3a" />
+    </linearGradient>
+    <linearGradient id="mug" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff8a00" />
+      <stop offset="100%" stop-color="#ff3cac" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <rect x="16" y="16" width="1168" height="598" rx="16" fill="none" stroke="#9a9ab0" stroke-width="2" stroke-dasharray="10 10" />
+  <g transform="translate(480,205)">
+    <path d="M40 60 h160 v90 a80 80 0 0 1-160 0 z" fill="url(#mug)" />
+    <path d="M200 90 a35 35 0 0 1 0 70 h-10 v-70 z" fill="none" stroke="url(#mug)" stroke-width="12" />
+    <path d="M75 40 q10 -20 0 -40" fill="none" stroke="#e8e8ec" stroke-width="6" stroke-linecap="round" opacity="0.6" />
+    <path d="M110 40 q10 -20 0 -40" fill="none" stroke="#e8e8ec" stroke-width="6" stroke-linecap="round" opacity="0.6" />
+  </g>
+  <text x="600" y="440" text-anchor="middle" font-family="sans-serif" font-size="28" font-weight="700" fill="#e8e8ec">Image placeholder</text>
+  <text x="600" y="478" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#9a9ab0">See docs/image-prompts.md — swap for generated art</text>
+</svg>

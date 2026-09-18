@@ -29,7 +29,17 @@ the separate publishDate is the site's publication timestamp, not the build date
 
 Clear work/AI essays are in scope for later batches. Personal crossover pieces
 remain subject to editorial review. No redirects or original-page retirement in
-this slice. Newsletter delivery, comments, RSS and sitemap are not added here.
+this slice. Newsletter delivery and comments are not added here.
+
+## When in crisis, make tea (launch)
+
+The first post written for this site rather than migrated from one. Its
+Layoff Triage Skill download and `/layoff-triage` landing page ship in the
+same change (see `docs/image-prompts.md` for the one placeholder image on
+that page). Sitemap (`app/sitemap.ts`), robots (`app/robots.ts`), and an RSS
+feed (`app/feed.xml/route.ts`) are added in this pass; every post also gets an
+automatic social-preview card from `app/blog/[slug]/opengraph-image.tsx`
+unless it sets its own `hero`.
 
 ## September 12 archive batch
 
