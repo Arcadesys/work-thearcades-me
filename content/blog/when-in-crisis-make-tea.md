@@ -5,6 +5,9 @@ slug: when-in-crisis-make-tea
 group: work-notes
 publishDate: '2026-09-17T13:00:00.000Z'
 excerpt: Laid off again. Before the résumé, the tea — and a free skill that walks you through the same triage.
+hero:
+  src: /images/layoff-triage-hero.svg
+  alt: A steaming mug of tea beside a closed laptop and notebook on a dark desk.
 tags:
   - career
   - ai-enablement

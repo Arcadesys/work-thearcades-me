@@ -33,6 +33,7 @@ export default async function PostPage({ params }: PageProps<'/blog/[slug]'>) {
     <h1>{post.title}</h1><time dateTime={post.publishDate}>{displayDate(post.publishDate)}</time>
     {post.buildDate && <p>Build date: <time dateTime={post.buildDate}>{displayBuildDate(post.buildDate)}</time></p>}
     <PostTags post={post} />
+    {post.hero && <img className="blog-hero" src={post.hero.src} alt={post.hero.alt} width={1200} height={630} />}
     {work.length > 0 && <aside className="blog-related" aria-label="Featured work">{work.map(study => <p key={study.slug}>Featured work: <Link href={`/work/${study.slug}`}>{study.title}</Link></p>)}</aside>}
     <div className="blog-prose"><Markdown {...markdownProps}>{firstHalf}</Markdown></div>
     <div className="subscribe" aria-label="Subscribe">
