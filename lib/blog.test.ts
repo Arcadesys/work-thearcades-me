@@ -7,6 +7,9 @@ import path from 'node:path';
 import sources from '../content/blog-sources.json';
 import { loadPosts, publicPosts, postTags, relatedPosts, relatedWork, displayBuildDate, articleBody, archiveLinks } from './blog';
 import { caseStudies } from './content';
+import sitemap from '../app/sitemap';
+import robots from '../app/robots';
+import { GET as feedRoute } from '../app/feed.xml/route';
 
 test('Bunch preserves the complete source file, metadata, and explicit association', () => {
   const raw = readFileSync('content/blog/bunch.md');
@@ -43,7 +46,7 @@ test('partial build dates never display invented precision', () => {
 
 test('all selected imports preserve exact source files or archive bodies', () => {
   const posts = loadPosts();
-  assert.equal(posts.length, 12);
+  assert.equal(posts.length, 13);
   for (const [slug, receipt] of Object.entries(sources)) {
     const post = posts.find(post => post.slug === slug)!;
     assert(post, `Missing ${slug}`);
@@ -60,4 +63,42 @@ test('archive links resolve without exposing handoffs or unselected drafts', () 
   assert.equal(archiveLinks['the-fox-and-the-eval']['photos-arent-sticky.md'], '');
   const [media] = sources['the-fox-and-the-eval'].media;
   assert.equal(createHash('sha256').update(readFileSync(`public${media.destination}`)).digest('hex'), media.sha256);
+});
+
+test('the launch post links the skill and keeps a weekly cadence promise', () => {
+  const post = loadPosts().find(post => post.slug === 'when-in-crisis-make-tea')!;
+  assert.deepEqual(post.tags, ['career', 'ai-enablement', 'layoffs', 'building-in-public']);
+  assert(post.body.includes('[Download the free Layoff Triage Skill](/layoff-triage)'));
+  assert(!post.body.includes('**Download the free Layoff Triage Skill**'));
+});
+
+test('the layoff triage skill download exists and is referenced by the post and its landing page', () => {
+  assert(readFileSync('public/downloads/layoff-triage-skill.md', 'utf8').includes('I was just laid off. Start with tea.'));
+  assert(readFileSync('app/layoff-triage/page.tsx', 'utf8').includes('/downloads/layoff-triage-skill.md'));
+});
+
+test('sitemap includes every public post and excludes the noindexed journeys page', () => {
+  const entries = sitemap();
+  const urls = entries.map(entry => entry.url);
+  for (const post of publicPosts()) assert(urls.includes(`https://work.thearcades.me/blog/${post.slug}`), post.slug);
+  assert(urls.includes('https://work.thearcades.me/blog/when-in-crisis-make-tea'));
+  assert(urls.includes('https://work.thearcades.me/layoff-triage'));
+  assert(!urls.some(url => url.includes('/journeys')));
+});
+
+test('robots disallows journeys and points at the sitemap', () => {
+  const config = robots();
+  assert.equal(config.sitemap, 'https://work.thearcades.me/sitemap.xml');
+  const rule = Array.isArray(config.rules) ? config.rules[0] : config.rules;
+  assert.equal(rule.disallow, '/journeys');
+});
+
+test('the RSS feed lists exactly the public posts', async () => {
+  const response = feedRoute();
+  const body = await response.text();
+  const posts = publicPosts();
+  const itemCount = body.match(/<item>/g)?.length ?? 0;
+  assert.equal(itemCount, posts.length);
+  assert(body.includes('When in crisis, make tea.'));
+  assert.equal(response.headers.get('Content-Type'), 'application/rss+xml; charset=utf-8');
 });

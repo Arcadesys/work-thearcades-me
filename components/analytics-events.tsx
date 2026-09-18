@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 const SAFE_UTM_VALUE = /^[a-z0-9_-]{1,64}$/;
 const customEventsEnabled = process.env.NEXT_PUBLIC_VERCEL_CUSTOM_EVENTS_ENABLED === 'true';
 
-type FunnelEvent = 'resume_click' | 'contact_click' | 'booking_click';
+type FunnelEvent = 'resume_click' | 'contact_click' | 'booking_click' | 'triage_skill_download' | 'subscribe_submit';
 
 /**
  * Tracks only public funnel interactions. Event properties intentionally omit

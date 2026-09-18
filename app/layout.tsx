@@ -39,6 +39,7 @@ export const metadata: Metadata = {
   title: 'Austen Tucker-Crowder — AI Enablement & Engineering Transformation Leader',
   description: 'AI enablement and engineering transformation leadership for teams adopting AI in their everyday work.',
   metadataBase: new URL('https://work.thearcades.me'),
+  alternates: { types: { 'application/rss+xml': '/feed.xml' } },
 };
 
 /**

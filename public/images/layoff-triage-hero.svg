@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="80" y1="40" x2="1100" y2="600" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0a0a14"/>
+      <stop offset="0.58" stop-color="#21152f"/>
+      <stop offset="1" stop-color="#5a203b"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientTransform="translate(805 248) rotate(132) scale(390 300)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff8a00" stop-opacity=".48"/>
+      <stop offset=".52" stop-color="#ff3cac" stop-opacity=".16"/>
+      <stop offset="1" stop-color="#ff3cac" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="desk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#302d3c"/>
+      <stop offset="1" stop-color="#171721"/>
+    </linearGradient>
+    <linearGradient id="mug" x1="485" y1="330" x2="690" y2="535" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffb347"/>
+      <stop offset=".55" stop-color="#ff7a3d"/>
+      <stop offset="1" stop-color="#ff3cac"/>
+    </linearGradient>
+    <linearGradient id="laptop" x1="730" y1="250" x2="1030" y2="455" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#343342"/>
+      <stop offset="1" stop-color="#171721"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+    <filter id="steamBlur" x="-60%" y="-30%" width="220%" height="180%">
+      <feGaussianBlur stdDeviation="1.2"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <circle cx="103" cy="108" r="2" fill="#f8e9ff" opacity=".6"/>
+  <circle cx="167" cy="72" r="1.5" fill="#f8e9ff" opacity=".35"/>
+  <circle cx="1080" cy="127" r="2.5" fill="#ffd9ef" opacity=".45"/>
+  <circle cx="1009" cy="82" r="1.4" fill="#ffd9ef" opacity=".3"/>
+
+  <ellipse cx="690" cy="512" rx="440" ry="58" fill="#000" opacity=".34" filter="url(#shadow)"/>
+  <path d="M110 446 C310 410 875 406 1090 438 L1128 630 H72 Z" fill="url(#desk)"/>
+  <path d="M110 446 C330 423 870 418 1090 438" fill="none" stroke="#5b5265" stroke-width="3" opacity=".55"/>
+
+  <!-- closed laptop -->
+  <g transform="rotate(-3 885 391)">
+    <path d="M732 296 Q736 282 752 280 L1003 267 Q1019 267 1023 282 L1043 408 L715 423 Z" fill="url(#laptop)" stroke="#777287" stroke-width="3"/>
+    <path d="M709 423 L1048 407 Q1058 407 1061 416 Q1062 426 1050 429 L735 449 Q717 450 709 441 Z" fill="#23222e" stroke="#777287" stroke-width="3"/>
+    <path d="M843 418 L930 413 Q928 429 911 432 L864 435 Q848 434 843 418 Z" fill="#494657"/>
+    <circle cx="872" cy="344" r="8" fill="#9c95aa" opacity=".55"/>
+  </g>
+
+  <!-- tea mug -->
+  <g>
+    <ellipse cx="584" cy="509" rx="126" ry="25" fill="#000" opacity=".32"/>
+    <path d="M470 344 H662 V466 Q662 520 606 533 H526 Q470 520 470 466 Z" fill="url(#mug)"/>
+    <ellipse cx="566" cy="344" rx="96" ry="24" fill="#ffd9b4"/>
+    <ellipse cx="566" cy="347" rx="79" ry="15" fill="#6f3523"/>
+    <path d="M659 375 C722 368 748 395 740 430 C733 462 705 479 661 473" fill="none" stroke="#ff6f60" stroke-width="22" stroke-linecap="round"/>
+    <path d="M661 386 C697 382 716 398 711 422 C708 441 692 450 662 451" fill="none" stroke="#2b2030" stroke-width="9" stroke-linecap="round" opacity=".72"/>
+    <path d="M598 350 C596 377 598 402 615 424" fill="none" stroke="#e9c7a0" stroke-width="3"/>
+    <rect x="608" y="423" width="24" height="18" rx="3" fill="#f3e0c7" transform="rotate(7 620 432)"/>
+  </g>
+
+  <!-- steam -->
+  <g fill="none" stroke="#fff5ec" stroke-width="7" stroke-linecap="round" opacity=".72" filter="url(#steamBlur)">
+    <path d="M522 306 C490 277 538 256 516 219 C503 198 507 177 531 158"/>
+    <path d="M568 306 C548 281 584 257 566 229 C549 203 555 177 579 153"/>
+    <path d="M611 307 C587 277 628 257 611 224 C600 203 607 184 627 166"/>
+  </g>
+
+  <!-- notebook + pencil, a quiet hint of planning -->
+  <g transform="rotate(7 323 455)">
+    <rect x="227" y="407" width="194" height="116" rx="10" fill="#f2e9df"/>
+    <path d="M255 436 H390 M255 459 H390 M255 482 H352" stroke="#b7a99b" stroke-width="5" stroke-linecap="round"/>
+    <path d="M398 420 L418 405" stroke="#ff8a00" stroke-width="8" stroke-linecap="round"/>
+  </g>
+
+  <!-- subtle window-light stripe -->
+  <path d="M69 0 H215 L444 446 H300 Z" fill="#ffffff" opacity=".035"/>
+</svg>
