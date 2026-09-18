@@ -53,13 +53,24 @@ export type CaseStudy = {
   star?: Star;
   /** The closing lesson the writeup lands on. */
   principle?: string;
+  /** Fast, inspectable proof for skeptical readers. */
+  evidence?: {
+    heading: string;
+    items: Array<{ label: string; value: string }>;
+    note?: string;
+  };
+  /** Technical/product detail that sits outside the narrative story. */
+  buildNotes?: Array<{
+    heading: string;
+    paragraphs: string[];
+  }>;
 };
 
 export const STAR_PARTS = [
-  { key: 'situation', label: 'Situation' },
-  { key: 'task', label: 'Task' },
-  { key: 'action', label: 'Action' },
-  { key: 'result', label: 'Result' },
+  { key: 'situation', label: 'The problem' },
+  { key: 'task', label: 'What I owned' },
+  { key: 'action', label: 'What I did' },
+  { key: 'result', label: 'What changed' },
 ] as const satisfies ReadonlyArray<{ key: keyof Star; label: string }>;
 
 export function hasStar(study: CaseStudy): boolean {
@@ -83,7 +94,7 @@ export type Comment = {
 
 export const site = {
   name: 'Austen Tucker-Crowder',
-  role: 'AI Enablement & Engineering Transformation Leader',
+  role: 'AI Builder & Enablement Leader',
   email: 'austen@thearcades.me',
   bookingUrl: 'https://cal.com/austen-tucker-crowder/30min',
   resumeUrl: '/resume',
@@ -95,56 +106,91 @@ export const site = {
 } as const;
 
 export const hero = {
-  eyebrow: 'AI Enablement & Engineering Transformation Leader',
+  eyebrow: 'AI builder · product-minded engineer · enablement leader',
   headingBefore: 'Hi. I make ',
   headingAccent: 'useful',
   headingAfter: ' things.',
   evidence: 'Helped raise agentic-coding adoption from roughly 2% to 43% of merge requests',
   intro:
-    'I’m seeking a leadership role in AI enablement or engineering transformation, helping teams turn AI ambition into measurable, repeatable practice.',
+    'I turn messy problems into working software, then make the systems around that software understandable enough for other people to own. I’m looking for hands-on AI engineering work and focused consulting where building is part of the job.',
 } as const;
 
 export const workWithMe = {
-  title: 'AI enablement and engineering transformation leadership',
-  description: 'Austen Tucker-Crowder is seeking AI enablement or engineering transformation leadership roles, and also offers limited consulting engagements.',
-  intro: 'I’m looking for a leadership role where I can help engineering and product organizations turn AI ambition into measurable, repeatable practice.',
-  roleLabel: 'Discuss a role',
-  consultingTitle: 'Consulting for teams and small organizations',
-  consultingIntro: 'I also take on select consulting engagements for teams that need practical AI enablement, a useful website or app, or a clear first version of an idea.',
-  bookingLabel: 'Discuss a consulting project',
+  title: 'Build the first useful version',
+  description: 'Austen Tucker-Crowder builds practical AI systems, prototypes, and workflows, then helps teams understand and own what ships.',
+  intro: 'Bring me a messy workflow, a half-formed product idea, or an AI capability that needs to become real. I work best where the job includes building the thing, testing it with actual people, and leaving behind something your team can understand and own.',
+  roleLabel: 'Talk about a role',
+  consultingTitle: 'Focused consulting engagements',
+  consultingIntro: 'For consulting, I scope around a concrete outcome rather than selling a vague bucket of hours.',
+  bookingLabel: 'Discuss a project',
   services: [
     {
-      id: 'ai-enablement',
-      title: 'Give your team AI superpowers',
-      body: 'I help teams put AI to work: finding useful starting points, building practical workflows, and teaching people how to use the tools and check the results.',
-      includes: ['Team workshops', 'Workflow coaching', 'Hands-on prototyping'],
-      detail: 'Bring one recurring task to a workshop and leave with an AI-assisted approach you have tried and know how to check.',
+      id: 'first-useful-version',
+      title: 'Build the first useful version',
+      body: 'Turn an idea, recurring headache, or broken workflow into something real enough to use and learn from.',
+      includes: ['Working prototype or small application', 'Explicit acceptance criteria', 'Handoff notes and next-step decisions'],
+      detail: 'The point is not a polished monument. It is a useful first version that exposes what should happen next.',
+      exampleSlug: 'bunch',
+    },
+    {
+      id: 'ai-workflow',
+      title: 'Put AI to work on a real task',
+      body: 'Take one meaningful workflow and make AI useful inside it without pretending generated output is automatically trustworthy.',
+      includes: ['Workflow design and implementation', 'A way to inspect or check results', 'Practical documentation for the people using it'],
+      detail: 'The deliverable is an approach your team can try, evaluate, and improve rather than a demo that only works while I am in the room.',
       exampleSlug: 'ai-enablement',
     },
     {
-      id: 'websites-and-apps',
-      title: 'Websites and apps',
-      body: 'Business tools, personal projects, creative ideas—or an existing website that needs help. Tell me what you want to make or improve, and we’ll define a useful first version.',
-      includes: ['Website improvements', 'Small custom applications', 'Prototypes'],
-      detail: 'Not every project needs AI. We’ll choose the tools that fit yours.',
-      exampleSlug: 'bunch',
+      id: 'team-ownership',
+      title: 'Help the team take ownership',
+      body: 'When a useful pattern exists, I help turn it into something other people can operate, teach, and extend.',
+      includes: ['Hands-on training', 'Worked examples', 'Ownership and handoff plan'],
+      detail: 'Good systems should survive contact with the people who inherit them.',
+      exampleSlug: 'ai-enablement',
     },
   ],
   firstStep: {
     title: 'How this works',
     steps: [
-      'We have a 30-minute chat about what you need.',
-      'I put together a statement of work and an estimate.',
-      'We talk it through and agree on how to move forward.',
+      'We identify the concrete problem and the person who needs it solved.',
+      'I propose a bounded first outcome, acceptance criteria, and estimate.',
+      'We build, test, and decide what deserves to exist next.',
     ],
   },
   pricing: {
-    title: 'Pricing that fits the project',
-    body: 'Pricing depends on scope. Sliding-scale options are available, especially for individuals, artists, and small community organizations. If money is tight, tell me what you have in mind and we’ll see what we can work out.',
+    title: 'Scope before spectacle',
+    body: 'Pricing depends on scope. Sliding-scale options are available, especially for individuals, artists, and small community organizations. We define what success means before committing to a larger build.',
     welcome: 'Small nonprofits and LGBTQ organizations are especially welcome.',
   },
-  closing: 'Bring an idea, a recurring headache, or a website that needs some attention.',
+  closing: 'Bring an idea, a recurring headache, or a system that needs to become legible.',
 } as const;
+
+export const outcomes = [
+  {
+    number: '01',
+    title: 'Prototype',
+    body: 'Turn an ambiguous opportunity into a working artifact people can react to.',
+    accent: 'pink' as Accent,
+  },
+  {
+    number: '02',
+    title: 'Instrument',
+    body: 'Define what success means and measure the behavior that matters instead of relying on vibes.',
+    accent: 'orange' as Accent,
+  },
+  {
+    number: '03',
+    title: 'Operationalize',
+    body: 'Build the boring-but-essential evaluation, documentation, and handoff around the useful thing.',
+    accent: 'rose' as Accent,
+  },
+  {
+    number: '04',
+    title: 'Enable',
+    body: 'Teach the pattern well enough that the team can keep moving without a permanent wizard in the basement.',
+    accent: 'amber' as Accent,
+  },
+] as const;
 
 export const beliefs = [
   {
@@ -213,6 +259,31 @@ export const caseStudies: CaseStudy[] = [
       { label: 'View the source code', href: 'https://github.com/Arcadesys/bunch' },
     ],
     accent: 'pink',
+    evidence: {
+      heading: 'Proof you can inspect',
+      items: [
+        { label: 'Observed recovery', value: 'About 15 seconds for one real catch-up that had previously taken roughly 20 minutes to reconstruct manually.' },
+        { label: 'Public implementation', value: 'Source code, setup documentation, and the data model are published.' },
+        { label: 'Shared engine', value: 'The web app and MCP server operate on the same explicit records and service rules.' },
+      ],
+      note: 'The 15-second result is one personal observation, not a population-wide performance benchmark.',
+    },
+    buildNotes: [
+      {
+        heading: 'Under the hood',
+        paragraphs: [
+          'Bunch has two front doors onto the same records: a web application for browsing and editing, and an MCP server so an AI assistant can read and write under the same rules.',
+          'The record model is deliberately explicit. A missing entry means nothing was recorded; the system does not infer that nobody was present. That boundary is part of the product, not an implementation footnote.',
+        ],
+      },
+      {
+        heading: 'The product insight',
+        paragraphs: [
+          'I started by thinking I was building identity-tracking software. The more general problem was continuity: preserve enough structured context that the next person, session, or interface can keep going.',
+          'That makes the architecture productizable across different surfaces. The audience-specific language can change while the core job stays the same: maintain canonical context, track changes over time, and hand a harness the smallest useful packet of truth.',
+        ],
+      },
+    ],
     image: {
       src: '/images/bunch-data-model.png',
       width: 1792,
@@ -245,6 +316,23 @@ export const caseStudies: CaseStudy[] = [
     body: 'At Guaranteed Rate, I acted as product owner for a data-mining tool associated with $1.5B in locked loan volume. The work required turning complexity into priorities, risks, trade-offs, and a path through ambiguity.',
     tags: ['Program ownership', 'Fintech', 'Delivery', 'Executive communication'],
     accent: 'orange',
+    evidence: {
+      heading: 'Scope, separated cleanly',
+      items: [
+        { label: 'Technical credibility', value: 'Learned JavaScript and shipped internal tools, including a real-time lobby display of loan locks.' },
+        { label: 'Program ownership', value: 'Later acted as product owner on a separate data-mining initiative associated with roughly $1.5B in locked loan volume.' },
+        { label: 'Operating lesson', value: 'Small shipped artifacts created feedback and credibility faster than abstract plans.' },
+      ],
+      note: 'The lobby display and the $1.5B data-mining initiative were separate pieces of work. The volume figure describes the initiative’s associated locked loans, not revenue I personally generated.',
+    },
+    buildNotes: [
+      {
+        heading: 'Why this belongs in an engineering portfolio',
+        paragraphs: [
+          'The important part is not that I became a JavaScript expert overnight. I learned enough to cross the boundary from coordinator to builder, put a real tool in front of people, and use that artifact to improve the quality of the product conversation.',
+        ],
+      },
+    ],
     star: {
       situation: [
         'I joined Guaranteed Rate in a high-pressure, engineering-driven culture where credibility came from shipping. I had been hired to help keep teams moving, but early on I was told pretty directly that I was not worth listening to because I could not code.',
@@ -271,6 +359,24 @@ export const caseStudies: CaseStudy[] = [
     body: 'At ActiveCampaign, I led AI enablement and transformation across engineering, product, and leadership. I paired adoption goals and operating metrics with accessibility-first learning experiences that made practical experimentation possible.',
     tags: ['AI enablement', 'Agentic development', 'Teaching', 'Change leadership'],
     accent: 'rose',
+    evidence: {
+      heading: 'Measured transformation',
+      items: [
+        { label: 'Adoption', value: 'Agentic-coding adoption moved from roughly 2% to 43% of merge requests across the broader transformation work.' },
+        { label: 'Enablement surface', value: 'Led a hands-on product-manager roadshow across three continents.' },
+        { label: 'Behavior change', value: 'Product managers began producing prototypes of their own after the roadshow.' },
+      ],
+      note: 'The adoption metric reflects broader organizational work. I contributed to that result; I do not claim the training program alone caused the increase.',
+    },
+    buildNotes: [
+      {
+        heading: 'What I was actually building',
+        paragraphs: [
+          'The product was not a workshop. It was an operating system for adoption: goals and KPIs, practical learning experiences, visible artifacts, decision structures, and enough psychological safety for people to try the tools on real work.',
+          'The repeated pattern was to pair permission to experiment with a way to inspect the result. That is how a novelty starts becoming a practice.',
+        ],
+      },
+    ],
     star: {
       situation: [
         'ActiveCampaign had a strong push toward AI adoption, but little shared structure for how engineering, product, and leadership would learn, measure progress, and act on it.',

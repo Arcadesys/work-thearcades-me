@@ -37,10 +37,7 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
   return (
     <>
       <CaseStudyView slug={study.slug} />
-      <a className="skip-link" href="#main">
-        Skip to content
-      </a>
-
+      <a className="skip-link" href="#main">Skip to content</a>
       <SiteHeader />
 
       <main id="main" tabIndex={-1}>
@@ -54,17 +51,15 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
           <p className="case-page-lede">{study.body}</p>
 
           <ul className="tag-list case-page-tags" aria-label={`${study.lane} disciplines`}>
-            {study.tags.map((tag) => (
-              <li className="label" key={tag}>
-                {tag}
-              </li>
-            ))}
+            {study.tags.map((tag) => <li className="label" key={tag}>{tag}</li>)}
           </ul>
 
           {links?.length ? (
             <ul className="case-links" aria-label={`${study.title} links`}>
               {links.map((link) => (
-                <li key={link.href}><ExternalLink href={link.href}>{link.label}<span aria-hidden="true"> ↗</span></ExternalLink></li>
+                <li key={link.href}>
+                  <ExternalLink href={link.href}>{link.label}<span aria-hidden="true"> ↗</span></ExternalLink>
+                </li>
               ))}
             </ul>
           ) : null}
@@ -84,26 +79,51 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
             </figure>
           )}
 
+          {study.evidence && (
+            <section className="case-evidence" aria-labelledby="case-evidence-heading">
+              <p className="label kicker"><span className="dot" />Evidence</p>
+              <h2 id="case-evidence-heading">{study.evidence.heading}</h2>
+              <dl className="case-evidence-grid">
+                {study.evidence.items.map((item) => (
+                  <div key={item.label}>
+                    <dt>{item.label}</dt>
+                    <dd>{item.value}</dd>
+                  </div>
+                ))}
+              </dl>
+              {study.evidence.note && <p className="case-evidence-note">{study.evidence.note}</p>}
+            </section>
+          )}
+
+          {study.buildNotes?.length ? (
+            <section className="case-build-notes" aria-labelledby="case-build-notes-heading">
+              <p className="label kicker"><span className="dot" />Engineering & product</p>
+              <h2 id="case-build-notes-heading">What the artifact taught me</h2>
+              <div className="case-build-notes-grid">
+                {study.buildNotes.map((note) => (
+                  <section key={note.heading}>
+                    <h3>{note.heading}</h3>
+                    {note.paragraphs.map((paragraph, index) => (
+                      <p key={index}>{paragraph}</p>
+                    ))}
+                  </section>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
           {written && (
-            <div className="star">
+            <div className="star" aria-label="Case study narrative">
               {STAR_PARTS.map((part) => {
                 const paragraphs = study.star?.[part.key];
                 if (!paragraphs?.length) return null;
 
                 return (
-                  <section
-                    className="star-part"
-                    key={part.key}
-                    aria-labelledby={`star-${part.key}`}
-                  >
-                    <h2 className="label star-label" id={`star-${part.key}`}>
-                      {part.label}
-                    </h2>
+                  <section className="star-part" key={part.key} aria-labelledby={`star-${part.key}`}>
+                    <h2 className="label star-label" id={`star-${part.key}`}>{part.label}</h2>
                     <div className="star-body">
                       {paragraphs.map((paragraph, index) => (
-                        <p key={index}>
-                          <RichText>{paragraph}</RichText>
-                        </p>
+                        <p key={index}><RichText>{paragraph}</RichText></p>
                       ))}
                     </div>
                   </section>
@@ -114,39 +134,41 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
 
           {study.principle && (
             <aside className="principle" aria-labelledby="principle-label">
-              <p className="label principle-label" id="principle-label">
-                Principle
-              </p>
+              <p className="label principle-label" id="principle-label">Principle</p>
               <p className="principle-text">{study.principle}</p>
             </aside>
           )}
 
-          {relatedPosts(study).length > 0 && <section className="blog-related" aria-labelledby="related-build-logs"><h2 id="related-build-logs">Related build logs</h2><BlogPostList posts={relatedPosts(study)} /></section>}
-
-          <div className="subscribe" id="subscribe">
-            <p className="label kicker">
-              <span className="dot" />
-              {newsletter.kicker}
-            </p>
-            <h2>{newsletter.heading}</h2>
-            <p>{newsletter.body}</p>
-            <SubscribeForm />
-          </div>
-
-          <div className="case-page-footer">
+          <section className="case-page-footer" aria-labelledby="case-conversation-heading">
+            <h2 id="case-conversation-heading">Have a problem in this neighborhood?</h2>
             <p className="lede">
-              Want the longer version, or the parts that don’t fit on a page? I’m happy to walk
-              through it.
+              I’m happy to walk through the technical decisions, the parts that failed, or what I would build next.
             </p>
             <div className="btn-row">
-              <ExternalLink className="btn btn-outline" href={site.bookingUrl} data-funnel-event="booking_click" data-funnel-placement="case_study">
-                Grab time on my calendar
-                <span aria-hidden="true"> →</span>
-              </ExternalLink>
-              <Link className="btn btn-ghost" href="/#work">
-                See the other work
-              </Link>
+              <a
+                className="btn btn-gradient"
+                href={`mailto:${site.email}`}
+                data-funnel-event="contact_click"
+                data-funnel-placement="case_study"
+              >
+                Talk about the work <span aria-hidden="true">→</span>
+              </a>
+              <Link className="btn btn-ghost" href="/#work">See the other work</Link>
             </div>
+          </section>
+
+          {relatedPosts(study).length > 0 && (
+            <section className="blog-related" aria-labelledby="related-build-logs">
+              <h2 id="related-build-logs">Related build logs</h2>
+              <BlogPostList posts={relatedPosts(study)} />
+            </section>
+          )}
+
+          <div className="subscribe" id="subscribe">
+            <p className="label kicker"><span className="dot" />{newsletter.kicker}</p>
+            <h2>{newsletter.heading}</h2>
+            <p>{newsletter.body}</p>
+            <SubscribeForm placement={`case_${study.slug}`} />
           </div>
         </article>
       </main>
