@@ -6,6 +6,7 @@ import { SiteHeader } from '@/components/site-header';
 import { ExternalLink } from '@/components/external-link';
 import { RevealOnScroll } from '@/components/reveal-on-scroll';
 import { SubscribeForm } from '@/components/subscribe-form';
+import styles from './home.module.css';
 import {
   about,
   beliefs,
@@ -74,7 +75,7 @@ export default function Home() {
 
       <SiteHeader home />
 
-      <main id="main" tabIndex={-1}>
+      <main className={styles.home} id="main" tabIndex={-1}>
         {/* Hero */}
         <section className="shell section-top hero" id="top" aria-labelledby="hero-heading">
           <div className="hero-grid">
