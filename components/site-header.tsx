@@ -7,7 +7,7 @@ import { ThemeSwitch } from './theme-switch';
 
 const links = [
   ['Work', '/#work'],
-  ['Work with me', '/work-with-me'],
+  ['What I offer', '/work-with-me'],
   ['About', '/#about'],
   ['Blog', '/blog'],
   ['Contact', '/#contact'],
