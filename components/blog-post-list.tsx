@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { BlogPost, RelatedReadingItem, displayDate, postTags, tagHref } from '@/lib/blog';
+import styles from './blog-post-list.module.css';
+
 export function PostTags({ post }: { post: BlogPost }) {
   return <ul className="blog-tags" aria-label="Post tags">{postTags(post).map(tag => <li key={tag}><Link href={tagHref(tag)}>{tag}</Link></li>)}</ul>;
 }
@@ -22,9 +24,28 @@ export function RelatedReading({ items }: { items: RelatedReadingItem[] }) {
   );
 }
 export function BlogPostList({ posts }: { posts: BlogPost[] }) {
-  return <ul className="blog-list">{posts.map(post => <li key={post.slug}>
-    <article><time dateTime={post.publishDate}>{displayDate(post.publishDate)}</time>
-      <h2><Link href={`/blog/${post.slug}`}>{post.title}</Link></h2>
-      {post.excerpt && <p>{post.excerpt}</p>}<PostTags post={post} />
-    </article></li>)}</ul>;
+  return <ul className="blog-list">{posts.map(post => {
+    const href = `/blog/${post.slug}`;
+    const imageSrc = post.hero?.src ?? `${href}/opengraph-image`;
+    return <li key={post.slug}>
+      <article className={styles.post}>
+        <Link className={styles.imageLink} href={href} aria-label={`Read ${post.title}`}>
+          <img
+            className={styles.image}
+            src={imageSrc}
+            alt={post.hero?.alt ?? ''}
+            width={1200}
+            height={630}
+            loading="lazy"
+          />
+        </Link>
+        <div className={styles.copy}>
+          <time dateTime={post.publishDate}>{displayDate(post.publishDate)}</time>
+          <h2><Link href={href}>{post.title}</Link></h2>
+          {post.excerpt && <p>{post.excerpt}</p>}
+          <PostTags post={post} />
+        </div>
+      </article>
+    </li>;
+  })}</ul>;
 }
