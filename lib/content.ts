@@ -90,6 +90,7 @@ export const site = {
   creativeUrl: 'https://www.thearcades.me',
   publishingUrl: 'https://freeplaypublishing.com',
   githubUrl: 'https://github.com/Arcadesys',
+  linkedinUrl: 'https://www.linkedin.com/in/austen-tucker-0968a914',
   blogUrl: 'https://work.thearcades.me/blog',
 } as const;
 
