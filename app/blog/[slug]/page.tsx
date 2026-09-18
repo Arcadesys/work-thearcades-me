@@ -45,6 +45,12 @@ export default async function PostPage({ params }: PageProps<'/blog/[slug]'>) {
     {source?.url && <p className="blog-provenance">Originally published on <a href={source.url}>The Arcades</a> on {displayDate(post.publishDate)}.</p>}
     {source?.kind === 'archive' && <p className="blog-provenance">From my writing archive. Published here on {displayDate(post.publishDate)}.</p>}
     <RelatedReading items={related} />
+    <div className="subscribe" aria-label="Subscribe">
+      <p className="label kicker"><span className="dot" />{newsletter.kicker}</p>
+      <h3>{newsletter.heading}</h3>
+      <p>{newsletter.body}</p>
+      <SubscribeForm placement="blog_post_end" />
+    </div>
     <Link className="back-link" href="/blog">← All posts</Link>
   </article>;
 }
