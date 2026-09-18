@@ -2424,3 +2424,9 @@ main [id] { scroll-margin-top: 16px; }
     border-color: var(--text);
   }
 }
+
+
+/* Temporary email signup pause while the mailing-list provider is being brought online. */
+.subscribe {
+  display: none !important;
+}
