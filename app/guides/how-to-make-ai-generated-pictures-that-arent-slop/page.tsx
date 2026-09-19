@@ -111,6 +111,8 @@ export default function PictureGuidePage() {
           <h2 id="reading-heading">The practice behind this guide</h2>
           <ul>
             <li><Link href="/blog/the-fox-and-the-eval">The Fox and the Eval</Link> — the public account of preserving a character, a photographic composition, and a boundary between subject and scene.</li>
+            <li><Link href="/blog/bunch-part-two">Bunch, Part II: After MVP</Link> — how image ratings become inspectable eval claims with frozen prompts, references, settings, and output hashes.</li>
+            <li><Link href="/blog/bunch-part-three">Bunch, Part III: The Group Photo</Link> — staging a multi-person composition, refusing to invent missing references, and keeping human recognition as the acceptance test.</li>
             <li><Link href="/blog/four-stages-nobody-tells-you-about">The Four Stages Nobody Tells You About</Link> — why systems, structured inputs, and evaluation outlast prompt obsession.</li>
             <li><ExternalLink href="https://github.com/Arcadesys/furry-image-studio">Furry Image Studio</ExternalLink> — the public prototype referenced in the evaluation essay.</li>
           </ul>
