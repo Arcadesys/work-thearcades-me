@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import type { Metadata } from 'next';
-import { homepageMetadata, PERSON_ID, SITE_URL, blogPostMetadata, caseStudyMetadata, blogPostJsonLd, caseStudyJsonLd, blogIndexMetadata, guideJsonLd, websiteJsonLd } from './site-metadata';
+import { homepageMetadata, PERSON_ID, SITE_URL, blogPostMetadata, caseStudyMetadata, blogPostJsonLd, caseStudyJsonLd, blogIndexMetadata, blogTagMetadata, guideJsonLd, personJsonLd, websiteJsonLd } from './site-metadata';
 import { loadPosts } from './blog';
 import { caseStudyBySlug, site, workWithMe } from './content';
 import { pictureGuide } from './guides';
@@ -51,6 +51,10 @@ test('case studies use exact search titles without changing their visible editor
   assert.equal(bunch.title, 'Bunch: free, open software for continuity across memory gaps');
   assert.equal(enablement.title, 'Turning AI adoption into measurable, repeatable practice');
   assert.equal(blogIndexMetadata.title, 'AI Engineering Build Logs & Essays');
+  assert.equal(blogIndexMetadata.openGraph?.url, '/blog');
+  assert.equal(blogIndexMetadata.openGraph?.title, 'AI Engineering Build Logs & Essays');
+  assert(blogIndexMetadata.twitter && 'card' in blogIndexMetadata.twitter);
+  assert.equal(blogIndexMetadata.twitter.card, 'summary_large_image');
 });
 
 test('structured data is canonical, source-bounded, and safe to embed in HTML', () => {
@@ -62,6 +66,7 @@ test('structured data is canonical, source-bounded, and safe to embed in HTML', 
   assert.equal(postSchema['@type'], 'BlogPosting');
   assert.equal(postSchema.url, `${SITE_URL}/blog/when-in-crisis-make-tea`);
   assert.equal(postSchema.datePublished, post.publishDate);
+  assert.equal(postSchema.dateModified, post.updatedDate ?? post.publishDate);
   assert.equal(studySchema['@type'], 'Article');
   assert.equal(studySchema.url, `${SITE_URL}/work/bunch`);
   assert.equal(studySchema.author.name, 'Austen Tucker-Crowder');
@@ -69,4 +74,20 @@ test('structured data is canonical, source-bounded, and safe to embed in HTML', 
   assert.equal(guideJsonLd(pictureGuide).url, `${SITE_URL}${pictureGuide.path}`);
   assert.equal(serializeJsonLd({ headline: '</script><script>alert(1)</script>' }).includes('</script>'), false);
   assert.match(serializeJsonLd({ headline: '</script>' }), /\\u003c\/script>/);
+});
+
+test('Person references all established public identities', () => {
+  assert.deepEqual(personJsonLd().sameAs, [
+    'https://www.linkedin.com/in/austen-tucker-0968a914',
+    'https://github.com/Arcadesys',
+    'https://www.thearcades.me',
+    'https://freeplaypublishing.com',
+  ]);
+});
+
+test('thin tag archives are noindex while established tags remain indexable', () => {
+  const thinTag = blogTagMetadata('career', 1);
+  const establishedTag = blogTagMetadata('bunch', 3);
+  assert.deepEqual(thinTag.robots, { index: false, follow: true });
+  assert.deepEqual(establishedTag.robots, { index: true, follow: true });
 });

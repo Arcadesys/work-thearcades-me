@@ -58,9 +58,9 @@ export default function PictureGuidePage() {
   return (
     <div className={styles.page}>
       <JsonLd data={guideJsonLd(pictureGuide)} />
-      <JsonLd data={breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'Blog', path: '/blog' }, { name: pictureGuide.title, path: pictureGuide.path }])} />
+      <JsonLd data={breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'Guides', path: '/guides' }, { name: pictureGuide.title, path: pictureGuide.path }])} />
       <a className="skip-link" href="#main">Skip to content</a>
-      <SiteHeader />
+      <SiteHeader current="/guides" />
 
       <main className={`shell ${styles.main}`} id="main" tabIndex={-1}>
         <header className={styles.intro}>

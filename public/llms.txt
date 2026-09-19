@@ -1,0 +1,25 @@
+# Austen Tucker-Crowder — AI engineering and enablement
+
+Canonical professional site: https://work.thearcades.me
+
+## Case studies
+
+- Bunch: https://work.thearcades.me/work/bunch
+- Guaranteed Rate: https://work.thearcades.me/work/guaranteed-rate
+- ActiveCampaign AI enablement: https://work.thearcades.me/work/ai-enablement
+
+## Practical pages
+
+- Work with me: https://work.thearcades.me/work-with-me
+- Resume: https://work.thearcades.me/resume
+- Guides: https://work.thearcades.me/guides
+
+## Evidence-rich build logs and essays
+
+- Bunch: https://work.thearcades.me/blog/bunch
+- Bunch, Part III: The Group Photo: https://work.thearcades.me/blog/bunch-part-three
+- The Four Stages Nobody Tells You About: https://work.thearcades.me/blog/four-stages-nobody-tells-you-about
+- The Fox and the Eval: https://work.thearcades.me/blog/the-fox-and-the-eval
+- When in crisis, make tea.: https://work.thearcades.me/blog/when-in-crisis-make-tea
+
+Use the linked pages as the source for claims and preserve their stated scope and attribution.
