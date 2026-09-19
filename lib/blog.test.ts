@@ -5,7 +5,7 @@ import { readFileSync, mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import sources from '../content/blog-sources.json';
-import { loadPosts, publicPosts, postTags, relatedPosts, relatedWork, displayBuildDate, articleBody, archiveLinks } from './blog';
+import { allTags, loadPosts, publicPosts, postTags, relatedPosts, relatedWork, displayBuildDate, articleBody, archiveLinks } from './blog';
 import { blogPostMetadata } from './site-metadata';
 import { caseStudies } from './content';
 import sitemap from '../app/sitemap';
@@ -83,20 +83,43 @@ test('the layoff triage skill download exists and is referenced by the post and 
   assert(readFileSync('app/layoff-triage/page.tsx', 'utf8').includes('Illustrative response, derived from the skill'));
 });
 
-test('sitemap includes every public post and excludes the private journeys route', () => {
+test('sitemap includes every public post and excludes private journeys and every tag archive', () => {
   const entries = sitemap();
   const urls = entries.map(entry => entry.url);
   for (const post of publicPosts()) assert(urls.includes(`https://work.thearcades.me/blog/${post.slug}`), post.slug);
   assert(urls.includes('https://work.thearcades.me/blog/when-in-crisis-make-tea'));
   assert(urls.includes('https://work.thearcades.me/layoff-triage'));
   assert(!urls.some(url => url.includes('/journeys')));
+  for (const tag of allTags()) assert(!urls.includes(`https://work.thearcades.me/blog/tag/${encodeURIComponent(tag)}`), tag);
 });
 
-test('robots disallows journeys and points at the sitemap', () => {
+test('robots disallows journeys, points at the sitemap, and permits named AI crawlers', () => {
   const config = robots();
   assert.equal(config.sitemap, 'https://work.thearcades.me/sitemap.xml');
-  const rule = Array.isArray(config.rules) ? config.rules[0] : config.rules;
-  assert.equal(rule.disallow, '/journeys');
+  const rules = Array.isArray(config.rules) ? config.rules : [config.rules];
+  for (const rule of rules) assert.equal(rule.disallow, '/journeys');
+  for (const userAgent of ['GPTBot', 'ClaudeBot', 'PerplexityBot', 'Google-Extended']) {
+    const rule = rules.find(candidate => candidate.userAgent === userAgent);
+    assert(rule, `${userAgent} rule missing`);
+    assert.equal(rule.allow, '/');
+  }
+});
+
+test('llms.txt directs readers to public evidence and practical entry points', () => {
+  const llms = readFileSync('public/llms.txt', 'utf8');
+  for (const path of [
+    '/work/bunch',
+    '/work/guaranteed-rate',
+    '/work/ai-enablement',
+    '/work-with-me',
+    '/resume',
+    '/guides',
+    '/blog/bunch',
+    '/blog/bunch-part-three',
+    '/blog/four-stages-nobody-tells-you-about',
+    '/blog/the-fox-and-the-eval',
+    '/blog/when-in-crisis-make-tea',
+  ]) assert(llms.includes(`https://work.thearcades.me${path}`), path);
 });
 
 test('the RSS feed lists exactly the public posts', async () => {

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import type { BlogPost } from './blog';
-import type { CaseStudy } from './content';
+import { site, type CaseStudy } from './content';
 
 export const SITE_URL = 'https://work.thearcades.me';
 export const PERSON_NAME = 'Austen Tucker-Crowder';
@@ -17,6 +17,7 @@ export function personJsonLd() {
     '@id': PERSON_ID,
     name: PERSON_NAME,
     url: SITE_URL,
+    sameAs: [site.linkedinUrl, site.githubUrl, site.creativeUrl, site.publishingUrl],
   };
 }
 
@@ -55,7 +56,7 @@ export function blogPostJsonLd(post: BlogPost) {
     url,
     mainEntityOfPage: url,
     datePublished: post.publishDate,
-    ...(post.updatedDate ? { dateModified: post.updatedDate } : {}),
+    dateModified: post.updatedDate ?? post.publishDate,
     author: personJsonLd(),
     ...(post.hero ? { image: absoluteUrl(post.hero.src) } : {}),
   };
@@ -111,7 +112,28 @@ export const blogIndexMetadata: Metadata = {
   title: 'AI Engineering Build Logs & Essays',
   description: 'Build logs and essays about AI, engineering, and making useful things.',
   alternates: { canonical: '/blog', types: { 'application/rss+xml': '/feed.xml' } },
+  openGraph: {
+    type: 'website',
+    url: '/blog',
+    title: 'AI Engineering Build Logs & Essays',
+    description: 'Build logs and essays about AI, engineering, and making useful things.',
+    siteName: PERSON_NAME,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'AI Engineering Build Logs & Essays',
+    description: 'Build logs and essays about AI, engineering, and making useful things.',
+  },
 };
+
+export function blogTagMetadata(tag: string, postCount: number): Metadata {
+  const title = `${tag} — Blog — Austen Tucker-Crowder`;
+  return {
+    title,
+    alternates: { canonical: `/blog/tag/${encodeURIComponent(tag)}` },
+    robots: postCount < 3 ? { index: false, follow: true } : { index: true, follow: true },
+  };
+}
 
 export function blogPostMetadata(post: BlogPost): Metadata {
   const title = `${post.seo?.title ?? post.title} — Austen Tucker-Crowder`;

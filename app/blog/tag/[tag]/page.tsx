@@ -4,11 +4,13 @@ import { allTags, publicPosts, postTags } from '@/lib/blog';
 import { BlogPostList } from '@/components/blog-post-list';
 import { SubscribeForm } from '@/components/subscribe-form';
 import { newsletter } from '@/lib/content';
+import { blogTagMetadata } from '@/lib/site-metadata';
 export const dynamicParams = false;
 export function generateStaticParams() { return allTags().map(tag => ({ tag })); }
 export async function generateMetadata({ params }: PageProps<'/blog/tag/[tag]'>) {
   const { tag } = await params;
-  return { title: `${tag} — Blog — Austen Tucker-Crowder`, alternates: { canonical: `/blog/tag/${encodeURIComponent(tag)}` } };
+  const postCount = publicPosts().filter(post => postTags(post).includes(tag)).length;
+  return blogTagMetadata(tag, postCount);
 }
 export default async function TagPage({ params }: PageProps<'/blog/tag/[tag]'>) {
   const { tag } = await params;

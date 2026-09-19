@@ -32,7 +32,7 @@
   object-position: center 32%;
 }
 
-.home :global(.hero h1) {
+.home :global(.hero .hero-heading) {
   max-width: 16ch;
   margin-bottom: 28px;
   font-size: clamp(3rem, 7.4vw, 6.6rem);
@@ -180,7 +180,7 @@
     max-width: 54rem;
   }
 
-  .home :global(.hero h1) {
+  .home :global(.hero .hero-heading) {
     max-width: 12ch;
     font-size: clamp(3rem, 6.2vw, 5.6rem);
   }
@@ -213,7 +213,7 @@
     padding-bottom: 68px;
   }
 
-  .home :global(.hero h1) {
+  .home :global(.hero .hero-heading) {
     max-width: none;
     font-size: clamp(2.7rem, 13vw, 4.3rem);
   }

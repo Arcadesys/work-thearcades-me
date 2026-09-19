@@ -10,6 +10,7 @@ const links = [
   ['What I offer', '/work-with-me'],
   ['About', '/#about'],
   ['Blog', '/blog'],
+  ['Guides', '/guides'],
   ['Contact', '/#contact'],
   ['Résumé', '/resume'],
 ] as const;

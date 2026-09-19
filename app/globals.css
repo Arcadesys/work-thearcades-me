@@ -813,7 +813,7 @@ textarea::placeholder {
   margin-bottom: 26px;
 }
 
-.hero h1 {
+.hero .hero-heading {
   font-weight: 300;
   font-size: clamp(2.5rem, 6.4vw, 4.4rem);
   line-height: 1.12;
