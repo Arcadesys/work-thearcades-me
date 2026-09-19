@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from 'next';
+import Link from 'next/link';
+import { Suspense } from 'react';
 import { Inter, JetBrains_Mono, Lora } from 'next/font/google';
 import { AnalyticsEvents } from '@/components/analytics-events';
 import { PublicAnalytics } from '@/components/public-analytics';
@@ -71,7 +73,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
         <script dangerouslySetInnerHTML={{ __html: revealBootstrap }} />
         {children}
-        <PublicAnalytics />
+        <div className="analytics-privacy-link"><Link href="/privacy">Privacy and site analytics</Link></div>
+        <Suspense fallback={null}><PublicAnalytics /></Suspense>
         <AnalyticsEvents />
       </body>
     </html>

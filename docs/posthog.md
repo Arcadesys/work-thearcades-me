@@ -1,0 +1,11 @@
+# Work site analytics
+
+PostHog replaces Vercel Web Analytics. Hosting remains on Vercel. The existing US project is 608995. No person profiles, identify calls, autocapture, replay, heatmaps, performance/error capture, surveys, feature-flag requests, or persistent analytics cookies/local storage are enabled. Session storage is required; unavailable storage disables analytics.
+
+Vercel configuration: NEXT_PUBLIC_POSTHOG_KEY and NEXT_PUBLIC_POSTHOG_HOST (https://us.i.posthog.com), with system NEXT_PUBLIC_VERCEL_ENV. Only the production environment on work.thearcades.me collects production events. Preview collection requires NEXT_PUBLIC_POSTHOG_PREVIEW_ENABLED=true and a .vercel.app hostname. The verification branch alone enables this switch.
+
+One pageview is emitted per committed pathname change, including the initial page; fragments and query-only changes do not count as another page. Case-study views follow pageviews. Entry campaigns and referring domain persist in session storage across reloads. Clicks retain public placement; no destination addresses are captured. before_send replaces SDK properties with an allowlist. URLs, referrer paths/queries, form data, arbitrary properties and person updates are dropped. Session and random anonymous identifiers support same-session analysis. IP-based geolocation is disabled. PostHog still receives transport connection information.
+
+Dashboard: Work site — Content and conversions. Every production report must filter hostname=work.thearcades.me and environment=production, and exclude utm_campaign=analytics-verification. Reports: pageviews by referring_domain; pageviews by landing_page; campaigns by utm_campaign; case_study_view by slug; resume_click/contact_click/booking_click by placement; a same-session pageview → case_study_view → contact_click or booking_click funnel; and session paths. Clicks measure intent, not completed inquiries/bookings. Do not report returning visitors or cross-site journeys.
+
+Configuration reference: https://posthog.com/docs/libraries/js/config and https://posthog.com/docs/libraries/next-js. Verification must distinguish payload tests, received preview events, received production events, and saved/rendered dashboard reports. Deployment alone does not establish receipt.
