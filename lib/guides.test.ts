@@ -32,3 +32,41 @@ test('the AI-picture guide links every image-generation build log', () => {
     assert(source.includes(`href="${href}"`), href);
   }
 });
+
+test('the AI-picture guide presents the five authorized ratchet images with decision labels', () => {
+  const source = readFileSync('app/guides/how-to-make-ai-generated-pictures-that-arent-slop/page.tsx', 'utf8');
+  const assets = [
+    'moxie-piano-current-best.webp',
+    'moxie-piano-paw-repair.webp',
+    'fur-nor-feather-sleeping-candidate.webp',
+    'fur-nor-feather-standing-repair-candidate.webp',
+    'fur-nor-feather-tail-repair-candidate.webp',
+  ];
+
+  for (const asset of assets) {
+    assert(source.includes(`/images/guides/image-ratchet/${asset}`), asset);
+    assert.doesNotThrow(() => readFileSync(`public/images/guides/image-ratchet/${asset}`));
+  }
+
+  assert(source.includes("status: 'Current-best candidate'"));
+  assert(source.includes("status: 'Rejected direction'"));
+  assert(source.includes('no creator score was recorded'));
+});
+
+test('the AI-picture guide metadata describes the ratchet thesis', () => {
+  assert.match(pictureGuide.description, /changing one thing without losing everything/);
+});
+
+test('the AI-picture guide offers the complete image ratchet skill download', () => {
+  const guide = readFileSync('app/guides/how-to-make-ai-generated-pictures-that-arent-slop/page.tsx', 'utf8');
+  const skill = readFileSync('public/downloads/image-ratchet-skill.md', 'utf8');
+
+  assert(guide.includes("const SKILL_DOWNLOAD_PATH = '/downloads/image-ratchet-skill.md'"));
+  assert(guide.includes('Download the skill and improve your image generation today.'));
+  assert(guide.includes('data-funnel-event="image_ratchet_skill_download"'));
+  assert(skill.includes('name: image-ratchet'));
+  assert(skill.includes('**Keep:**'));
+  assert(skill.includes('**Revise:**'));
+  assert(skill.includes('**Discard:**'));
+  assert(skill.includes('A candidate is not canon'));
+});

@@ -9,6 +9,7 @@ const funnelEvents = new Set<AnalyticsEvent>([
   'contact_click',
   'booking_click',
   'triage_skill_download',
+  'image_ratchet_skill_download',
   'subscribe_submit',
 ]);
 

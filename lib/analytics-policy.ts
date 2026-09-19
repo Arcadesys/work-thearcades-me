@@ -1,4 +1,4 @@
-export const eventNames = ['$pageview', 'case_study_view', 'resume_click', 'contact_click', 'booking_click', 'triage_skill_download', 'subscribe_submit', 'campaign_landing'] as const;
+export const eventNames = ['$pageview', 'case_study_view', 'resume_click', 'contact_click', 'booking_click', 'triage_skill_download', 'image_ratchet_skill_download', 'subscribe_submit', 'campaign_landing'] as const;
 export type AnalyticsEvent = typeof eventNames[number];
 type CapturedEvent = {
   event: string;
@@ -21,7 +21,7 @@ export function collectionEnvironment(hostname: string, environment?: string, pr
 }
 export function safePath(path: string) {
   // Public route shapes only; unknown paths cannot leak user-entered URL data.
-  return /^\/(?:work-with-me|resume|privacy|layoff-triage|blog(?:\/(?:tag\/)?[a-z0-9-]+)?|work\/(?:bunch|guaranteed-rate|ai-enablement))?\/?$/.test(path) ? path : '/other';
+  return /^\/(?:work-with-me|resume|privacy|layoff-triage|guides(?:\/how-to-make-ai-generated-pictures-that-arent-slop)?|blog(?:\/(?:tag\/)?[a-z0-9-]+)?|work\/(?:bunch|guaranteed-rate|ai-enablement))?\/?$/.test(path) ? path : '/other';
 }
 export function referrerDomain(referrer: string) {
   try { const url = new URL(referrer); return /^https?:$/.test(url.protocol) ? url.hostname : ''; } catch { return ''; }

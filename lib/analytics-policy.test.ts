@@ -13,12 +13,13 @@ test('campaigns discard private fields and unsafe values', () => {
  assert.deepEqual(campaignProperties('?utm_source=private%40example.com&utm_campaign=hello%20world'), {});
 });
 test('the conversion-event allowlist preserves every existing funnel event', () => {
- assert.deepEqual(eventNames, ['$pageview', 'case_study_view', 'resume_click', 'contact_click', 'booking_click', 'triage_skill_download', 'subscribe_submit', 'campaign_landing']);
+ assert.deepEqual(eventNames, ['$pageview', 'case_study_view', 'resume_click', 'contact_click', 'booking_click', 'triage_skill_download', 'image_ratchet_skill_download', 'subscribe_submit', 'campaign_landing']);
 });
 test('outgoing SDK properties fail closed', () => {
  const result = sanitizeProperties({distinct_id:'abc-123', $session_id:'session-123', $current_url:'https://work.thearcades.me/?email=private@example.com#secret', $referrer:'https://example.com/private?token=secret', $set:{email:'private@example.com'}, email:'private@example.com', placement:'hero', pathname:'/resume', environment:'preview', arbitrary:'secret'});
  assert.deepEqual(result, {distinct_id:'abc-123',$session_id:'session-123',placement:'hero',pathname:'/resume',environment:'preview',$process_person_profile:false,$geoip_disable:true,$ip:'0.0.0.0'});
  assert.equal(safePath('/layoff-triage'), '/layoff-triage');
+ assert.equal(safePath('/guides/how-to-make-ai-generated-pictures-that-arent-slop'), '/guides/how-to-make-ai-generated-pictures-that-arent-slop');
  assert.equal(safePath('/private@example.com'), '/other');
  assert.equal(referrerDomain('https://example.com/private?token=secret#fragment'), 'example.com');
  assert.equal(referrerDomain('mailto:private@example.com'), '');
