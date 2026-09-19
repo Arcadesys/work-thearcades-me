@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { track, type AnalyticsEvent } from '@/lib/analytics-client';
+import { track } from '@/lib/analytics-client';
+import type { AnalyticsEvent } from '@/lib/analytics-policy';
 
 const funnelEvents = new Set<AnalyticsEvent>([
   'resume_click',
@@ -18,7 +19,7 @@ export function AnalyticsEvents() {
       const target = event.target instanceof Element ? event.target : null;
       const control = target?.closest<HTMLElement>('[data-funnel-event]');
       const name = control?.dataset.funnelEvent as AnalyticsEvent | undefined;
-      if (name && funnelEvents.has(name)) {
+      if (control && name && funnelEvents.has(name)) {
         track(name, { placement: control.dataset.funnelPlacement ?? 'unspecified' });
       }
     };

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { campaignProperties, collectionEnvironment, outgoingEvent, referrerDomain, safePath, sanitizeProperties } from './analytics-policy';
+import { campaignProperties, collectionEnvironment, eventNames, outgoingEvent, referrerDomain, safePath, sanitizeProperties } from './analytics-policy';
 test('production and explicitly enabled preview are isolated', () => {
  assert.equal(collectionEnvironment('work.thearcades.me', 'production'), 'production');
  for (const host of ['localhost', 'www.thearcades.me', 'work.thearcades.me.evil.com', 'test.vercel.app']) assert.equal(collectionEnvironment(host, 'production'), null);
@@ -12,9 +12,13 @@ test('campaigns discard private fields and unsafe values', () => {
  assert.deepEqual(campaignProperties('?utm_source=Newsletter&utm_medium=email&utm_campaign=fall&utm_content=hero&email=private@example.com&token=secret'), {utm_source:'newsletter',utm_medium:'email',utm_campaign:'fall',utm_content:'hero'});
  assert.deepEqual(campaignProperties('?utm_source=private%40example.com&utm_campaign=hello%20world'), {});
 });
+test('the conversion-event allowlist preserves every existing funnel event', () => {
+ assert.deepEqual(eventNames, ['$pageview', 'case_study_view', 'resume_click', 'contact_click', 'booking_click', 'triage_skill_download', 'subscribe_submit', 'campaign_landing']);
+});
 test('outgoing SDK properties fail closed', () => {
  const result = sanitizeProperties({distinct_id:'abc-123', $session_id:'session-123', $current_url:'https://work.thearcades.me/?email=private@example.com#secret', $referrer:'https://example.com/private?token=secret', $set:{email:'private@example.com'}, email:'private@example.com', placement:'hero', pathname:'/resume', environment:'preview', arbitrary:'secret'});
  assert.deepEqual(result, {distinct_id:'abc-123',$session_id:'session-123',placement:'hero',pathname:'/resume',environment:'preview',$process_person_profile:false,$geoip_disable:true,$ip:'0.0.0.0'});
+ assert.equal(safePath('/layoff-triage'), '/layoff-triage');
  assert.equal(safePath('/private@example.com'), '/other');
  assert.equal(referrerDomain('https://example.com/private?token=secret#fragment'), 'example.com');
  assert.equal(referrerDomain('mailto:private@example.com'), '');
