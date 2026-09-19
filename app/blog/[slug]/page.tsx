@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Markdown, { defaultUrlTransform } from 'react-markdown';
@@ -6,15 +7,14 @@ import { PostTags, RelatedReading } from '@/components/blog-post-list';
 import { SubscribeForm } from '@/components/subscribe-form';
 import { publicPosts, postBySlug, displayDate, displayBuildDate, relatedWork, relatedReading, splitAtReadingPeak, articleBody, archiveLinks } from '@/lib/blog';
 import { newsletter } from '@/lib/content';
+import { blogPostMetadata } from '@/lib/site-metadata';
 import sources from '@/content/blog-sources.json';
 export const dynamicParams = false;
 export function generateStaticParams() { return publicPosts().map(post => ({ slug: post.slug })); }
-export async function generateMetadata({ params }: PageProps<'/blog/[slug]'>) {
+export async function generateMetadata({ params }: PageProps<'/blog/[slug]'>): Promise<Metadata> {
   const post = postBySlug((await params).slug);
   if (!post) return {};
-  // Omitting `images` entirely (rather than an empty array) when there's no hero lets
-  // the co-located opengraph-image.tsx file convention supply the card instead.
-  return { title: `${post.seo?.title ?? post.title} — Austen Tucker-Crowder`, description: post.seo?.description ?? post.excerpt, alternates: { canonical: `/blog/${post.slug}`, types: { 'application/rss+xml': '/feed.xml' } }, openGraph: { type: 'article', publishedTime: post.publishDate, ...(post.hero ? { images: [{ url: post.hero.src, alt: post.hero.alt }] } : {}) } };
+  return blogPostMetadata(post);
 }
 export default async function PostPage({ params }: PageProps<'/blog/[slug]'>) {
   const post = postBySlug((await params).slug);

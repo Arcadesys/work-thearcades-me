@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono, Lora } from 'next/font/google';
 import { AnalyticsEvents } from '@/components/analytics-events';
 import { PublicAnalytics } from '@/components/public-analytics';
+import { homepageMetadata } from '@/lib/site-metadata';
 import './globals.css';
 
 const inter = Inter({
@@ -35,12 +36,7 @@ export const viewport: Viewport = {
   ],
 };
 
-export const metadata: Metadata = {
-  title: 'Austen Tucker-Crowder — AI Enablement & Engineering Transformation Leader',
-  description: 'AI enablement and engineering transformation leadership for teams adopting AI in their everyday work.',
-  metadataBase: new URL('https://work.thearcades.me'),
-  alternates: { types: { 'application/rss+xml': '/feed.xml' } },
-};
+export const metadata: Metadata = homepageMetadata;
 
 /**
  * Resolves the palette before the first paint, so the page never flashes the

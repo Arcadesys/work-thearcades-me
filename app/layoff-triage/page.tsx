@@ -13,7 +13,8 @@ export const metadata: Metadata = {
   title: `${TITLE} — ${site.name}`,
   description: DESCRIPTION,
   alternates: { canonical: '/layoff-triage' },
-  openGraph: { type: 'website', title: TITLE, description: DESCRIPTION },
+  openGraph: { type: 'website', url: '/layoff-triage', title: TITLE, description: DESCRIPTION },
+  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
 };
 
 export default function LayoffTriagePage() {

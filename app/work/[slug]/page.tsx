@@ -10,6 +10,7 @@ import { SiteHeader } from '@/components/site-header';
 import { SubscribeForm } from '@/components/subscribe-form';
 import { CaseStudyView } from '@/components/analytics-events';
 import { STAR_PARTS, caseStudies, caseStudyBySlug, hasStar, newsletter, site } from '@/lib/content';
+import { caseStudyMetadata } from '@/lib/site-metadata';
 
 export function generateStaticParams() {
   return caseStudies.map((study) => ({ slug: study.slug }));
@@ -20,10 +21,7 @@ export async function generateMetadata(props: PageProps<'/work/[slug]'>): Promis
   const study = caseStudyBySlug(slug);
   if (!study) return {};
 
-  return {
-    title: `${study.title} — ${site.name}`,
-    description: study.body,
-  };
+  return caseStudyMetadata(study, site.name);
 }
 
 export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
