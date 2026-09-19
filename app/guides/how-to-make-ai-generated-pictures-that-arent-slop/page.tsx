@@ -30,70 +30,84 @@ export const metadata: Metadata = {
   },
 };
 
-const pianoFrames = [
+const demoFrames = [
   {
-    src: '/images/guides/image-ratchet/moxie-piano-current-best.webp',
-    width: 1085,
-    height: 1450,
-    status: 'Current-best candidate',
-    alt: 'Moxie, an orange fox with purple glasses, seated at a piano. Her long forearms end in narrow, awkward paws on the keys.',
-    caption: 'This candidate already had the face, glasses, pose, room, clothing, light, and framing I wanted. The paws were the named defect.',
+    src: '/images/guides/image-ratchet/sprig-current-best.webp',
+    status: 'Starting point',
+    alt: 'Blue garden robot Sprig kneels beside a wilted sunflower. Water from the can misses the pot and splashes onto the greenhouse floor.',
+    caption: 'Almost everything works: Sprig, the worried pose, the low camera, the warm painted greenhouse, and the wilted flower. One thing does not: the water misses the pot.',
   },
   {
-    src: '/images/guides/image-ratchet/moxie-piano-paw-repair.webp',
-    width: 1085,
-    height: 1450,
-    status: 'Localized repair candidate',
-    alt: 'The same piano portrait of Moxie with shorter, more coherent fox paws resting on the keys while the rest of the scene remains nearly unchanged.',
-    caption: 'The paws changed. The earlier wins survived. That is what makes this a useful repair candidate instead of merely another good picture.',
+    src: '/images/guides/image-ratchet/sprig-roller-coaster.webp',
+    status: 'Roller-coaster rewrite',
+    alt: 'A tall mint-green robot stands beside a healthy sunflower in a glossy greenhouse, replacing Sprig, the wilted flower, the low camera, and the painted style.',
+    caption: 'The water reaches the flower, but the picture traded away nearly everything else. The fix worked. The image did not.',
+  },
+  {
+    src: '/images/guides/image-ratchet/sprig-local-repair.webp',
+    status: 'Ratchet repair',
+    alt: 'The original blue robot, wilted sunflower, low greenhouse view, and painted style remain while the water now lands inside the pot.',
+    caption: 'The water now lands in the pot. Sprig, the pose, the flower, the camera, the light, and the medium stay put. One visible problem changed.',
   },
 ] as const;
 
-const coverFrames = [
+const referenceFrames = [
   {
-    src: '/images/guides/image-ratchet/fur-nor-feather-sleeping-candidate.webp',
-    status: 'Baseline candidate',
-    alt: 'Square storybook cover showing Moxie asleep beneath a magpie and gold moon, with her tail forming a thick loop around her body.',
-    caption: 'The sleeping composition has a clear first read, but the tail becomes a closed ring with no believable attachment to the body.',
+    src: '/images/guides/image-ratchet/sprig-composition-source.webp',
+    width: 1200,
+    height: 900,
+    status: 'Job 1: Where things go',
+    alt: 'Loose gray storyboard showing a generic kneeling figure at left and a drooping sunflower at right inside a greenhouse.',
+    caption: 'This rough sketch owns the camera, pose, scale, and first place the eye lands. It says nothing about who the character is or how the final should be painted.',
   },
   {
-    src: '/images/guides/image-ratchet/fur-nor-feather-standing-repair-candidate.webp',
-    status: 'Rejected direction',
-    alt: 'A polished square cover showing Moxie standing and holding a magpie, replacing the earlier sleeping composition.',
-    caption: 'This pass makes Moxie and the magpie legible co-leads, but it solves the problem by making a different picture. The ratchet rejects the direction for losing the baseline composition; this is not a recorded creator verdict.',
+    src: '/images/guides/image-ratchet/sprig-identity-source.webp',
+    width: 1200,
+    height: 800,
+    status: 'Job 2: Who Sprig is',
+    alt: 'Model sheet of Sprig showing the same round blue body, single amber eye, triangle antenna, yellow apron, leaf patch, grippers, and boots from several angles.',
+    caption: 'This sheet owns Sprig’s identity. It does not decide the greenhouse layout, action, camera, or final texture.',
   },
   {
-    src: '/images/guides/image-ratchet/fur-nor-feather-tail-repair-candidate.webp',
-    status: 'Localized repair candidate',
-    alt: 'The sleeping cover composition restored, now with one fox tail visibly curving from Moxie’s body to a cream tip near her paws.',
-    caption: 'This pass stays close to the sleeping candidate while giving the tail one readable root, curve, and tip. It is still a candidate: no creator score was recorded for this trace.',
+    src: '/images/guides/image-ratchet/sprig-style-source.webp',
+    width: 1200,
+    height: 900,
+    status: 'Job 3: How it feels',
+    alt: 'Greenhouse style board with layered paper leaves, gouache brush texture, terracotta pots, warm gold light, and cool teal shadows.',
+    caption: 'This board owns the handmade paper-and-paint look, palette, and light. It deliberately contains neither Sprig nor the final composition.',
   },
 ] as const;
 
 const ratchet = [
   {
-    title: 'Keep a named current best',
-    body: 'Do not let the newest image become the default just because it is new. Keep the last version that earned its place available for comparison.',
+    title: 'Save the version you like best',
+    body: 'Call it the current best and keep it where you can see it. Newer does not mean better, and a new image should never quietly replace the last one that worked.',
+    example: 'The first Sprig image is the current best. The missed water is annoying, but the picture already has a clear character, action, camera, and mood.',
   },
   {
-    title: 'Write down what it already won',
-    body: 'The keep-list might include the face, glasses, room, camera, silhouette, hand position, lighting, or the relationship between two characters. If you cannot name a win, you cannot protect it.',
+    title: 'Write a short keep-list',
+    body: 'Name three to six things you would be upset to lose. Use plain, visible facts: the blue one-eyed robot, kneeling on the left, the drooping flower on the right, the low camera, and the paper-and-paint finish.',
+    example: 'A keep-list turns “I liked the old one more” into a comparison you can actually make.',
   },
   {
-    title: 'Choose one visible win for this pass',
-    body: '“Make it better” has no stopping condition. “Give the tail one visible attachment at the pelvis while preserving the sleeping pose” can be inspected.',
+    title: 'Ask for one change you can point to',
+    body: '“Make it better” gives the model permission to remake the whole picture. A useful instruction names one visible result and leaves the rest alone.',
+    example: 'For Sprig: “Make the water land inside the pot. Keep everything else the same.” We can tell whether that happened without debating taste.',
   },
   {
     title: 'Give every reference one job',
-    body: 'A photograph can own the composition. A model sheet can own identity. A style reference can own shape language. Asking all three to vaguely inspire the result makes it harder to tell which source was ignored.',
+    body: 'Do not toss several images into the prompt and call them inspiration. Say what each one controls: where things go, what the subject looks like, or how the final image should feel.',
+    example: 'The gray sketch owns the layout. The model sheet owns Sprig. The painted board owns texture and light. If Sprig turns green, we know the identity reference lost.',
   },
   {
-    title: 'Compare the candidate with the current best',
-    body: 'Check the requested change first, then every item on the keep-list. A repaired paw does not compensate for a different face or a redrawn room.',
+    title: 'Put the two versions side by side',
+    body: 'First check the change you asked for. Then walk down the keep-list. Looking at only the new image makes drift easy to miss because the new version may still be attractive.',
+    example: 'The glossy green-robot version fixes the water. Side by side, it also reveals five stolen wins: character, pose, flower, camera, and medium.',
   },
   {
-    title: 'Promote only without regression',
-    body: 'If the named defect improved and the earlier wins survived, the candidate becomes the new current best. Otherwise keep the old one and try a narrower move.',
+    title: 'Keep the new one only if it really wins',
+    body: 'The new image becomes your current best only when the requested change improved and the keep-list still holds. If it fixed one thing by breaking three others, keep the old image and try again.',
+    example: 'The localized Sprig repair wins because the water moves into the pot while the rest of the picture remains recognizably the same.',
   },
 ] as const;
 
@@ -109,23 +123,23 @@ export default function PictureGuidePage() {
         <header className={styles.intro}>
           <p className="label kicker"><span className="dot" />Practical guide</p>
           <h1>{pictureGuide.title}</h1>
-          <p className={styles.lede}>The trick is not making one good picture. It is changing one thing without losing everything that already works.</p>
-          <p className={styles.scope}>This is the image ratchet: keep a current best, name one repair, and promote the new version only when the earlier wins survive.</p>
+          <p className={styles.lede}>Treat your image workflow like a ratchet, not a roller coaster.</p>
+          <p className={styles.scope}>Keep the best version you have. Change one thing. Keep the new version only if it fixes the problem without breaking what you already liked.</p>
         </header>
 
         <article className={styles.article}>
-          <section aria-labelledby="piano-heading">
+          <section aria-labelledby="demo-heading">
             <p className="label">Start with the comparison</p>
-            <h2 id="piano-heading">A repair should leave most of the picture alone.</h2>
-            <p>In the first piano image, Moxie was already Moxie. The glasses sat correctly. The green shirt, room, camera angle, and warm domestic light all worked. The failure was smaller and stranger: her paws stretched into narrow hands that did not feel attached to the same fox.</p>
-            <p>That makes the next instruction simple: repair the paws and protect everything else. The usefulness of the second image is not that it is prettier. It is that you can see what changed.</p>
+            <h2 id="demo-heading">One small fix. Two very different outcomes.</h2>
+            <p>Sprig is a fictional garden robot built for this guide—no private portrait or personal identity is hiding underneath. In the starting image, Sprig is trying to save a wilted sunflower, but the water misses the pot.</p>
+            <p>A roller-coaster workflow asks for a better picture and hopes. It gets a healthy flower, plus a different robot, pose, camera, mood, and medium. A ratchet workflow moves the water and leaves the picture alone.</p>
 
-            <div className={styles.pianoComparison} aria-label="Moxie piano repair comparison">
-              {pianoFrames.map((frame) => (
+            <div className={styles.demoComparison} aria-label="Starting image, broad rewrite, and localized repair">
+              {demoFrames.map((frame) => (
                 <figure className={styles.figureCard} key={frame.src}>
                   <p className={styles.status}>{frame.status}</p>
                   <a className={styles.imageLink} href={frame.src} target="_blank" rel="noreferrer" aria-label={`Open ${frame.status.toLowerCase()} at full size`}>
-                    <Image src={frame.src} width={frame.width} height={frame.height} sizes="(max-width: 720px) calc(100vw - 40px), 500px" alt={frame.alt} loading="eager" />
+                    <Image src={frame.src} width={1200} height={900} sizes="(max-width: 820px) calc(100vw - 40px), 340px" alt={frame.alt} loading="eager" />
                   </a>
                   <figcaption>{frame.caption}</figcaption>
                 </figure>
@@ -150,35 +164,30 @@ export default function PictureGuidePage() {
                   <div>
                     <h3>{step.title}</h3>
                     <p>{step.body}</p>
+                    <p className={styles.stepExample}><strong>In this demo:</strong> {step.example}</p>
                   </div>
                 </li>
               ))}
             </ol>
           </section>
 
-          <section aria-labelledby="different-picture-heading">
-            <p className="label">The expensive failure</p>
-            <h2 id="different-picture-heading">The model can fix the defect by making a different picture.</h2>
-            <p>These <em>fur nor Feather</em> traces make the failure visible. The standing cover is polished. It also abandons the sleeping composition that gave the first candidate its quiet, circular shape. Under a ratchet, polish cannot pay for that regression.</p>
-            <p>The labels below describe how the candidates behave against the preservation contract. None of these traces contains a recorded creator score, so none is presented as an approved final.</p>
+          <section aria-labelledby="references-heading">
+            <p className="label">Three sources, three jobs</p>
+            <h2 id="references-heading">Tell the model what to borrow from each image.</h2>
+            <p>A reference is easier to follow when it has one clear responsibility. For the Sprig demo, the first source decides where everything goes. The second decides who Sprig is. The third decides how the picture is painted. None of them has to solve the whole image.</p>
 
-            <div className={styles.coverSequence} aria-label="Three fur nor Feather repair candidates in chronological order">
-              {coverFrames.map((frame) => (
+            <div className={styles.referenceSequence} aria-label="Three source images with separate production jobs">
+              {referenceFrames.map((frame) => (
                 <figure className={styles.figureCard} key={frame.src}>
                   <p className={styles.status}>{frame.status}</p>
                   <a className={styles.imageLink} href={frame.src} target="_blank" rel="noreferrer" aria-label={`Open ${frame.status.toLowerCase()} at full size`}>
-                    <Image src={frame.src} width={1254} height={1254} sizes="(max-width: 720px) calc(100vw - 40px), (max-width: 1100px) 45vw, 340px" alt={frame.alt} />
+                    <Image src={frame.src} width={frame.width} height={frame.height} sizes="(max-width: 820px) calc(100vw - 40px), 340px" alt={frame.alt} />
                   </a>
                   <figcaption>{frame.caption}</figcaption>
                 </figure>
               ))}
             </div>
-          </section>
 
-          <section aria-labelledby="references-heading">
-            <p className="label">References are production parts</p>
-            <h2 id="references-heading">Make each source responsible for something.</h2>
-            <p>“Use these references” is not a plan. I assign them jobs. The photograph owns the room and camera. The character sheet owns the face, markings, glasses, and body. The style reference owns the drawing language. When the output drifts, I can ask which source lost the argument.</p>
             <p>For adding a new character to a photographic scene, my current working default is human-first: choose the pose, insert a human stand-in, check scale and floor contact, convert only that person, then compare the result with both the human checkpoint and the original backplate. It costs an extra pass and it can still drift. It is a useful default from our experiments, not a universal law. I am not reproducing that backplate here because the preserved photograph contains real bystanders.</p>
           </section>
 
@@ -190,10 +199,10 @@ export default function PictureGuidePage() {
           </section>
 
           <section className={styles.boundaries} aria-labelledby="boundaries-heading">
-            <p className="label">Do not blur the states</p>
-            <h2 id="boundaries-heading">A candidate is not canon.</h2>
-            <p>If an approved identity reference is missing, the honest state is <code>NEEDS_INFORMATION</code>, not a confident substitute. A generated image is not an approved profile. An uploaded file is not proof that it was saved. A saved image is not proof that it was selected. A selection is not the same as the represented person saying, “Yes, that is me.”</p>
-            <p>The distinctions sound fussy until a polished image quietly teaches the wrong face. Keep the states separate. Keep the current best. Let each repair earn the next click.</p>
+            <p className="label">Keep the labels simple</p>
+            <h2 id="boundaries-heading">A draft is not a final.</h2>
+            <p><strong>Generated</strong> means the tool made something. <strong>Saved</strong> means you kept the file. <strong>Chosen</strong> means you picked it. <strong>Approved</strong> means the person or client who matters said yes. Those are four different moments.</p>
+            <p>If the right reference is missing, stop and ask for it. If nobody has approved the image, call it a draft. A polished picture can still be the wrong picture.</p>
           </section>
 
           <section className={styles.reading} aria-labelledby="reading-heading">

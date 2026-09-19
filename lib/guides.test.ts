@@ -33,14 +33,15 @@ test('the AI-picture guide links every image-generation build log', () => {
   }
 });
 
-test('the AI-picture guide presents the five authorized ratchet images with decision labels', () => {
+test('the AI-picture guide presents the fictional Sprig demo with decision labels and reference jobs', () => {
   const source = readFileSync('app/guides/how-to-make-ai-generated-pictures-that-arent-slop/page.tsx', 'utf8');
   const assets = [
-    'moxie-piano-current-best.webp',
-    'moxie-piano-paw-repair.webp',
-    'fur-nor-feather-sleeping-candidate.webp',
-    'fur-nor-feather-standing-repair-candidate.webp',
-    'fur-nor-feather-tail-repair-candidate.webp',
+    'sprig-composition-source.webp',
+    'sprig-identity-source.webp',
+    'sprig-style-source.webp',
+    'sprig-current-best.webp',
+    'sprig-roller-coaster.webp',
+    'sprig-local-repair.webp',
   ];
 
   for (const asset of assets) {
@@ -48,13 +49,17 @@ test('the AI-picture guide presents the five authorized ratchet images with deci
     assert.doesNotThrow(() => readFileSync(`public/images/guides/image-ratchet/${asset}`));
   }
 
-  assert(source.includes("status: 'Current-best candidate'"));
-  assert(source.includes("status: 'Rejected direction'"));
-  assert(source.includes('no creator score was recorded'));
+  assert(source.includes("status: 'Starting point'"));
+  assert(source.includes("status: 'Roller-coaster rewrite'"));
+  assert(source.includes("status: 'Ratchet repair'"));
+  assert(source.includes("status: 'Job 1: Where things go'"));
+  assert(source.includes("status: 'Job 2: Who Sprig is'"));
+  assert(source.includes("status: 'Job 3: How it feels'"));
+  assert(!source.includes('Moxie'));
 });
 
 test('the AI-picture guide metadata describes the ratchet thesis', () => {
-  assert.match(pictureGuide.description, /changing one thing without losing everything/);
+  assert.match(pictureGuide.description, /Treat your image workflow like a ratchet/);
 });
 
 test('the AI-picture guide offers the complete image ratchet skill download', () => {
