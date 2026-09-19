@@ -9,7 +9,8 @@ import { RichText } from '@/components/rich-text';
 import { SiteHeader } from '@/components/site-header';
 import { SubscribeForm } from '@/components/subscribe-form';
 import { STAR_PARTS, caseStudies, caseStudyBySlug, hasStar, newsletter, site } from '@/lib/content';
-import { caseStudyMetadata } from '@/lib/site-metadata';
+import { caseStudyMetadata, caseStudyJsonLd, breadcrumbJsonLd } from '@/lib/site-metadata';
+import { JsonLd } from '@/lib/json-ld';
 
 export function generateStaticParams() {
   return caseStudies.map((study) => ({ slug: study.slug }));
@@ -33,6 +34,8 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
 
   return (
     <>
+      <JsonLd data={caseStudyJsonLd(study)} />
+      <JsonLd data={breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'Work', path: '/#work' }, { name: study.title, path: `/work/${study.slug}` }])} />
       <a className="skip-link" href="#main">Skip to content</a>
       <SiteHeader />
 

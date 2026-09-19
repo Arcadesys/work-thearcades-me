@@ -105,7 +105,7 @@ export default function Home() {
                   data-funnel-event="contact_click"
                   data-funnel-placement="hero"
                 >
-                  Talk about a role
+                  Talk about AI engineering work
                 </a>
               </div>
             </div>
@@ -312,7 +312,7 @@ export default function Home() {
                 data-funnel-placement="contact_section"
                 style={{ fontSize: '1.125rem' }}
               >
-                Talk about a role<Arrow />
+                Talk about AI engineering work<Arrow />
               </a>
               <ExternalLink
                 className="btn btn-lg btn-outline"

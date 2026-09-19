@@ -37,7 +37,7 @@ export interface ResumeSkillGroup {
 
 export const RESUME_PROFILE: ResumeProfile = {
   name: 'Austen Tucker-Crowder',
-  titleLine: 'AI Enablement & Engineering Transformation Leader',
+  titleLine: 'AI Builder & Product-Minded Engineer',
   location: 'Chicago, IL',
   email: 'austen@thearcades.me',
   site: 'work.thearcades.me',
@@ -47,11 +47,11 @@ export const RESUME_PROFILE: ResumeProfile = {
 };
 
 export const RESUME_SUMMARY =
-  'AI enablement and engineering transformation leader, builder, program manager, and agile coach '
-  + 'with 16+ years delivering customer-focused software. I build the operating systems, learning experiences, and '
-  + 'decision-making practices that help teams adopt AI in their everyday work. An '
-  + 'accessibility-first facilitator, I turn complex transformation work into usable tools, '
-  + 'shared goals, and concrete next steps.';
+  'AI builder, product-minded engineer, program manager, and agile coach with 16+ years delivering '
+  + 'customer-focused software. I build practical AI systems, prototypes, and workflows, then help teams evaluate, '
+  + 'understand, and own what ships. My leadership work is grounded in hands-on building: MCP-enabled operating '
+  + 'artifacts, AI skills, and accessibility-first learning experiences. Seeking hands-on AI engineering roles and '
+  + 'focused consulting with a concrete outcome.';
 
 export const RESUME_ACCOMPLISHMENTS: ResumeAccomplishment[] = [
   { text: 'Helped raise agentic-coding adoption from roughly 2% to 43% of merge requests; it was still climbing at departure' },
@@ -151,8 +151,8 @@ export const RESUME_CANONICAL_PATH = '/resume';
 export const RESUME_PDF_PATH = '/resume.pdf';
 
 export const RESUME_DESCRIPTION =
-  'AI enablement and engineering transformation leader, builder, program manager, and accessibility-first facilitator with '
-  + '16+ years delivering customer-focused software.';
+  'AI builder and product-minded engineer with 16+ years delivering customer-focused software, practical AI systems, '
+  + 'and accessibility-first learning experiences.';
 
 export const RESUME_COMMUNITY = {
   organization: 'Midwest FurFest',

@@ -43,6 +43,8 @@ export type CaseStudy = {
   slug: string;
   lane: string;
   title: string;
+  /** Search-facing title when the visible editorial heading is more expressive. */
+  seoTitle?: string;
   body: string;
   tags: string[];
   /** Public primary-source links, displayed on the full case-study page. */
@@ -117,9 +119,9 @@ export const hero = {
 
 export const workWithMe = {
   title: 'Build the first useful version',
-  description: 'Austen Tucker-Crowder builds practical AI systems, prototypes, and workflows, then helps teams understand and own what ships.',
-  intro: 'Bring me a messy workflow, a half-formed product idea, or an AI capability that needs to become real. I work best where the job includes building the thing, testing it with actual people, and leaving behind something your team can understand and own.',
-  roleLabel: 'Talk about a role',
+  description: 'AI engineering and workflow consulting from Austen Tucker-Crowder: practical prototypes, useful AI workflows, and team handoff for organizations with a concrete problem to solve.',
+  intro: 'I take on focused consulting for organizations with a messy workflow, a half-formed product idea, or an AI capability that needs to become real. A first engagement produces a working prototype or workflow, a way to evaluate it with the people who will use it, and clear next-step decisions your team can own.',
+  roleLabel: 'Talk about an AI engineering role',
   consultingTitle: 'Focused consulting engagements',
   consultingIntro: 'For consulting, I scope around a concrete outcome rather than selling a vague bucket of hours.',
   bookingLabel: 'Discuss a project',
@@ -252,6 +254,7 @@ export const caseStudies: CaseStudy[] = [
     blogTags: ['bunch'],
     lane: 'Accessibility · Public interest',
     title: 'Bunch: free, open software for continuity across memory gaps',
+    seoTitle: 'Building an MCP Context System: Bunch',
     body: "I built Bunch to meet a continuity need that the tools I had tried did not address: recovering working context across memory gaps. It's free and open, with the source code and data model published. The engineering problem was preserving context so the right information surfaces at the moment it matters. The accessibility problem turned out to be the same problem in a different hat.",
     tags: ['Accessibility', 'Public interest', 'AI systems', 'Rapid prototyping'],
     links: [
@@ -356,6 +359,7 @@ export const caseStudies: CaseStudy[] = [
     blogTags: ['ai-enablement'],
     lane: 'Evangelist',
     title: 'Turning AI adoption into measurable, repeatable practice',
+    seoTitle: 'AI Adoption Case Study: ActiveCampaign',
     body: 'At ActiveCampaign, I led AI enablement and transformation across engineering, product, and leadership. I paired adoption goals and operating metrics with accessibility-first learning experiences that made practical experimentation possible.',
     tags: ['AI enablement', 'Agentic development', 'Teaching', 'Change leadership'],
     accent: 'rose',
@@ -501,6 +505,6 @@ export const commentBox = {
 
 export const contact = {
   kicker: 'Say hello',
-  heading: 'Let’s talk about your next role or project.',
-  body: 'I’m seeking a leadership role in AI enablement or engineering transformation. I also take on select consulting projects.',
+  heading: 'Let’s talk about hands-on AI engineering work or a focused project.',
+  body: 'I’m seeking hands-on AI engineering work where building is part of the job. I also take on focused consulting projects with a concrete outcome.',
 } as const;

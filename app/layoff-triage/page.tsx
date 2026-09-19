@@ -28,7 +28,7 @@ export default function LayoffTriagePage() {
           <div className={styles.heroCopy}>
             <p className="label kicker"><span className="dot" />Free download</p>
             <h1 id="triage-title">{TITLE}</h1>
-            <p className={styles.lede}>{DESCRIPTION}</p>
+            <p className={styles.lede}>A free, downloadable plain-text instruction file for an AI assistant. It helps you work through a layoff in order, beginning with what needs attention now rather than a giant job-search checklist.</p>
             <a
               className="btn btn-gradient"
               href={DOWNLOAD_PATH}
@@ -66,7 +66,7 @@ export default function LayoffTriagePage() {
                 <span className={styles.stepNumber} aria-hidden="true">2</span>
                 <div>
                   <strong>Give it to your AI assistant.</strong>
-                  <p>Use it as a project file, custom instructions, or a pasted system prompt.</p>
+                  <p>Use your assistant&rsquo;s documented way to add instructions. If it has no such option, paste the file into a new conversation.</p>
                 </div>
               </li>
               <li>
@@ -82,7 +82,26 @@ export default function LayoffTriagePage() {
             </ol>
           </article>
 
-          <aside className={`${styles.card} ${styles.originCard}`} aria-labelledby="where-it-came-from">
+          <article className={`${styles.card} ${styles.exampleCard}`} aria-labelledby="example-title">
+            <p className={styles.stepLabel}>Illustrative example</p>
+            <h2 id="example-title">What the first exchange can look like</h2>
+            <p className={styles.exampleLabel}>Starting request</p>
+            <blockquote className={styles.exampleQuote}>I was just laid off. Start with tea.</blockquote>
+            <p className={styles.exampleLabel}>Illustrative response, derived from the skill</p>
+            <blockquote className={styles.exampleQuote}>Before we plan the job search, choose one small task already in reach: make tea, drink water, or take a short walk. When you&rsquo;ve done that, tell me whether there&rsquo;s a deadline you need to handle this week.</blockquote>
+            <p className={styles.exampleNote}>The exact wording depends on the assistant and your situation. The file is guidance for a conversation; it does not provide benefits, legal, medical, mental-health, or employment advice.</p>
+          </article>
+
+          <aside className={`${styles.card} ${styles.originCard}`} aria-labelledby="what-it-does">
+            <p className={styles.stepLabel}>What it covers</p>
+            <h2 id="what-it-does">A calm order of operations</h2>
+            <p>It starts by separating urgent deadlines from everything that can wait, then helps you name what you learned, identify the value you create, and build the smallest useful opportunity engine.</p>
+            <p>Bring what is urgent for you and answer its questions in your own words. If you say you&rsquo;re overwhelmed, it should stop and offer one concrete task that takes 15 minutes or less.</p>
+          </aside>
+        </section>
+
+        <section className={styles.originSection} aria-labelledby="where-it-came-from">
+          <div className={`${styles.card} ${styles.originCopy}`}>
             <p className={styles.stepLabel}>Why this exists</p>
             <h2 id="where-it-came-from">Where it came from</h2>
             <p>
@@ -93,7 +112,7 @@ export default function LayoffTriagePage() {
               It&rsquo;s free because the point isn&rsquo;t the download. It&rsquo;s that the next chance to work together
               starts with something useful, not a cold ask.
             </p>
-          </aside>
+          </div>
         </section>
 
         <section className={styles.subscribeWrap} aria-label="Subscribe">

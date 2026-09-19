@@ -7,7 +7,8 @@ import { PostTags, RelatedReading } from '@/components/blog-post-list';
 import { SubscribeForm } from '@/components/subscribe-form';
 import { publicPosts, postBySlug, displayDate, displayBuildDate, relatedWork, relatedReading, splitAtReadingPeak, articleBody, archiveLinks } from '@/lib/blog';
 import { newsletter } from '@/lib/content';
-import { blogPostMetadata } from '@/lib/site-metadata';
+import { blogPostMetadata, blogPostJsonLd, breadcrumbJsonLd } from '@/lib/site-metadata';
+import { JsonLd } from '@/lib/json-ld';
 import sources from '@/content/blog-sources.json';
 export const dynamicParams = false;
 export function generateStaticParams() { return publicPosts().map(post => ({ slug: post.slug })); }
@@ -29,7 +30,10 @@ export default async function PostPage({ params }: PageProps<'/blog/[slug]'>) {
     urlTransform: (url: string) => defaultUrlTransform(archiveLinks[post.slug]?.[url] ?? url),
     components: { a: ({ href, children }: { href?: string; children?: React.ReactNode }) => (href ? <a href={href}>{children}</a> : <span>{children}</span>) },
   };
-  return <article><Link className="back-link" href="/blog">← All posts</Link>
+  return <article>
+    <JsonLd data={blogPostJsonLd(post)} />
+    <JsonLd data={breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'Blog', path: '/blog' }, { name: post.title, path: `/blog/${post.slug}` }])} />
+    <Link className="back-link" href="/blog">← All posts</Link>
     <h1>{post.title}</h1><time dateTime={post.publishDate}>{displayDate(post.publishDate)}</time>
     {post.buildDate && <p>Build date: <time dateTime={post.buildDate}>{displayBuildDate(post.buildDate)}</time></p>}
     <PostTags post={post} />
