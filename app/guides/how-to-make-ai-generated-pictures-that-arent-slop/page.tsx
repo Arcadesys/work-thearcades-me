@@ -51,33 +51,6 @@ const demoFrames = [
   },
 ] as const;
 
-const referenceFrames = [
-  {
-    src: '/images/guides/image-ratchet/sprig-composition-source.webp',
-    width: 1200,
-    height: 900,
-    status: 'Job 1: Where things go',
-    alt: 'Loose gray storyboard showing a generic kneeling figure at left and a drooping sunflower at right inside a greenhouse.',
-    caption: 'This rough sketch owns the camera, pose, scale, and first place the eye lands. It says nothing about who the character is or how the final should be painted.',
-  },
-  {
-    src: '/images/guides/image-ratchet/sprig-identity-source.webp',
-    width: 1200,
-    height: 800,
-    status: 'Job 2: Who Sprig is',
-    alt: 'Model sheet of Sprig showing the same round blue body, single amber eye, triangle antenna, yellow apron, leaf patch, grippers, and boots from several angles.',
-    caption: 'This sheet owns Sprig’s identity. It does not decide the greenhouse layout, action, camera, or final texture.',
-  },
-  {
-    src: '/images/guides/image-ratchet/sprig-style-source.webp',
-    width: 1200,
-    height: 900,
-    status: 'Job 3: How it feels',
-    alt: 'Greenhouse style board with layered paper leaves, gouache brush texture, terracotta pots, warm gold light, and cool teal shadows.',
-    caption: 'This board owns the handmade paper-and-paint look, palette, and light. It deliberately contains neither Sprig nor the final composition.',
-  },
-] as const;
-
 const ratchet = [
   {
     title: 'Save the version you like best',
@@ -99,9 +72,9 @@ const ratchet = [
   },
   {
     title: 'Give every reference one job',
-    body: 'Do not toss several images into the prompt and call them inspiration. Say what each one controls: where things go, what the subject looks like, or how the final image should feel.',
-    example: 'The gray sketch owns the layout. The model sheet owns Sprig. The painted board owns texture and light. If Sprig turns green, we know the identity reference lost.',
-    prompt: 'Use Reference 1 only for the camera, layout, and pose. Use Reference 2 only for Sprig’s identity and proportions. Use Reference 3 only for the paper-and-paint texture, palette, and light. Do not let one reference overwrite another reference’s job.',
+    body: 'Do not toss several images into the prompt and call them inspiration. Say what each one controls: the composition decides where things go, each model sheet decides who a character is, and one shared style reference decides how everybody is drawn.',
+    example: 'If each model sheet also brings its own line weight, anatomy, and shading into a group scene, the characters can look as if they came from different shows. Give identity and rendering separate jobs.',
+    prompt: 'Use Reference 1 only for the camera, layout, and pose. Use each character model sheet only for that character’s identity and proportions. Use the final reference for the shared line weight, anatomy treatment, shading, palette, and light. Render every character as if they belong in the same production.',
   },
   {
     title: 'Put the two versions side by side',
@@ -180,20 +153,50 @@ export default function PictureGuidePage() {
           </section>
 
           <section aria-labelledby="references-heading">
-            <p className="label">Three sources, three jobs</p>
-            <h2 id="references-heading">Tell the model what to borrow from each image.</h2>
-            <p>A reference is easier to follow when it has one clear responsibility. For the Sprig demo, the first source decides where everything goes. The second decides who Sprig is. The third decides how the picture is painted. None of them has to solve the whole image.</p>
+            <p className="label">Continuity before composition</p>
+            <h2 id="references-heading">How did I get all these styles to clash? Here’s how.</h2>
+            <p>I brought four recognizable characters into one beach picture, but their references were built in different visual languages. One has softer face geometry. Another has sharper anime features. Fur, hands, eyes, line weight, and shading all follow slightly different rules. Each character reads. The group does not quite agree with itself.</p>
 
-            <div className={styles.referenceSequence} aria-label="Three source images with separate production jobs">
-              {referenceFrames.map((frame) => (
-                <figure className={styles.figureCard} key={frame.src}>
-                  <p className={styles.status}>{frame.status}</p>
-                  <a className={styles.imageLink} href={frame.src} target="_blank" rel="noreferrer" aria-label={`Open ${frame.status.toLowerCase()} at full size`}>
-                    <Image src={frame.src} width={frame.width} height={frame.height} sizes="(max-width: 820px) calc(100vw - 40px), 340px" alt={frame.alt} />
-                  </a>
-                  <figcaption>{frame.caption}</figcaption>
-                </figure>
-              ))}
+            <figure className={`${styles.figureCard} ${styles.heroFigure}`}>
+              <p className={styles.status}>Useful failure: identity survived, style did not</p>
+              <a className={styles.imageLink} href="/images/guides/image-ratchet/bunch-style-clash-group.webp" target="_blank" rel="noreferrer" aria-label="Open the style-clash group-photo candidate at full size">
+                <Image
+                  src="/images/guides/image-ratchet/bunch-style-clash-group.webp"
+                  width={1536}
+                  height={1024}
+                  sizes="(max-width: 820px) calc(100vw - 40px), 1080px"
+                  alt="Generated beach group-photo candidate in which four recognizable characters share a scene but use visibly different face geometry, fur rendering, and shading styles."
+                />
+              </a>
+              <figcaption>This is a generated Bunch group-photo experiment, not a record of a real event. The observation is that the characters remain distinct; the judgment is that they do not yet feel drawn by the same production.</figcaption>
+            </figure>
+
+            <div className={styles.continuityGrid}>
+              <div>
+                <h3>First, build identity on purpose.</h3>
+                <p>A good model sheet is more than one attractive portrait pasted four times. Turn the character around. Test a neutral face and several expressions. Pull out the details most likely to drift: ears, horns, nose, hands, tail, hair shape, markings, jewelry, and palette. Label the traits that must survive every pose.</p>
+                <p>The sheet’s job is continuity. It should answer “Is this still the same character?” before a dramatic camera, outfit, or lighting setup makes that question harder.</p>
+              </div>
+              <div>
+                <p className={styles.promptLabel}>Sample model-sheet prompt</p>
+                <pre className={styles.samplePrompt}><code>{`Build a clean model sheet for [character]. This sheet owns identity, not the final scene style.
+
+Show front, three-quarter, side, and back views at the same scale; four useful expressions; and close-ups of [ears / horns / hands / tail / markings / signature accessory]. Keep the character’s proportions, face geometry, hair silhouette, palette, and markings identical in every view. Use a plain background and even light. Do not add a story scene.`}</code></pre>
+              </div>
+            </div>
+
+            <div className={styles.continuityGrid}>
+              <div>
+                <h3>Then, make the group share one visual world.</h3>
+                <p>Use each model sheet for identity only. Choose one separate style reference to control the rules everybody shares: line weight, face simplification, anatomy, fur detail, shading, palette, and lighting. A composition reference can still decide the camera and where bodies overlap.</p>
+                <p>This separation matters. If every model sheet is allowed to control style as well as identity, the final picture averages incompatible instructions instead of making a cast.</p>
+              </div>
+              <div>
+                <p className={styles.promptLabel}>Sample group-photo prompt</p>
+                <pre className={styles.samplePrompt}><code>{`Stage one group portrait using the composition reference for camera, pose, scale, and overlap.
+
+Use each model sheet only for that character’s identity: face, body proportions, hair, ears, horns, tail, markings, and signature accessories. Use the shared style reference for every character’s line weight, anatomy simplification, eye treatment, fur detail, shading, palette, and light. One scene, one camera, one light source, one production style. Do not copy the individual model sheets’ rendering styles.`}</code></pre>
+              </div>
             </div>
 
             <p>For adding a new character to a photographic scene, my current working default is human-first: choose the pose, insert a human stand-in, check scale and floor contact, convert only that person, then compare the result with both the human checkpoint and the original backplate. It costs an extra pass and it can still drift. It is a useful default from our experiments, not a universal law. I am not reproducing that backplate here because the preserved photograph contains real bystanders.</p>
@@ -211,6 +214,47 @@ export default function PictureGuidePage() {
             <h2 id="boundaries-heading">A draft is not a final.</h2>
             <p><strong>Generated</strong> means the tool made something. <strong>Saved</strong> means you kept the file. <strong>Chosen</strong> means you picked it. <strong>Approved</strong> means the person or client who matters said yes. Those are four different moments.</p>
             <p>If the right reference is missing, stop and ask for it. If nobody has approved the image, call it a draft. A polished picture can still be the wrong picture.</p>
+          </section>
+
+          <section aria-labelledby="colette-heading">
+            <p className="label">The whole move, end to end</p>
+            <h2 id="colette-heading">How we made Colette together.</h2>
+            <p>Colette did not begin as a giant style prompt. We chose one identity anchor at a time: shoulder-length green curls; feminine and borderline sultry; adult, softly full-bodied lamb proportions. Then we made the design testable: lamb ears, curled horns, lamb nose, violet dress, white shearling jacket, turquoise pendant, tail, and toon-four hands.</p>
+            <p>The model sheet ratcheted those choices into a continuity reference. It tested front, three-quarter, side, and back views; expressions; hands; head, ear, horn, and tail construction; and the palette. Only then did we ask for a scene: Colette singing at a piano. The scene could change the pose, camera, clothing arrangement, and light. It did not get permission to redesign Colette.</p>
+
+            <div className={styles.coletteSequence} aria-label="Colette continuity reference and scene result">
+              <figure className={styles.figureCard}>
+                <p className={styles.status}>Continuity reference</p>
+                <a className={styles.imageLink} href="/images/guides/image-ratchet/colette-model-sheet.webp" target="_blank" rel="noreferrer" aria-label="Open Colette’s model sheet at full size">
+                  <Image
+                    src="/images/guides/image-ratchet/colette-model-sheet.webp"
+                    width={1536}
+                    height={1024}
+                    sizes="(max-width: 820px) calc(100vw - 40px), 520px"
+                    alt="Colette model sheet testing consistent green curls, lamb ears and horns, body proportions, hands, tail, expressions, and palette across multiple views."
+                  />
+                </a>
+                <figcaption>The sheet makes identity inspectable before a scene adds harder variables. It is the reference for who Colette is, not a command to reuse this neutral sheet layout.</figcaption>
+              </figure>
+              <figure className={styles.figureCard}>
+                <p className={styles.status}>Scene result</p>
+                <a className={styles.imageLink} href="/images/guides/image-ratchet/colette-piano-portrait.webp" target="_blank" rel="noreferrer" aria-label="Open Colette’s piano portrait at full size">
+                  <Image
+                    src="/images/guides/image-ratchet/colette-piano-portrait.webp"
+                    width={1254}
+                    height={1254}
+                    sizes="(max-width: 820px) calc(100vw - 40px), 520px"
+                    alt="Colette sings at a piano while retaining the green curls, lamb ears and horns, violet dress, shearling jacket, pendant, and softly full-bodied proportions established in her model sheet."
+                  />
+                </a>
+                <figcaption>The piano portrait changes the action and staging while the identity carriers survive. In the recorded workflow, this became the chosen portrait and the model sheet became the appearance reference.</figcaption>
+              </figure>
+            </div>
+
+            <p className={styles.promptLabel}>Sample scene prompt</p>
+            <pre className={styles.samplePrompt}><code>{`Use Colette’s model sheet only for identity and proportions. Preserve her shoulder-length emerald curls, lamb ears, curled horns, lamb nose, softly full-bodied build, violet dress, white shearling jacket, turquoise pendant, tail, and toon-four hands.
+
+Place her singing at a piano. Let the performance determine the pose, expression, camera, and lighting, but do not redesign her face, silhouette, species traits, or palette. After generating, compare the result with the model sheet and list what stayed consistent and what drifted.`}</code></pre>
           </section>
 
           <section className={styles.reading} aria-labelledby="reading-heading">

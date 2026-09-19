@@ -64,7 +64,7 @@
   overflow-wrap: anywhere;
 }
 
-.article section > p:not(.status, :global(.label)),
+.article section > p:not(.status, .promptLabel, :global(.label)),
 .download > p:not(:global(.label)),
 .next > p:not(:global(.label)) {
   max-width: 67ch;
@@ -75,7 +75,8 @@
 }
 
 .demoComparison,
-.referenceSequence {
+.referenceSequence,
+.coletteSequence {
   display: grid;
   gap: 18px;
   margin-top: 34px;
@@ -84,6 +85,35 @@
 .demoComparison,
 .referenceSequence {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.coletteSequence {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.heroFigure {
+  max-width: 68rem;
+  margin-top: 34px;
+}
+
+.continuityGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(24px, 5vw, 56px);
+  align-items: start;
+  margin-top: clamp(42px, 7vw, 72px);
+}
+
+.continuityGrid h3 {
+  font-size: clamp(1.3rem, 2.6vw, 1.8rem);
+  line-height: 1.2;
+}
+
+.continuityGrid p:not(.promptLabel) {
+  margin-top: 14px;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  line-height: 1.7;
 }
 
 .figureCard {
@@ -190,7 +220,7 @@
   color: var(--text);
 }
 
-.ratchet .promptLabel {
+.promptLabel {
   margin-top: 20px;
   color: var(--pink-light);
   font-family: var(--font-mono), ui-monospace, monospace;
@@ -286,7 +316,9 @@
 
 @media (max-width: 820px) {
   .demoComparison,
-  .referenceSequence {
+  .referenceSequence,
+  .coletteSequence,
+  .continuityGrid {
     grid-template-columns: 1fr;
   }
 

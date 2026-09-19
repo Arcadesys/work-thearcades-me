@@ -33,12 +33,9 @@ test('the AI-picture guide links every image-generation build log', () => {
   }
 });
 
-test('the AI-picture guide presents the fictional Sprig demo with decision labels and reference jobs', () => {
+test('the AI-picture guide presents the fictional Sprig repair with decision labels', () => {
   const source = readFileSync('app/guides/how-to-make-ai-generated-pictures-that-arent-slop/page.tsx', 'utf8');
   const assets = [
-    'sprig-composition-source.webp',
-    'sprig-identity-source.webp',
-    'sprig-style-source.webp',
     'sprig-current-best.webp',
     'sprig-roller-coaster.webp',
     'sprig-local-repair.webp',
@@ -52,10 +49,29 @@ test('the AI-picture guide presents the fictional Sprig demo with decision label
   assert(source.includes("status: 'Starting point'"));
   assert(source.includes("status: 'Roller-coaster rewrite'"));
   assert(source.includes("status: 'Ratchet repair'"));
-  assert(source.includes("status: 'Job 1: Where things go'"));
-  assert(source.includes("status: 'Job 2: Who Sprig is'"));
-  assert(source.includes("status: 'Job 3: How it feels'"));
   assert(!source.includes('Moxie'));
+});
+
+test('the guide uses the Bunch style clash and Colette model sheet as continuity evidence', () => {
+  const source = readFileSync('app/guides/how-to-make-ai-generated-pictures-that-arent-slop/page.tsx', 'utf8');
+  const assets = [
+    'bunch-style-clash-group.webp',
+    'colette-model-sheet.webp',
+    'colette-piano-portrait.webp',
+  ];
+
+  for (const asset of assets) {
+    assert(source.includes(`/images/guides/image-ratchet/${asset}`), asset);
+    assert.doesNotThrow(() => readFileSync(`public/images/guides/image-ratchet/${asset}`));
+  }
+
+  assert(source.includes('How did I get all these styles to clash? Here’s how.'));
+  assert(source.includes('Sample model-sheet prompt'));
+  assert(source.includes('Sample group-photo prompt'));
+  assert(source.includes('How we made Colette together.'));
+  assert(source.includes('Continuity reference'));
+  assert(source.includes('Scene result'));
+  assert(source.includes('not a record of a real event'));
 });
 
 test('each ratchet step includes a concrete sample prompt', () => {
