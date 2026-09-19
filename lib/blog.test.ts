@@ -6,6 +6,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import sources from '../content/blog-sources.json';
 import { loadPosts, publicPosts, postTags, relatedPosts, relatedWork, displayBuildDate, articleBody, archiveLinks } from './blog';
+import { blogPostMetadata } from './site-metadata';
 import { caseStudies } from './content';
 import sitemap from '../app/sitemap';
 import robots from '../app/robots';
@@ -68,6 +69,10 @@ test('archive links resolve without exposing handoffs or unselected drafts', () 
 test('the launch post links the skill and keeps a weekly cadence promise', () => {
   const post = loadPosts().find(post => post.slug === 'when-in-crisis-make-tea')!;
   assert.deepEqual(post.tags, ['career', 'ai-enablement', 'layoffs', 'building-in-public']);
+  assert.equal(post.title, 'When in crisis, make tea.');
+  assert.equal(post.publishDate, '2026-09-17T13:00:00.000Z');
+  assert.equal(post.seo?.title, 'What I Did After a Layoff: Start With Tea');
+  assert.equal(blogPostMetadata(post).title, 'What I Did After a Layoff: Start With Tea — Austen Tucker-Crowder');
   assert(post.body.includes('[Download the free Layoff Triage Skill](/layoff-triage)'));
   assert(!post.body.includes('**Download the free Layoff Triage Skill**'));
 });
@@ -75,9 +80,10 @@ test('the launch post links the skill and keeps a weekly cadence promise', () =>
 test('the layoff triage skill download exists and is referenced by the post and its landing page', () => {
   assert(readFileSync('public/downloads/layoff-triage-skill.md', 'utf8').includes('I was just laid off. Start with tea.'));
   assert(readFileSync('app/layoff-triage/page.tsx', 'utf8').includes('/downloads/layoff-triage-skill.md'));
+  assert(readFileSync('app/layoff-triage/page.tsx', 'utf8').includes('Illustrative response, derived from the skill'));
 });
 
-test('sitemap includes every public post and excludes the noindexed journeys page', () => {
+test('sitemap includes every public post and excludes the private journeys route', () => {
   const entries = sitemap();
   const urls = entries.map(entry => entry.url);
   for (const post of publicPosts()) assert(urls.includes(`https://work.thearcades.me/blog/${post.slug}`), post.slug);

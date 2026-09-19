@@ -5,7 +5,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      // Working brief with unresolved status notes, not a public page. Also noindex'd in app/journeys/page.tsx.
+      // Working brief with unresolved status notes. The route returns 404;
+      // this rule also avoids unnecessary crawler requests.
       disallow: '/journeys',
     },
     sitemap: 'https://work.thearcades.me/sitemap.xml',

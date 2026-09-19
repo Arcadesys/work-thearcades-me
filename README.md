@@ -1,6 +1,6 @@
 # work.thearcades.me
 
-An independent, static Next.js portfolio for Austen Tucker-Crowder’s AI leadership and building work. It deliberately links out to the existing public creative and publishing site rather than merging those audiences.
+An independent, static Next.js portfolio for Austen Tucker-Crowder’s AI engineering, enablement, and building work. It deliberately links out to the existing public creative and publishing site rather than merging those audiences.
 
 ## Run locally
 
@@ -44,6 +44,13 @@ npm run build
 - The pull quotation and its footer are supplied self-description from the approved wireframe; they are not represented as an externally sourced quotation.
 
 ## Iteration log
+
+### 2026-09-19 — Builder positioning and practical image guide
+
+- Aligned the homepage, default résumé, consulting page, and search metadata around hands-on AI engineering work and focused consulting while retaining leadership accomplishments as evidence.
+- Published `/guides/how-to-make-ai-generated-pictures-that-arent-slop`, linked it from the blog, and gave it a canonical URL, structured data, sitemap entry, and route-specific social card.
+- Rebuilt `public/resume.pdf` from `lib/resume.ts` with `python3 scripts/generate-resume-pdf.py`; refresh the PDF whenever the shared résumé source changes.
+- `/journeys` now returns 404 because it contains internal working notes. Its historical source remains in `lib/journeys.ts` and it remains excluded from the sitemap and blocked in `robots.txt`.
 
 ### 2026-09-14 — Customer journeys design brief + three-lane fixes
 

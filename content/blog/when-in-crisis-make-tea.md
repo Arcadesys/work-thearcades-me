@@ -14,6 +14,7 @@ tags:
   - layoffs
   - building-in-public
 seo:
+  title: 'What I Did After a Layoff: Start With Tea'
   description: A layoff story, what a year in AI-enabled product work actually taught me, and a free AI skill that triages a layoff the way I did.
 ---
 

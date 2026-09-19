@@ -109,7 +109,7 @@ def render() -> None:
 
     document = SimpleDocTemplate(
         str(OUTPUT), pagesize=letter, leftMargin=0.72 * inch, rightMargin=0.72 * inch,
-        topMargin=0.62 * inch, bottomMargin=0.7 * inch, title="Résumé — Austen Tucker-Crowder",
+        topMargin=0.62 * inch, bottomMargin=0.9 * inch, title="Résumé — Austen Tucker-Crowder",
         author="Austen Tucker-Crowder",
     )
     document.build(story, onFirstPage=footer, onLaterPages=footer)

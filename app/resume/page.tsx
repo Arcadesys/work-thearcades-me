@@ -57,7 +57,7 @@ export default function ResumePage() {
         </div>
         <div className={styles.roleActions}>
           <a className={`btn btn-gradient ${styles.rolePrimary}`} href={`mailto:${RESUME_PROFILE.email}`} data-funnel-event="contact_click" data-funnel-placement="resume_header">
-            Discuss a leadership role <span aria-hidden="true">→</span>
+            Discuss an AI engineering role <span aria-hidden="true">→</span>
           </a>
           <a className={styles.roleSecondary} href={RESUME_PDF_PATH} download data-funnel-event="resume_click" data-funnel-placement="resume_pdf">Download résumé PDF</a>
         </div>
@@ -145,13 +145,14 @@ export default function ResumePage() {
       </section>
 
       <section className={styles.section} aria-labelledby="resume-hire">
-        <h2 id="resume-hire" className={styles.sectionHeading}>Discuss a leadership role</h2>
+        <h2 id="resume-hire" className={styles.sectionHeading}>Discuss an AI engineering role</h2>
         <div className={styles.hire}>
           <p className={styles.hireCopy}>{hero.intro}</p>
           <div className={styles.hireActions}>
             <a className={styles.hirePrimary} href={`mailto:${RESUME_PROFILE.email}`} data-funnel-event="contact_click" data-funnel-placement="resume_footer">
-              Discuss a leadership role <span aria-hidden="true">→</span>
+              Discuss an AI engineering role <span aria-hidden="true">→</span>
             </a>
+            <ExternalLink className={styles.hireSecondary} href={site.bookingUrl} data-funnel-event="booking_click" data-funnel-placement="resume_footer">Discuss a focused project</ExternalLink>
             <Link className={styles.hireSecondary} href="/#work">Read the case studies</Link>
             <Link className={styles.hireSecondary} href="https://www.thearcades.me/projects">See what I build</Link>
           </div>
