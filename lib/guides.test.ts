@@ -58,6 +58,19 @@ test('the AI-picture guide presents the fictional Sprig demo with decision label
   assert(!source.includes('Moxie'));
 });
 
+test('each ratchet step includes a concrete sample prompt', () => {
+  const source = readFileSync('app/guides/how-to-make-ai-generated-pictures-that-arent-slop/page.tsx', 'utf8');
+
+  assert.equal(source.match(/    prompt: '/g)?.length, 6);
+  assert(source.includes('Do not generate or edit anything yet'));
+  assert(source.includes('write a keep-list of three to six visible things'));
+  assert(source.includes('Change only the water stream'));
+  assert(source.includes('Use Reference 1 only for the camera'));
+  assert(source.includes('Report three short lists: Improved, Preserved, and Drifted'));
+  assert(source.includes('Give this version one verdict: KEEP, REVISE, or DISCARD'));
+  assert(source.includes('<p className={styles.promptLabel}>Sample prompt</p>'));
+});
+
 test('the AI-picture guide metadata describes the ratchet thesis', () => {
   assert.match(pictureGuide.description, /Treat your image workflow like a ratchet/);
 });

@@ -190,6 +190,37 @@
   color: var(--text);
 }
 
+.ratchet .promptLabel {
+  margin-top: 20px;
+  color: var(--pink-light);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.055em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.samplePrompt {
+  max-width: 62rem;
+  margin-top: 8px;
+  padding: 16px 18px;
+  overflow: visible;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+  color: var(--text);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: clamp(0.92rem, 1.7vw, 1rem);
+  line-height: 1.65;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.samplePrompt code {
+  font: inherit;
+}
+
 .boundaries,
 .reading,
 .download,
@@ -283,8 +314,12 @@
   }
 
   .ratchet li {
-    grid-template-columns: 2.4rem minmax(0, 1fr);
-    gap: 12px;
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .number {
+    padding-top: 0;
   }
 
   .boundaries,

@@ -83,31 +83,37 @@ const ratchet = [
     title: 'Save the version you like best',
     body: 'Call it the current best and keep it where you can see it. Newer does not mean better, and a new image should never quietly replace the last one that worked.',
     example: 'The first Sprig image is the current best. The missed water is annoying, but the picture already has a clear character, action, camera, and mood.',
+    prompt: 'This is my current best. Do not generate or edit anything yet. Treat this image as the version to beat, and confirm which image you are using as the baseline.',
   },
   {
     title: 'Write a short keep-list',
     body: 'Name three to six things you would be upset to lose. Use plain, visible facts: the blue one-eyed robot, kneeling on the left, the drooping flower on the right, the low camera, and the paper-and-paint finish.',
     example: 'A keep-list turns “I liked the old one more” into a comparison you can actually make.',
+    prompt: 'Before editing, write a keep-list of three to six visible things that already work. For this image, protect Sprig’s blue one-eyed design, the kneeling pose on the left, the drooping flower on the right, the low camera, and the paper-and-paint finish.',
   },
   {
     title: 'Ask for one change you can point to',
     body: '“Make it better” gives the model permission to remake the whole picture. A useful instruction names one visible result and leaves the rest alone.',
     example: 'For Sprig: “Make the water land inside the pot. Keep everything else the same.” We can tell whether that happened without debating taste.',
+    prompt: 'Change only the water stream so it lands inside the flowerpot. Remove the splash where it hit the floor. Keep every item on the keep-list unchanged.',
   },
   {
     title: 'Give every reference one job',
     body: 'Do not toss several images into the prompt and call them inspiration. Say what each one controls: where things go, what the subject looks like, or how the final image should feel.',
     example: 'The gray sketch owns the layout. The model sheet owns Sprig. The painted board owns texture and light. If Sprig turns green, we know the identity reference lost.',
+    prompt: 'Use Reference 1 only for the camera, layout, and pose. Use Reference 2 only for Sprig’s identity and proportions. Use Reference 3 only for the paper-and-paint texture, palette, and light. Do not let one reference overwrite another reference’s job.',
   },
   {
     title: 'Put the two versions side by side',
     body: 'First check the change you asked for. Then walk down the keep-list. Looking at only the new image makes drift easy to miss because the new version may still be attractive.',
     example: 'The glossy green-robot version fixes the water. Side by side, it also reveals five stolen wins: character, pose, flower, camera, and medium.',
+    prompt: 'Compare the new image with the current best. First say whether the requested change worked. Then check every keep-list item. Report three short lists: Improved, Preserved, and Drifted. Do not judge the new image by itself.',
   },
   {
     title: 'Keep the new one only if it really wins',
     body: 'The new image becomes your current best only when the requested change improved and the keep-list still holds. If it fixed one thing by breaking three others, keep the old image and try again.',
     example: 'The localized Sprig repair wins because the water moves into the pot while the rest of the picture remains recognizably the same.',
+    prompt: 'Give this version one verdict: KEEP, REVISE, or DISCARD. Choose KEEP only if the requested change improved and every keep-list item survived. If you choose REVISE, name the single next repair. If you choose DISCARD, keep the old current best.',
   },
 ] as const;
 
@@ -165,6 +171,8 @@ export default function PictureGuidePage() {
                     <h3>{step.title}</h3>
                     <p>{step.body}</p>
                     <p className={styles.stepExample}><strong>In this demo:</strong> {step.example}</p>
+                    <p className={styles.promptLabel}>Sample prompt</p>
+                    <pre className={styles.samplePrompt}><code>{step.prompt}</code></pre>
                   </div>
                 </li>
               ))}
