@@ -82,15 +82,15 @@ export default function Home() {
         <section className="shell section-top hero" id="top" aria-labelledby="hero-heading">
           <div className="hero-grid">
             <div>
-              <p className="label kicker hero-eyebrow" data-reveal="1">
+              <h1 className="label kicker hero-eyebrow" id="hero-heading" data-reveal="1">
                 <span className="dot" />
-                {hero.eyebrow}
-              </p>
-              <h1 id="hero-heading" data-reveal="2">
+                AI engineering and enablement — Austen Tucker-Crowder
+              </h1>
+              <p className="hero-heading" data-reveal="2">
                 {hero.headingBefore}
                 <span className="glow-accent">{hero.headingAccent}</span>
                 {hero.headingAfter}
-              </h1>
+              </p>
               <p className="hero-intro" data-reveal="3">{hero.intro}</p>
               <p className="hero-payoff" data-reveal="4">
                 <Link href="/work/ai-enablement">{hero.evidence}</Link>.
