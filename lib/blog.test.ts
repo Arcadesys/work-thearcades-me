@@ -5,11 +5,12 @@ import { readFileSync, mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import sources from '../content/blog-sources.json';
-import { loadPosts, publicPosts, postTags, relatedPosts, relatedWork, displayBuildDate, articleBody, archiveLinks } from './blog';
+import { loadPosts, publicPosts, postTags, relatedPosts, relatedWork, postSearchMetadata, displayBuildDate, articleBody, archiveLinks } from './blog';
 import { caseStudies } from './content';
 import sitemap from '../app/sitemap';
 import robots from '../app/robots';
 import { GET as feedRoute } from '../app/feed.xml/route';
+import { layoffTriageMetadata, workWithMeMetadata } from './entry-page-metadata';
 
 test('Bunch preserves the complete source file, metadata, and explicit association', () => {
   const raw = readFileSync('content/blog/bunch.md');
@@ -75,6 +76,26 @@ test('the launch post links the skill and keeps a weekly cadence promise', () =>
 test('the layoff triage skill download exists and is referenced by the post and its landing page', () => {
   assert(readFileSync('public/downloads/layoff-triage-skill.md', 'utf8').includes('I was just laid off. Start with tea.'));
   assert(readFileSync('app/layoff-triage/page.tsx', 'utf8').includes('/downloads/layoff-triage-skill.md'));
+});
+
+test('entry pages name the consulting service and downloadable triage tool in metadata', () => {
+  assert.equal(workWithMeMetadata.title, 'AI Engineering & Workflow Consulting | Austen Tucker-Crowder');
+  assert.equal(workWithMeMetadata.canonical, '/work-with-me');
+  assert.equal(layoffTriageMetadata.title, 'Free AI Layoff Triage Tool | Austen Tucker-Crowder');
+  assert.equal(layoffTriageMetadata.canonical, '/layoff-triage');
+  const triagePage = readFileSync('app/layoff-triage/page.tsx', 'utf8');
+  assert(triagePage.includes('Illustrative response, derived from the skill'));
+  assert(triagePage.includes('data-funnel-event="triage_skill_download"'));
+});
+
+test('the tea essay uses its descriptive SEO title while other essays fall back to their visible title', () => {
+  const teaMetadata = postSearchMetadata(loadPosts().find(post => post.slug === 'when-in-crisis-make-tea')!);
+  assert.equal(teaMetadata.title, 'What I Did After a Layoff: Start With Tea — Austen Tucker-Crowder');
+  const fallbackPost = loadPosts().find(post => post.slug === 'my-writing-harness')!;
+  const fallbackMetadata = postSearchMetadata(fallbackPost);
+  assert.equal(fallbackMetadata.title, `${fallbackPost.title} — Austen Tucker-Crowder`);
+  const teaSource = readFileSync('content/blog/when-in-crisis-make-tea.md', 'utf8');
+  assert(teaSource.includes('title: When in crisis, make tea.'));
 });
 
 test('sitemap includes every public post and excludes the noindexed journeys page', () => {

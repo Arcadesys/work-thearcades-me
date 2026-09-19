@@ -3,11 +3,18 @@ import Link from 'next/link';
 import { SiteHeader } from '@/components/site-header';
 import { ExternalLink } from '@/components/external-link';
 import { caseStudyBySlug, site, workWithMe } from '@/lib/content';
+import { workWithMeMetadata } from '@/lib/entry-page-metadata';
 
 export const metadata: Metadata = {
-  title: `${workWithMe.title} — ${site.name}`,
+  title: workWithMeMetadata.title,
   description: workWithMe.description,
-  alternates: { canonical: '/work-with-me' },
+  alternates: { canonical: workWithMeMetadata.canonical },
+  openGraph: {
+    type: 'website',
+    title: workWithMeMetadata.title,
+    description: workWithMe.description,
+    url: workWithMeMetadata.canonical,
+  },
 };
 
 export default function WorkWithMePage() {
@@ -20,6 +27,7 @@ export default function WorkWithMePage() {
         <div className="services-intro">
           <h1>{workWithMe.title}</h1>
           <p>{workWithMe.intro}</p>
+          <p>For a hands-on AI engineering or transformation role, I&rsquo;m also open to the right full-time work.</p>
           <a className="btn btn-gradient" href={`mailto:${site.email}`} data-funnel-event="contact_click" data-funnel-placement="work_with_me_intro">{workWithMe.roleLabel}<span aria-hidden="true"> →</span></a>
         </div>
         <section className="services-intro" aria-labelledby="consulting-heading">

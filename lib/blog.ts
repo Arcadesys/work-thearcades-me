@@ -31,6 +31,13 @@ export function publicPosts(now = new Date(), posts = loadPosts()) {
     .sort((a, b) => Date.parse(b.publishDate) - Date.parse(a.publishDate) || a.slug.localeCompare(b.slug));
 }
 export function postBySlug(slug: string) { return publicPosts().find(post => post.slug === slug); }
+export function postSearchMetadata(post: BlogPost) {
+  return {
+    title: `${post.seo?.title ?? post.title} — Austen Tucker-Crowder`,
+    description: post.seo?.description ?? post.excerpt,
+    canonical: `/blog/${post.slug}`,
+  };
+}
 export function postTags(post: BlogPost) {
   return [...new Set([...post.tags, ...(projectTags[post.slug] ?? [])])];
 }

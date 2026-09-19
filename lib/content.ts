@@ -117,8 +117,8 @@ export const hero = {
 
 export const workWithMe = {
   title: 'Build the first useful version',
-  description: 'Austen Tucker-Crowder builds practical AI systems, prototypes, and workflows, then helps teams understand and own what ships.',
-  intro: 'Bring me a messy workflow, a half-formed product idea, or an AI capability that needs to become real. I work best where the job includes building the thing, testing it with actual people, and leaving behind something your team can understand and own.',
+  description: 'AI engineering and workflow consulting from Austen Tucker-Crowder: practical prototypes, useful AI workflows, and team handoff for organizations with a concrete problem to solve.',
+  intro: 'I take on focused consulting for organizations with a messy workflow, a half-formed product idea, or an AI capability that needs to become real. A first engagement produces a working prototype or workflow, a way to evaluate it with the people who will use it, and clear next-step decisions your team can own.',
   roleLabel: 'Talk about a role',
   consultingTitle: 'Focused consulting engagements',
   consultingIntro: 'For consulting, I scope around a concrete outcome rather than selling a vague bucket of hours.',
