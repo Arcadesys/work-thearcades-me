@@ -1,59 +1,71 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { FormEvent, useId, useState } from 'react';
+import { newsletter } from '@/lib/content';
 
-const ACTIVE_CAMPAIGN_FORM_ID = '11';
-const ACTIVE_CAMPAIGN_EMBED_URL =
-  'https://atuckercrowder.activehosted.com/f/embed.php?id=11';
+type State = 'idle' | 'submitting' | 'success' | 'error';
 
-/**
- * Use ActiveCampaign's live embed instead of copying proc.php routing fields into
- * the app. Form 11 is the dedicated work.thearcades.me AI / Career signup and
- * resolves to ActiveCampaign list 20.
- */
 export function SubscribeForm({ placement = 'blog_post' }: { placement?: string }) {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const hostRef = useRef<HTMLDivElement>(null);
+  const emailId = useId();
+  const [email, setEmail] = useState('');
+  const [state, setState] = useState<State>('idle');
+  const [message, setMessage] = useState(newsletter.idleNote);
 
-  useEffect(() => {
-    const wrapper = wrapperRef.current;
-    const host = hostRef.current;
-    if (!wrapper || !host) return;
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (state === 'submitting') return;
 
-    const decorateSubmitControl = () => {
-      const submit = host.querySelector<HTMLElement>(
-        'button[type="submit"], input[type="submit"]',
-      );
-      if (!submit) return;
-      submit.setAttribute('data-funnel-event', 'subscribe_submit');
-      submit.setAttribute('data-funnel-placement', placement);
-    };
+    setState('submitting');
+    setMessage('Adding you to the build notes…');
 
-    const observer = new MutationObserver(decorateSubmitControl);
-    observer.observe(host, { childList: true, subtree: true });
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ email, placement }),
+      });
+      const payload = (await response.json()) as { ok?: boolean; error?: string };
 
-    const script = document.createElement('script');
-    script.src = ACTIVE_CAMPAIGN_EMBED_URL;
-    script.async = true;
-    script.charset = 'utf-8';
-    script.dataset.activecampaignForm = ACTIVE_CAMPAIGN_FORM_ID;
-    script.addEventListener('load', decorateSubmitControl);
-    wrapper.appendChild(script);
+      if (!response.ok || !payload.ok) {
+        throw new Error(payload.error || 'Could not subscribe right now.');
+      }
 
-    return () => {
-      observer.disconnect();
-      script.remove();
-      host.replaceChildren();
-    };
-  }, [placement]);
+      setState('success');
+      setMessage("You're on the list. Welcome aboard.");
+      setEmail('');
+    } catch (error) {
+      setState('error');
+      setMessage(error instanceof Error ? error.message : 'Could not subscribe right now.');
+    }
+  }
 
   return (
-    <div
-      ref={wrapperRef}
-      data-activecampaign-form={ACTIVE_CAMPAIGN_FORM_ID}
-      data-funnel-placement={placement}
-    >
-      <div ref={hostRef} className="_form_11" />
-    </div>
+    <form onSubmit={submit} noValidate={false}>
+      <label htmlFor={emailId}>Email address</label>
+      <input
+        className="field"
+        id={emailId}
+        type="email"
+        name="email"
+        required
+        autoComplete="email"
+        placeholder="you@company.com"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+        disabled={state === 'submitting'}
+      />
+      <button
+        className="btn btn-gradient"
+        type="submit"
+        disabled={state === 'submitting'}
+        data-funnel-event="subscribe_submit"
+        data-funnel-placement={placement}
+      >
+        {state === 'submitting' ? 'Adding you…' : 'Get the build notes'}
+      </button>
+      <p className="form-note" role={state === 'error' ? 'alert' : 'status'} aria-live="polite">
+        {message}
+      </p>
+    </form>
   );
 }
