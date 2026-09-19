@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test": "tsx --test lib/blog.test.ts"
+    "test": "tsx --test lib/blog.test.ts lib/metadata.test.ts"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

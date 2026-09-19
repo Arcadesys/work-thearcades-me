@@ -118,7 +118,7 @@
     "path": "when-in-crisis-make-tea.md",
     "sourceStatus": "draft",
     "sourceSha256": "0185e3bc17fda0b2dc1f16b7ce11fc58774577991e4a136291f62bd0045c8866",
-    "bodySha256": "5ba13db2f9f700024db2cfd81c81d563ffd8d48bbdc5ee8b546a05399227dac2",
+    "bodySha256": "0eb6940aca5d8fa23126cd415513b3ce528837d91bc1e9d5c3796cf5d52fed2a",
     "importedAt": "2026-09-17T13:00:00.000Z",
     "note": "First post written for this site rather than migrated from a prior one. The single change from the source file: the bold 'Download the free Layoff Triage Skill' line is now a real link to /layoff-triage, since that page and download now exist. Prose is otherwise unchanged, including its typos."
   }

@@ -8,6 +8,17 @@ export const metadata: Metadata = {
   title: `${workWithMe.title} — ${site.name}`,
   description: workWithMe.description,
   alternates: { canonical: '/work-with-me' },
+  openGraph: {
+    type: 'website',
+    url: '/work-with-me',
+    title: `${workWithMe.title} — ${site.name}`,
+    description: workWithMe.description,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `${workWithMe.title} — ${site.name}`,
+    description: workWithMe.description,
+  },
 };
 
 export default function WorkWithMePage() {
