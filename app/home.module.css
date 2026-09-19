@@ -11,8 +11,25 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
-.home :global(.hero-grid > :only-child) {
+.home :global(.hero-grid > :first-child) {
   max-width: 74rem;
+}
+
+.heroPortrait {
+  position: relative;
+  width: min(100%, 340px);
+  aspect-ratio: 4 / 5;
+  justify-self: start;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--pink) 55%, var(--border));
+  border-radius: clamp(18px, 2vw, 28px);
+  background: var(--surface);
+  box-shadow: 18px 18px 0 color-mix(in srgb, var(--orange) 16%, transparent);
+}
+
+.heroHeadshot {
+  object-fit: cover;
+  object-position: center 32%;
 }
 
 .home :global(.hero h1) {
@@ -150,6 +167,27 @@
 @media (max-width: 1080px) {
   .home :global(.lane-grid) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 940px) {
+  .home :global(.hero-grid) {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+    align-items: center;
+  }
+
+  .home :global(.hero-grid > :first-child) {
+    max-width: 54rem;
+  }
+
+  .home :global(.hero h1) {
+    max-width: 12ch;
+    font-size: clamp(3rem, 6.2vw, 5.6rem);
+  }
+
+  .heroPortrait {
+    width: 100%;
+    justify-self: end;
   }
 }
 

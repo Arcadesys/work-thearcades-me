@@ -109,6 +109,16 @@ export default function Home() {
                 </a>
               </div>
             </div>
+            <div className={styles.heroPortrait}>
+              <Image
+                src="/images/headshots/austen-tucker-crowder.jpeg"
+                alt="Austen Tucker-Crowder smiling in glasses."
+                fill
+                priority
+                sizes="(max-width: 939px) min(100vw - 48px, 340px), 360px"
+                className={styles.heroHeadshot}
+              />
+            </div>
           </div>
         </section>
 
