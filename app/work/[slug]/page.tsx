@@ -57,7 +57,13 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
             <ul className="case-links" aria-label={`${study.title} links`}>
               {links.map((link) => (
                 <li key={link.href}>
-                  <ExternalLink href={link.href}>{link.label}<span aria-hidden="true"> ↗</span></ExternalLink>
+                  {link.href.startsWith('/') ? (
+                    <Link className={`case-link case-link-${link.emphasis ?? 'quiet'}`} href={link.href}>{link.label}</Link>
+                  ) : (
+                    <ExternalLink className={`case-link case-link-${link.emphasis ?? 'quiet'}`} href={link.href}>
+                      {link.label}<span className="visually-hidden"> (opens in a new tab)</span>
+                    </ExternalLink>
+                  )}
                 </li>
               ))}
             </ul>

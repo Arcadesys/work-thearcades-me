@@ -13,6 +13,7 @@ Canonical professional site: https://work.thearcades.me
 - Work with me: https://work.thearcades.me/work-with-me
 - Resume: https://work.thearcades.me/resume
 - Guides: https://work.thearcades.me/guides
+- Technical tour: https://work.thearcades.me/engineering
 
 ## Evidence-rich build logs and essays
 

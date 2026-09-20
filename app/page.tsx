@@ -49,6 +49,11 @@ function CaseSummary({ study }: { study: CaseStudy }) {
         Read the full story<Arrow />
         <span className="visually-hidden"> about {study.title}</span>
       </Link>
+      {study.homeSupplementaryLink && (
+        <Link className="label case-technical-tour" href={study.homeSupplementaryLink.href}>
+          {study.homeSupplementaryLink.label}
+        </Link>
+      )}
     </div>
   );
 }

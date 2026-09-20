@@ -20,6 +20,8 @@ export type CaseImage = {
 export type CaseLink = {
   label: string;
   href: string;
+  /** Controls emphasis without making a page component special-case a study. */
+  emphasis?: 'primary' | 'secondary' | 'quiet';
 };
 
 /**
@@ -49,6 +51,8 @@ export type CaseStudy = {
   tags: string[];
   /** Public primary-source links, displayed on the full case-study page. */
   links?: CaseLink[];
+  /** A quiet contextual link that sits beneath the home-page case story. */
+  homeSupplementaryLink?: CaseLink;
   blogTags?: string[];
   accent: Accent;
   image?: CaseImage;
@@ -258,9 +262,11 @@ export const caseStudies: CaseStudy[] = [
     body: "I built Bunch to meet a continuity need that the tools I had tried did not address: recovering working context across memory gaps. It's free and open, with the source code and data model published. The engineering problem was preserving context so the right information surfaces at the moment it matters. The accessibility problem turned out to be the same problem in a different hat.",
     tags: ['Accessibility', 'Public interest', 'AI systems', 'Rapid prototyping'],
     links: [
-      { label: 'Explore the demo in Codex', href: 'https://github.com/Arcadesys/bunch/blob/main/docs/demo-install.md' },
-      { label: 'View the source code', href: 'https://github.com/Arcadesys/bunch' },
+      { label: 'Try the interactive demo', href: 'https://system.thearcades.me/demo', emphasis: 'primary' },
+      { label: 'Building with Bunch? → Technical tour', href: '/engineering', emphasis: 'secondary' },
+      { label: 'View the source code', href: 'https://github.com/Arcadesys/bunch', emphasis: 'quiet' },
     ],
+    homeSupplementaryLink: { label: 'Building with Bunch? → Technical tour', href: '/engineering', emphasis: 'quiet' },
     accent: 'pink',
     evidence: {
       heading: 'Proof you can inspect',
