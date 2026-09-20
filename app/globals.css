@@ -1134,6 +1134,21 @@ textarea::placeholder {
   text-shadow: var(--accent-glow);
 }
 
+.case-technical-tour {
+  display: block;
+  width: fit-content;
+  margin-top: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  text-decoration: underline;
+  text-decoration-color: var(--link-underline);
+  text-underline-offset: 4px;
+}
+
+.case-technical-tour:hover {
+  color: var(--accent);
+}
+
 /* --------------------------------------------------------------------------
    Case study detail page — /work/[slug]
    -------------------------------------------------------------------------- */
@@ -1665,8 +1680,13 @@ main [id] { scroll-margin-top: 16px; }
 }
 
 .case-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
-.case-links a { display: inline-flex; align-items: center; min-height: 48px; padding: 8px 14px; border: 1px solid var(--line); border-radius: var(--radius-sm); color: var(--text); font-size: 1rem; text-decoration: underline; text-underline-offset: 4px; }
-.case-links a:hover { background: var(--surface-hover); }
+.case-link { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 10px 16px; border-radius: var(--radius-sm); font-size: 1rem; font-weight: 600; line-height: 1.35; text-align: center; }
+.case-link-primary { background: var(--gradient); color: var(--bg); }
+.case-link-primary:hover { color: var(--bg); filter: brightness(1.1); box-shadow: var(--ring-pink); }
+.case-link-secondary { border: 1px solid var(--pink); color: var(--text); }
+.case-link-secondary:hover { background: var(--pink); color: var(--bg); }
+.case-link-quiet { border: 1px solid var(--line); color: var(--text-soft); font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }
+.case-link-quiet:hover { background: var(--surface-hover); color: var(--text); }
 
 .subscribe .kicker {
   margin-bottom: 16px;
