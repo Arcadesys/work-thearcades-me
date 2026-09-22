@@ -8,7 +8,7 @@ import { JsonLd } from '@/lib/json-ld';
 import Link from 'next/link';
 export const metadata = blogIndexMetadata;
 export default function BlogPage() {
-  return <><JsonLd data={breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'Blog', path: '/blog' }])} /><h1>Build logs & essays</h1><p className="blog-intro">What I’m building, what I’m learning, and what I’d do differently.</p>
+  return <><JsonLd data={breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'Letters from Next Door', path: '/blog' }])} /><h1>Letters from Next Door</h1><p className="blog-intro">Building parallel spaces until we can come back together.</p>
     <aside className="blog-related" aria-labelledby="featured-guide-heading">
       <p className="label">Practical guide</p>
       <h2 id="featured-guide-heading"><Link href={pictureGuide.path}>{pictureGuide.title}</Link></h2>
