@@ -116,6 +116,7 @@ export const hero = {
   headingBefore: 'Hi. I make ',
   headingAccent: 'useful',
   headingAfter: ' things.',
+  authorship: 'Everything you see here was conceived, built, written, and shipped by me. I use AI heavily as part of my toolchain; I own the product decisions, architecture, judgment, iteration, and delivery.',
   evidence: 'Helped raise agentic-coding adoption from roughly 2% to 43% of merge requests',
   intro:
     'I turn messy problems into working software, then make the systems around that software understandable enough for other people to own. I’m looking for hands-on AI engineering work and focused consulting where building is part of the job.',
