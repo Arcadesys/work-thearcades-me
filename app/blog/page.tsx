@@ -8,14 +8,21 @@ import { JsonLd } from '@/lib/json-ld';
 import Link from 'next/link';
 export const metadata = blogIndexMetadata;
 export default function BlogPage() {
-  return <><JsonLd data={breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'Letters from Next Door', path: '/blog' }])} /><h1>Letters from Next Door</h1><p className="blog-intro">Building parallel spaces until we can come back together.</p>
+  const posts = publicPosts();
+  return <><JsonLd data={breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'Letters from Next Door', path: '/blog' }])} />
+    <header className="blog-index-hero">
+      <p className="label kicker"><span className="dot" />Dispatches from the workshop next door</p>
+      <h1>Letters from <span>Next Door</span></h1>
+      <p className="blog-intro">Building parallel spaces until we can come back together. Notes on AI, creative tools, accessibility, experiments, and the strange things that happen when you keep turning the ratchet.</p>
+      <div className="blog-index-meta"><span>{posts.length} dispatches</span><span>Build weird things.</span></div>
+    </header>
     <aside className="blog-related" aria-labelledby="featured-guide-heading">
       <p className="label">Practical guide</p>
       <h2 id="featured-guide-heading"><Link href={pictureGuide.path}>{pictureGuide.title}</Link></h2>
       <p>{pictureGuide.description}</p>
     </aside>
     <details className="blog-tag-browser"><summary>Browse tags ({allTags().length})</summary><nav aria-label="Browse by tag"><ul className="blog-tags">{allTags().map(tag => <li key={tag}><Link href={tagHref(tag)}>{tag}</Link></li>)}</ul></nav></details>
-    <BlogPostList posts={publicPosts()} />
+    <BlogPostList posts={posts} />
     <div className="subscribe" aria-label="Subscribe">
       <p className="label kicker"><span className="dot" />{newsletter.kicker}</p>
       <h3>{newsletter.heading}</h3>
