@@ -2545,3 +2545,38 @@ main [id] { scroll-margin-top: 16px; }
 @media (prefers-reduced-motion: reduce) {
   .blog-page > .blog-list > li:hover { transform: none; }
 }
+
+
+.blog-kind-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem;
+  margin-top: 1.25rem;
+}
+.blog-kind-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: .45rem .9rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text);
+  background: var(--surface-sunken);
+}
+.blog-kind-nav a:hover { border-color: var(--pink); background: rgb(var(--pink-rgb) / .08); }
+.blog-section-heading,
+.blog-kind-section > h2 {
+  margin: 2.5rem 0 .5rem;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 400;
+}
+.blog-kind-section {
+  margin-top: clamp(3.5rem, 8vw, 6rem);
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+.blog-kind-section > .label { margin-top: 1.5rem; color: var(--pink); }
+.blog-list > li[data-kind='demo'] {
+  border-color: rgb(var(--pink-rgb) / .38);
+  background: linear-gradient(135deg, rgb(var(--pink-rgb) / .065), rgb(var(--orange-rgb) / .035));
+}
