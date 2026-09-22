@@ -27,7 +27,10 @@ export function BlogPostList({ posts }: { posts: BlogPost[] }) {
   return <ul className="blog-list">{posts.map(post => {
     const href = `/blog/${post.slug}`;
     const imageSrc = post.hero?.src ?? `${href}/opengraph-image`;
-    return <li key={post.slug}>
+    const kindLabel = post.kind === 'demo'
+      ? `Demo ${String(post.demoNumber ?? '').padStart(3, '0')}`.trim()
+      : 'Letter';
+    return <li key={post.slug} data-kind={post.kind}>
       <article className={styles.post}>
         <Link className={styles.imageLink} href={href} aria-label={`Read ${post.title}`}>
           <img
@@ -40,9 +43,10 @@ export function BlogPostList({ posts }: { posts: BlogPost[] }) {
           />
         </Link>
         <div className={styles.copy}>
-          <time dateTime={post.publishDate}>{displayDate(post.publishDate)}</time>
+          <div className={styles.meta}><span className={styles.kind}>{kindLabel}</span><time dateTime={post.publishDate}>{displayDate(post.publishDate)}</time></div>
           <h2><Link href={href}>{post.title}</Link></h2>
           {post.excerpt && <p>{post.excerpt}</p>}
+          {post.kind === 'demo' && post.demoUrl && <a className={styles.demoCta} href={post.demoUrl} target="_blank" rel="noreferrer">Try the demo ↗</a>}
           <PostTags post={post} />
         </div>
       </article>
