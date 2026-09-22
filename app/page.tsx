@@ -97,10 +97,11 @@ export default function Home() {
                 {hero.headingAfter}
               </p>
               <p className="hero-intro" data-reveal="3">{hero.intro}</p>
-              <p className="hero-payoff" data-reveal="4">
+              <p className="hero-payoff" data-reveal="4">{hero.authorship}</p>
+              <p className="hero-payoff" data-reveal="5">
                 <Link href="/work/ai-enablement">{hero.evidence}</Link>.
               </p>
-              <div className="btn-row" data-reveal="5">
+              <div className="btn-row" data-reveal="6">
                 <a className="btn btn-gradient" href="#work">
                   See what I’ve built<Arrow />
                 </a>
