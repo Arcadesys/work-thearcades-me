@@ -1,46 +1,115 @@
 import { z } from 'zod';
 
 const emailSchema = z.email().max(254);
-const idSchema = z.string().regex(/^[1-9]\d*$/);
+const idSchema = /^[1-9]\d*$/;
+const blockedStates = new Set(['bounced', 'cancelled', 'complained']);
 
-type KitConfig = { apiKey: string; formId: string };
 type Fetcher = typeof fetch;
-export type KitSignupResult = 'accepted' | 'already_active' | 'failed';
+export type KitSubscriberState = 'active' | 'inactive' | 'bounced' | 'cancelled' | 'complained';
+export type KitSubscriber = { id: number; emailAddress: string; state: KitSubscriberState };
+export type KitStatusResult = { kind: 'found'; subscriber: KitSubscriber } | { kind: 'missing' } | { kind: 'blocked' } | { kind: 'failed' };
 
 export function isValidSignupEmail(value: unknown): value is string {
   return typeof value === 'string' && emailSchema.safeParse(value.trim()).success;
 }
 
-/** Create the subscriber as inactive, then add it to the Kit form to trigger its double opt-in. */
-export async function submitKitSignup(email: string, config: KitConfig, fetcher: Fetcher = fetch): Promise<KitSignupResult> {
-  if (!isValidSignupEmail(email) || !config.apiKey || !idSchema.safeParse(config.formId).success) return 'failed';
+function parseSubscriber(value: unknown): KitSubscriber | null {
+  if (typeof value !== 'object' || value === null) return null;
+  const entry = value as Record<string, unknown>;
+  if (typeof entry.id !== 'number' || !Number.isSafeInteger(entry.id) || entry.id < 1) return null;
+  if (typeof entry.email_address !== 'string' || !isValidSignupEmail(entry.email_address)) return null;
+  if (typeof entry.state !== 'string' || !['active', 'inactive', 'bounced', 'cancelled', 'complained'].includes(entry.state)) return null;
+  return { id: entry.id, emailAddress: entry.email_address, state: entry.state as KitSubscriberState };
+}
 
-  const headers = {
-    'Content-Type': 'application/json',
-    'X-Kit-Api-Key': config.apiKey,
-  };
-  const requestOptions = { method: 'POST', headers, signal: AbortSignal.timeout(8000) };
+/** Look up only the exact address and all statuses; never use account-wide scans. */
+export async function findKitSubscriber(email: string, apiKey: string, fetcher: Fetcher = fetch): Promise<KitStatusResult> {
+  if (!isValidSignupEmail(email) || !apiKey) return { kind: 'failed' };
+  const url = new URL('https://api.kit.com/v4/subscribers');
+  url.searchParams.set('email_address', email.trim());
+  url.searchParams.set('status', 'all');
+  url.searchParams.set('slim', 'true');
+  url.searchParams.set('per_page', '10');
 
   try {
-    const createResponse = await fetcher('https://api.kit.com/v4/subscribers', {
-      ...requestOptions,
-      body: JSON.stringify({ email_address: email.trim(), state: 'inactive' }),
+    const response = await fetcher(url, {
+      headers: { 'X-Kit-Api-Key': apiKey },
+      signal: AbortSignal.timeout(8000),
     });
-    if (!createResponse.ok) return 'failed';
-
-    const created = await createResponse.json() as { subscriber?: { id?: unknown; state?: unknown } };
-    if (created.subscriber?.state === 'active') return 'already_active';
-    if (created.subscriber?.state !== 'inactive') return 'failed';
-    const subscriberId = created.subscriber?.id;
-    if (typeof subscriberId !== 'number' || !Number.isSafeInteger(subscriberId) || subscriberId < 1) return 'failed';
-
-    const formResponse = await fetcher(
-      `https://api.kit.com/v4/forms/${config.formId}/subscribers/${subscriberId}`,
-      { ...requestOptions, body: '{}' },
-    );
-    return formResponse.ok ? 'accepted' : 'failed';
+    if (!response.ok) return { kind: 'failed' };
+    const body = await response.json() as { subscribers?: unknown };
+    if (!Array.isArray(body.subscribers)) return { kind: 'failed' };
+    const subscribers = body.subscribers.map(parseSubscriber);
+    if (subscribers.some(subscriber => subscriber === null)) return { kind: 'failed' };
+    const matches = (subscribers as KitSubscriber[])
+      .filter(subscriber => subscriber.emailAddress.trim().toLowerCase() === email.trim().toLowerCase());
+    if (matches.length === 0) return { kind: 'missing' };
+    if (matches.length !== 1) return { kind: 'failed' };
+    const subscriber = matches[0];
+    return blockedStates.has(subscriber.state) ? { kind: 'blocked' } : { kind: 'found', subscriber };
   } catch {
-    // Never log Kit responses or the address submitted in the request.
-    return 'failed';
+    return { kind: 'failed' };
+  }
+}
+
+export async function createInactiveKitSubscriber(email: string, apiKey: string, fetcher: Fetcher = fetch): Promise<KitSubscriber | null> {
+  if (!isValidSignupEmail(email) || !apiKey) return null;
+  try {
+    const response = await fetcher('https://api.kit.com/v4/subscribers', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Kit-Api-Key': apiKey },
+      body: JSON.stringify({ email_address: email.trim(), state: 'inactive' }),
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!response.ok) return null;
+    const body = await response.json() as { subscriber?: unknown };
+    return parseSubscriber(body.subscriber);
+  } catch {
+    return null;
+  }
+}
+
+export async function addKitSubscriberToWorkForm(subscriberId: number, formId: string, apiKey: string, fetcher: Fetcher = fetch) {
+  if (!Number.isSafeInteger(subscriberId) || subscriberId < 1 || !idSchema.test(formId) || !apiKey) return false;
+  try {
+    const response = await fetcher(`https://api.kit.com/v4/forms/${formId}/subscribers/${subscriberId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Kit-Api-Key': apiKey },
+      body: '{}',
+      signal: AbortSignal.timeout(8000),
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+export async function addKitWorkTag(subscriberId: number, tagId: string, apiKey: string, fetcher: Fetcher = fetch) {
+  if (!Number.isSafeInteger(subscriberId) || subscriberId < 1 || !idSchema.test(tagId) || !apiKey) return false;
+  try {
+    const response = await fetcher(`https://api.kit.com/v4/tags/${tagId}/subscribers/${subscriberId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Kit-Api-Key': apiKey },
+      body: '{}',
+      signal: AbortSignal.timeout(8000),
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+export async function getKitSubscriberById(id: number, apiKey: string, fetcher: Fetcher = fetch): Promise<KitSubscriber | null> {
+  if (!Number.isSafeInteger(id) || id < 1 || !apiKey) return null;
+  try {
+    const response = await fetcher(`https://api.kit.com/v4/subscribers/${id}`, {
+      headers: { 'X-Kit-Api-Key': apiKey },
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!response.ok) return null;
+    const body = await response.json() as { subscriber?: unknown };
+    return parseSubscriber(body.subscriber);
+  } catch {
+    return null;
   }
 }

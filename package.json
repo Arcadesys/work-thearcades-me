@@ -11,6 +11,7 @@
     "test:browser": "playwright test"
   },
   "dependencies": {
+    "@upstash/redis": "^1.39.0",
     "gray-matter": "^4.0.3",
     "next": "16.3.4",
     "posthog-js": "^1.432.0",

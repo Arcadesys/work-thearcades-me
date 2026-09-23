@@ -1,7 +1,5 @@
-import { isValidSignupEmail } from '@/lib/kit-subscription';
+import { confirmNewsletterVerification } from '@/lib/newsletter-flow';
 import { createNewsletterRuntime } from '@/lib/newsletter-runtime';
-import { requestNewsletterVerification } from '@/lib/newsletter-flow';
-import { signupIpFingerprint } from '@/lib/signup-verification';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -31,24 +29,22 @@ export async function POST(request: Request) {
   } catch {
     return json({ accepted: false }, 400);
   }
-
-  const values = typeof payload === 'object' && payload !== null ? payload as Record<string, unknown> : {};
-  const email = values.email;
-  const placement = values.placement;
-  if (!isValidSignupEmail(email) || typeof placement !== 'string' || !/^[a-z0-9_-]{1,64}$/.test(placement)) {
-    return json({ accepted: false }, 400);
-  }
+  const token = typeof payload === 'object' && payload !== null && 'token' in payload ? payload.token : undefined;
+  if (typeof token !== 'string' || token.length > 512) return json({ accepted: false }, 400);
 
   const runtime = createNewsletterRuntime();
   if (!runtime) return json({ accepted: false }, 503);
 
   try {
-    const clientIp = request.headers.get('x-vercel-forwarded-for')?.split(',')[0]?.trim();
-    const ipFingerprint = signupIpFingerprint(clientIp, runtime.config.tokenSecret);
-    const result = await requestNewsletterVerification(email, placement, runtime.config, runtime.dependencies, ipFingerprint);
-    if (result === 'failed') return json({ accepted: false }, 502);
-    // Keep response text and shape identical for suppressed addresses and sent mail.
-    return json({ accepted: true }, 202);
+    const result = await confirmNewsletterVerification(token, runtime.config, runtime.dependencies);
+    if (result === 'active' || result === 'kit_confirmation_required') {
+      return json({ accepted: true, state: result }, 200);
+    }
+    if (result === 'completed') return json({ accepted: false, state: 'completed' }, 200);
+    if (result === 'busy') return json({ accepted: false, state: 'processing' }, 202);
+    if (result === 'suppressed') return json({ accepted: false, state: 'unavailable' }, 409);
+    if (result === 'invalid' || result === 'cancelled') return json({ accepted: false }, 410);
+    return json({ accepted: false }, 502);
   } catch {
     return json({ accepted: false }, 502);
   }
