@@ -1,5 +1,6 @@
 import { findKitSubscriber, createInactiveKitSubscriber, addKitSubscriberToWorkForm, addKitWorkTag } from './kit-subscription';
 import { sendSignupVerificationEmail } from './postmark-verification';
+import { sendWorkWelcomeEmail } from './postmark-work-welcome';
 import { createSignupLedgerFromEnv, validLinkSecret } from './signup-verification';
 import type { SignupConfig, SignupDependencies } from './newsletter-flow';
 
@@ -33,6 +34,13 @@ export function createNewsletterRuntime(env: NodeJS.ProcessEnv = process.env): N
       environment: env.VERCEL_ENV,
       vercelUrl: env.VERCEL_URL,
     }),
+    welcome: (email, token) => sendWorkWelcomeEmail(email, token, {
+      serverToken: POSTMARK_SERVER_TOKEN,
+      fromEmail: POSTMARK_FROM_EMAIL,
+      messageStream: POSTMARK_TRANSACTIONAL_STREAM,
+      environment: env.VERCEL_ENV,
+      vercelUrl: env.VERCEL_URL,
+    }),
     kit: {
       find: email => findKitSubscriber(email, apiKey),
       create: email => createInactiveKitSubscriber(email, apiKey),
@@ -44,8 +52,22 @@ export function createNewsletterRuntime(env: NodeJS.ProcessEnv = process.env): N
 }
 
 export function createReconciliationRuntime(env: NodeJS.ProcessEnv = process.env) {
-  const { KIT_API_KEY, KIT_WORK_TAG_ID } = env;
+  const { KIT_API_KEY, KIT_WORK_TAG_ID, SIGNUP_LINK_SECRET, POSTMARK_SERVER_TOKEN, POSTMARK_FROM_EMAIL, POSTMARK_TRANSACTIONAL_STREAM } = env;
   const ledger = createSignupLedgerFromEnv(env);
-  if (!KIT_API_KEY || !KIT_WORK_TAG_ID || !ledger) return null;
-  return { config: { apiKey: KIT_API_KEY, tagId: KIT_WORK_TAG_ID }, ledger };
+  if (!KIT_API_KEY || !KIT_WORK_TAG_ID || !validLinkSecret(SIGNUP_LINK_SECRET) || !ledger || !POSTMARK_SERVER_TOKEN || !POSTMARK_FROM_EMAIL || !POSTMARK_TRANSACTIONAL_STREAM) return null;
+  return {
+    config: {
+      apiKey: KIT_API_KEY,
+      tagId: KIT_WORK_TAG_ID,
+      tokenSecret: SIGNUP_LINK_SECRET,
+      welcome: (email: string, token: string) => sendWorkWelcomeEmail(email, token, {
+        serverToken: POSTMARK_SERVER_TOKEN,
+        fromEmail: POSTMARK_FROM_EMAIL,
+        messageStream: POSTMARK_TRANSACTIONAL_STREAM,
+        environment: env.VERCEL_ENV,
+        vercelUrl: env.VERCEL_URL,
+      }),
+    },
+    ledger,
+  };
 }

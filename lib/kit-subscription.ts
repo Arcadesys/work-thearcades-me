@@ -100,6 +100,21 @@ export async function addKitWorkTag(subscriberId: number, tagId: string, apiKey:
   }
 }
 
+export async function unsubscribeKitSubscriber(subscriberId: number, apiKey: string, fetcher: Fetcher = fetch) {
+  if (!Number.isSafeInteger(subscriberId) || subscriberId < 1 || !apiKey) return false;
+  try {
+    const response = await fetcher(`https://api.kit.com/v4/subscribers/${subscriberId}/unsubscribe`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Kit-Api-Key': apiKey },
+      body: '{}',
+      signal: AbortSignal.timeout(8000),
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
 export async function getKitSubscriberById(id: number, apiKey: string, fetcher: Fetcher = fetch): Promise<KitSubscriber | null> {
   if (!Number.isSafeInteger(id) || id < 1 || !apiKey) return null;
   try {

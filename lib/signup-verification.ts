@@ -109,6 +109,7 @@ function latestKey(emailDigest: string) { return `${namespace}:latest:${emailDig
 function tokenKey(tokenDigest: string) { return `${namespace}:token:${tokenDigest}`; }
 function cooldownKey(emailDigest: string) { return `${namespace}:cooldown:${emailDigest}`; }
 function ipWindowKey(fingerprint: string) { return `${namespace}:ip-window:${fingerprint}`; }
+function welcomeKey(emailDigest: string) { return `${namespace}:welcome:${emailDigest}`; }
 const queueKey = `${namespace}:queue`;
 
 /** Upstash Redis may decode Lua cjson return values before resolving EVAL. */
@@ -305,6 +306,31 @@ redis.call('ZADD', KEYS[1], ARGV[2], ARGV[1])
 return 1
 `;
 
+const claimWelcomeScript = `
+local result = redis.call('SET', KEYS[1], 'sending', 'NX')
+if result then return 'claimed' end
+local state = redis.call('GET', KEYS[1])
+if state == 'sending' then return 'busy' end
+return 'already_handled'
+`;
+
+const settleWelcomeScript = `
+local current = redis.call('GET', KEYS[1])
+if current == 'sent' or current == 'uncertain' then return 1 end
+if not current then
+  redis.call('SET', KEYS[1], 'uncertain', 'NX')
+  return 1
+end
+if current ~= 'sending' then return 0 end
+redis.call('SET', KEYS[1], ARGV[1])
+return 1
+`;
+
+const releaseWelcomeScript = `
+if redis.call('GET', KEYS[1]) ~= 'sending' then return 0 end
+return redis.call('DEL', KEYS[1])
+`;
+
 export interface SignupLedger {
   issue(record: SignupRecord, ipFingerprint?: string): Promise<boolean>;
   releaseEmailCooldown(emailDigest: string): Promise<void>;
@@ -316,6 +342,9 @@ export interface SignupLedger {
   suppress(id: string): Promise<void>;
   claimDueKitConfirmations(now: number, limit?: number): Promise<SignupRecord[]>;
   rescheduleKitConfirmation(id: string, nextAt: number): Promise<void>;
+  claimWorkWelcome(emailDigest: string): Promise<'claimed' | 'busy' | 'already_handled' | 'failed'>;
+  settleWorkWelcome(emailDigest: string, state: 'sent' | 'uncertain'): Promise<boolean>;
+  releaseWorkWelcome(emailDigest: string): Promise<void>;
 }
 
 export class UpstashSignupLedger implements SignupLedger {
@@ -386,6 +415,22 @@ export class UpstashSignupLedger implements SignupLedger {
 
   async rescheduleKitConfirmation(id: string, nextAt: number) {
     await this.redis.eval(rescheduleScript, [queueKey, requestKey(id)], [id, nextAt, recordTtlSeconds]);
+  }
+
+  async claimWorkWelcome(emailDigest: string) {
+    if (!/^[0-9a-f]{64}$/i.test(emailDigest)) return 'failed';
+    const result = await this.redis.eval<unknown[], string>(claimWelcomeScript, [welcomeKey(emailDigest)], []);
+    return result === 'claimed' || result === 'busy' || result === 'already_handled' ? result : 'failed';
+  }
+
+  async settleWorkWelcome(emailDigest: string, state: 'sent' | 'uncertain') {
+    if (!/^[0-9a-f]{64}$/i.test(emailDigest)) return false;
+    return await this.redis.eval<unknown[], number>(settleWelcomeScript, [welcomeKey(emailDigest)], [state]) === 1;
+  }
+
+  async releaseWorkWelcome(emailDigest: string) {
+    if (!/^[0-9a-f]{64}$/i.test(emailDigest)) return;
+    await this.redis.eval<unknown[], number>(releaseWelcomeScript, [welcomeKey(emailDigest)], []);
   }
 }
 

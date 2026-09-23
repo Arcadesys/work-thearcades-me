@@ -18,10 +18,11 @@
 }
 
 .card h1 {
-  max-width: 14ch;
+  max-width: 100%;
   margin: 0 0 1rem;
-  font-size: clamp(2rem, 7vw, 3.25rem);
+  font-size: clamp(1.5rem, 7vw, 3.25rem);
   line-height: 1.08;
+  overflow-wrap: anywhere;
 }
 
 .message {
