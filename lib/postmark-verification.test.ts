@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { sendSignupVerificationEmail } from './postmark-verification';
+import { sendSignupVerificationEmail, verificationSiteOrigin } from './postmark-verification';
 
 test('verification email uses an explicit fragment link and disables Postmark tracking', async () => {
   let request: RequestInit | undefined;
@@ -36,4 +36,11 @@ test('unexpected response parsing failure is uncertain', async () => {
     serverToken: 'private', fromEmail: 'notes@example.com', messageStream: 'outbound',
   }, async () => new Response('not json', { status: 200 }));
   assert.equal(result, 'uncertain');
+});
+
+test('verification links use only a validated Vercel deployment host for previews', () => {
+  assert.equal(verificationSiteOrigin({ environment: 'preview', vercelUrl: 'work-preview-abc.vercel.app' }), 'https://work-preview-abc.vercel.app');
+  assert.equal(verificationSiteOrigin({ environment: 'production', vercelUrl: 'work-preview-abc.vercel.app' }), 'https://work.thearcades.me');
+  assert.equal(verificationSiteOrigin({ environment: 'preview', vercelUrl: 'work.vercel.app.attacker.invalid' }), 'https://work.thearcades.me');
+  assert.equal(verificationSiteOrigin({ environment: 'preview', vercelUrl: 'https://work-preview.vercel.app/path' }), 'https://work.thearcades.me');
 });

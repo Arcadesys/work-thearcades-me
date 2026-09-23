@@ -14,12 +14,9 @@ export function createNewsletterRuntime(env: NodeJS.ProcessEnv = process.env): N
     POSTMARK_SERVER_TOKEN,
     POSTMARK_FROM_EMAIL,
     POSTMARK_TRANSACTIONAL_STREAM,
-    UPSTASH_REDIS_REST_URL,
-    UPSTASH_REDIS_REST_TOKEN,
   } = env;
   if (!KIT_API_KEY || !KIT_FORM_ID || !KIT_WORK_TAG_ID || !validLinkSecret(SIGNUP_LINK_SECRET)
-    || !POSTMARK_SERVER_TOKEN || !POSTMARK_FROM_EMAIL || !POSTMARK_TRANSACTIONAL_STREAM
-    || !UPSTASH_REDIS_REST_URL || !UPSTASH_REDIS_REST_TOKEN) return null;
+    || !POSTMARK_SERVER_TOKEN || !POSTMARK_FROM_EMAIL || !POSTMARK_TRANSACTIONAL_STREAM) return null;
 
   const ledger = createSignupLedgerFromEnv(env);
   if (!ledger) return null;
@@ -33,6 +30,8 @@ export function createNewsletterRuntime(env: NodeJS.ProcessEnv = process.env): N
       serverToken: POSTMARK_SERVER_TOKEN,
       fromEmail: POSTMARK_FROM_EMAIL,
       messageStream: POSTMARK_TRANSACTIONAL_STREAM,
+      environment: env.VERCEL_ENV,
+      vercelUrl: env.VERCEL_URL,
     }),
     kit: {
       find: email => findKitSubscriber(email, apiKey),

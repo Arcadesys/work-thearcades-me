@@ -368,9 +368,19 @@ export class UpstashSignupLedger implements SignupLedger {
   }
 }
 
+export function redisRestCredentials(env: Record<string, string | undefined> = process.env) {
+  const upstashUrl = env.UPSTASH_REDIS_REST_URL;
+  const upstashToken = env.UPSTASH_REDIS_REST_TOKEN;
+  if (upstashUrl && upstashToken) return { url: upstashUrl, token: upstashToken };
+
+  const vercelUrl = env.KV_REST_API_URL;
+  const vercelToken = env.KV_REST_API_TOKEN;
+  if (vercelUrl && vercelToken) return { url: vercelUrl, token: vercelToken };
+  return null;
+}
+
 export function createSignupLedgerFromEnv(env: NodeJS.ProcessEnv = process.env): SignupLedger | null {
-  const url = env.UPSTASH_REDIS_REST_URL;
-  const token = env.UPSTASH_REDIS_REST_TOKEN;
-  if (!url || !token) return null;
-  return new UpstashSignupLedger(new Redis({ url, token }));
+  const credentials = redisRestCredentials(env);
+  if (!credentials) return null;
+  return new UpstashSignupLedger(new Redis(credentials));
 }

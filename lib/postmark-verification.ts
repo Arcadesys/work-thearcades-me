@@ -1,7 +1,21 @@
-type VerificationMailConfig = { serverToken: string; fromEmail: string; messageStream: string };
+type VerificationMailConfig = {
+  serverToken: string;
+  fromEmail: string;
+  messageStream: string;
+  environment?: string;
+  vercelUrl?: string;
+};
 type Fetcher = typeof fetch;
 
 const siteOrigin = 'https://work.thearcades.me';
+const safeVercelHostname = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.vercel\.app$/i;
+
+export function verificationSiteOrigin(config: Pick<VerificationMailConfig, 'environment' | 'vercelUrl'>) {
+  if (config.environment === 'preview' && config.vercelUrl && safeVercelHostname.test(config.vercelUrl)) {
+    return `https://${config.vercelUrl}`;
+  }
+  return siteOrigin;
+}
 
 export async function sendSignupVerificationEmail(
   email: string,
@@ -10,7 +24,7 @@ export async function sendSignupVerificationEmail(
   fetcher: Fetcher = fetch,
 ) {
   if (!config.serverToken || !config.fromEmail || !config.messageStream || !token) return 'rejected';
-  const verifyUrl = `${siteOrigin}/newsletter/verify#token=${encodeURIComponent(token)}`;
+  const verifyUrl = `${verificationSiteOrigin(config)}/newsletter/verify#token=${encodeURIComponent(token)}`;
   const textBody = [
     'Confirm your request for Work build notes',
     '',
