@@ -3,7 +3,7 @@
 import { useId, useState, type FormEvent } from 'react';
 import { track } from '@/lib/analytics-client';
 
-const confirmationMessage = 'If this address is eligible, a verification link will arrive by email. The request is not sent to Kit until you confirm that link.';
+const confirmationMessage = 'If this address is eligible, we have requested a verification email. The request will not reach Kit until you confirm the link. If no email arrives, try again after ten minutes.';
 
 export function SubscribeForm({ placement = 'blog_post' }: { placement?: string }) {
   const emailId = useId();

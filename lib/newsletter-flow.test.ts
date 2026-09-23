@@ -43,7 +43,7 @@ function dependencies(state: 'active' | 'inactive' | 'missing' | 'blocked' = 'mi
   const subscriber: KitSubscriber = { id: 77, emailAddress: 'reader@example.com', state: state === 'missing' ? 'inactive' : state === 'blocked' ? 'cancelled' : state };
   const deps: SignupDependencies = {
     ledger,
-    mail: async (_email, token) => { calls.push('mail'); ledger.token = token; return true; },
+    mail: async (_email, token) => { calls.push('mail'); ledger.token = token; return 'sent'; },
     kit: {
       find: async () => { calls.push('find'); return state === 'blocked' ? { kind: 'blocked' } : state === 'missing' ? { kind: 'missing' } : { kind: 'found', subscriber }; },
       create: async () => { calls.push('create'); return subscriber; },
@@ -79,6 +79,15 @@ test('a Redis cooldown suppresses repeat verification mail without revealing why
   limited.deps.ledger.issue = async () => false;
   assert.equal(await requestNewsletterVerification('reader@example.com', 'blog_post', config, limited.deps), 'suppressed');
   assert.deepEqual(limited.calls, ['find']);
+});
+
+test('uncertain Postmark outcome keeps its one-time challenge valid for a possibly delivered email', async () => {
+  const uncertain = dependencies();
+  uncertain.deps.mail = async (_email, token) => { uncertain.ledger.token = token; return 'uncertain'; };
+  assert.equal(await requestNewsletterVerification('reader@example.com', 'blog_post', config, uncertain.deps), 'uncertain');
+  assert.equal(uncertain.ledger.record?.state, 'pending');
+  assert.ok(uncertain.ledger.record?.encryptedEmail);
+  assert.equal(uncertain.ledger.token.length > 0, true);
 });
 
 test('explicitly verified active contact is added to the Work form and tag only after link use', async () => {

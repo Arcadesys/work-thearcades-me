@@ -24,7 +24,7 @@ test('newsletter signup has a labelled keyboard flow and pending-confirmation fe
   await submit.focus();
   await submit.press('Enter');
 
-  await expect(status).toContainText('The request is not sent to Kit until you confirm that link.');
+  await expect(status).toContainText('The request will not reach Kit until you confirm the link.');
   await expect(email).toBeDisabled();
   await expect(page.locator('body')).toHaveJSProperty('scrollWidth', await page.locator('body').evaluate(node => node.clientWidth));
 });
@@ -46,7 +46,7 @@ test('newsletter signup explains a failed request and allows retry', async ({ pa
   await expect(status).toContainText('We could not submit your request. Please try again.');
 
   await submit.press('Enter');
-  await expect(status).toContainText('The request is not sent to Kit until you confirm that link.');
+  await expect(status).toContainText('The request will not reach Kit until you confirm the link.');
   expect(attempts).toBe(2);
 });
 

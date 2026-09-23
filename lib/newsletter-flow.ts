@@ -9,7 +9,8 @@ import { createSignupChallenge, decryptSignupEmail, isValidSignupChallenge, type
 
 export type SignupConfig = { apiKey: string; formId: string; tagId: string; tokenSecret: string };
 export function isKitReconciliationEnabled(value: string | undefined) { return value === 'true'; }
-export type SignupMailer = (email: string, token: string) => Promise<boolean>;
+export type SignupMailResult = 'sent' | 'rejected' | 'uncertain';
+export type SignupMailer = (email: string, token: string) => Promise<SignupMailResult>;
 export type SignupDependencies = {
   ledger: SignupLedger;
   mail: SignupMailer;
@@ -28,16 +29,17 @@ export async function requestNewsletterVerification(
   config: SignupConfig,
   dependencies: SignupDependencies,
   ipFingerprint?: string,
-): Promise<'sent' | 'suppressed' | 'failed'> {
+): Promise<'sent' | 'uncertain' | 'suppressed' | 'failed'> {
   const current = await dependencies.kit.find(email);
   if (current.kind === 'blocked') return 'suppressed';
   if (current.kind === 'failed') return 'failed';
 
   const challenge = createSignupChallenge(email, placement, config.tokenSecret, dependencies.now?.());
   if (!await dependencies.ledger.issue(challenge.record, ipFingerprint)) return 'suppressed';
-  let sent = false;
-  try { sent = await dependencies.mail(email, challenge.token); } catch { sent = false; }
-  if (!sent) {
+  let mailResult: SignupMailResult;
+  try { mailResult = await dependencies.mail(email, challenge.token); } catch { mailResult = 'uncertain'; }
+  if (mailResult === 'uncertain') return 'uncertain';
+  if (mailResult === 'rejected') {
     await dependencies.ledger.cancel(challenge.token);
     await dependencies.ledger.releaseEmailCooldown(challenge.record.emailDigest);
     return 'failed';

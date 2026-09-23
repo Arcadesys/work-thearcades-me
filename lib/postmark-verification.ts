@@ -9,7 +9,7 @@ export async function sendSignupVerificationEmail(
   config: VerificationMailConfig,
   fetcher: Fetcher = fetch,
 ) {
-  if (!config.serverToken || !config.fromEmail || !config.messageStream || !token) return false;
+  if (!config.serverToken || !config.fromEmail || !config.messageStream || !token) return 'rejected';
   const verifyUrl = `${siteOrigin}/newsletter/verify#token=${encodeURIComponent(token)}`;
   const textBody = [
     'Confirm your request for Work build notes',
@@ -41,11 +41,14 @@ export async function sendSignupVerificationEmail(
       }),
       signal: AbortSignal.timeout(8000),
     });
-    if (!response.ok) return false;
+    if (response.status >= 400 && response.status < 500) return 'rejected';
+    if (!response.ok) return 'uncertain';
     const result = await response.json() as { ErrorCode?: unknown };
-    return result.ErrorCode === 0;
+    if (result.ErrorCode === 0) return 'sent';
+    if (typeof result.ErrorCode === 'number') return 'rejected';
+    return 'uncertain';
   } catch {
-    // Do not log recipient addresses, verification tokens, or provider responses.
-    return false;
+    // The provider may have accepted the email before a timeout; preserve its challenge.
+    return 'uncertain';
   }
 }

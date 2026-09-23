@@ -10,7 +10,7 @@ test('verification email uses an explicit fragment link and disables Postmark tr
   };
   assert.equal(await sendSignupVerificationEmail('reader@example.com', 'signed.token', {
     serverToken: 'private', fromEmail: 'notes@example.com', messageStream: 'outbound',
-  }, fetcher), true);
+  }, fetcher), 'sent');
   const body = JSON.parse(String(request?.body));
   assert.equal(body.To, 'reader@example.com');
   assert.equal(body.TrackOpens, false);
@@ -20,9 +20,20 @@ test('verification email uses an explicit fragment link and disables Postmark tr
   assert.doesNotMatch(body.TextBody, /\?token=/);
 });
 
-test('provider rejection is returned without exposing provider response details', async () => {
+test('network uncertainty preserves challenge and clear rejection can release it for retry', async () => {
   const result = await sendSignupVerificationEmail('reader@example.com', 'token', {
     serverToken: 'private', fromEmail: 'notes@example.com', messageStream: 'outbound',
   }, async () => new Response('private provider detail', { status: 500 }));
-  assert.equal(result, false);
+  assert.equal(result, 'uncertain');
+  const rejected = await sendSignupVerificationEmail('reader@example.com', 'token', {
+    serverToken: 'private', fromEmail: 'notes@example.com', messageStream: 'outbound',
+  }, async () => new Response('rejected', { status: 422 }));
+  assert.equal(rejected, 'rejected');
+});
+
+test('unexpected response parsing failure is uncertain', async () => {
+  const result = await sendSignupVerificationEmail('reader@example.com', 'token', {
+    serverToken: 'private', fromEmail: 'notes@example.com', messageStream: 'outbound',
+  }, async () => new Response('not json', { status: 200 }));
+  assert.equal(result, 'uncertain');
 });
