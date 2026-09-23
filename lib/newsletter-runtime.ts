@@ -2,7 +2,7 @@ import { findKitSubscriber, createInactiveKitSubscriber, addKitSubscriberToWorkF
 import { sendSignupVerificationEmail } from './postmark-verification';
 import { sendWorkWelcomeEmail } from './postmark-work-welcome';
 import { createSignupLedgerFromEnv, validLinkSecret } from './signup-verification';
-import type { SignupConfig, SignupDependencies } from './newsletter-flow';
+import { isWorkWelcomeEnabled, type SignupConfig, type SignupDependencies } from './newsletter-flow';
 
 export type NewsletterRuntime = { config: SignupConfig; dependencies: SignupDependencies };
 
@@ -24,7 +24,7 @@ export function createNewsletterRuntime(env: NodeJS.ProcessEnv = process.env): N
   const apiKey = KIT_API_KEY;
   const formId = KIT_FORM_ID;
   const tagId = KIT_WORK_TAG_ID;
-  const config: SignupConfig = { apiKey, formId, tagId, tokenSecret: SIGNUP_LINK_SECRET };
+  const config: SignupConfig = { apiKey, formId, tagId, tokenSecret: SIGNUP_LINK_SECRET, welcomeEnabled: isWorkWelcomeEnabled(env.WORK_WELCOME_ENABLED) };
   const dependencies: SignupDependencies = {
     ledger,
     mail: (email, token) => sendSignupVerificationEmail(email, token, {
@@ -60,6 +60,7 @@ export function createReconciliationRuntime(env: NodeJS.ProcessEnv = process.env
       apiKey: KIT_API_KEY,
       tagId: KIT_WORK_TAG_ID,
       tokenSecret: SIGNUP_LINK_SECRET,
+      welcomeEnabled: isWorkWelcomeEnabled(env.WORK_WELCOME_ENABLED),
       welcome: (email: string, token: string) => sendWorkWelcomeEmail(email, token, {
         serverToken: POSTMARK_SERVER_TOKEN,
         fromEmail: POSTMARK_FROM_EMAIL,

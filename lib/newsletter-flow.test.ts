@@ -1,12 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { confirmNewsletterVerification, isKitReconciliationEnabled, reconcileVerifiedKitSignups, requestNewsletterVerification, type SignupDependencies } from './newsletter-flow';
+import { confirmNewsletterVerification, isKitReconciliationEnabled, isWorkWelcomeEnabled, reconcileVerifiedKitSignups, requestNewsletterVerification, type SignupDependencies } from './newsletter-flow';
 import { createSignupChallenge, decryptSignupEmail, isValidSignupChallenge, signupIpFingerprint, type SignupLedger, type SignupRecord } from './signup-verification';
 import type { KitSubscriber } from './kit-subscription';
 import { readWorkUnsubscribeToken } from './work-unsubscribe-token';
 
 const secret = 'a-very-long-test-secret-used-only-for-unit-tests';
-const config = { apiKey: 'test-key', formId: '9953061', tagId: '23806915', tokenSecret: secret };
+const config = { apiKey: 'test-key', formId: '9953061', tagId: '23806915', tokenSecret: secret, welcomeEnabled: true };
 
 class MemoryLedger implements SignupLedger {
   record?: SignupRecord;
@@ -133,7 +133,7 @@ test('inactive contact enters verified-only DOI queue and receives no tag until 
     assert.equal(url, 'https://api.kit.com/v4/tags/23806915/subscribers/77');
     return Response.json({ subscriber: { id: 77 } });
   };
-  const result = await reconcileVerifiedKitSignups({ apiKey: 'test-key', tagId: '23806915', tokenSecret: secret, welcome: async email => { calls.push(`welcome:${email}`); return 'sent'; } }, ledger, 1_800_000_000_000, fetcher);
+  const result = await reconcileVerifiedKitSignups({ apiKey: 'test-key', tagId: '23806915', tokenSecret: secret, welcomeEnabled: true, welcome: async email => { calls.push(`welcome:${email}`); return 'sent'; } }, ledger, 1_800_000_000_000, fetcher);
   assert.deepEqual(result, { processed: 1, tagged: 1, waiting: 0, suppressed: 0, failed: 0 });
   assert.equal(ledger.record?.state, 'completed');
   assert.deepEqual(calls, ['find', 'mail', 'find', 'form', 'welcome:reader@example.com']);
@@ -171,6 +171,29 @@ test('definite welcome rejection releases the marker for an explicit retry', asy
   assert.equal(ledger.welcomeAddresses.values().next().value, 'sent');
 });
 
+test('Work welcome is disabled by default while explicitly verified tagging still completes', async () => {
+  const { ledger, calls, deps } = dependencies('active');
+  await requestNewsletterVerification('reader@example.com', 'blog_post', config, deps);
+  assert.equal(await confirmNewsletterVerification(ledger.token, { ...config, welcomeEnabled: false }, deps), 'active');
+  assert.deepEqual(calls, ['find', 'mail', 'find', 'form', 'tag']);
+  assert.equal(ledger.welcomeAddresses.size, 0);
+});
+
+test('Work welcome remains disabled in reconciliation unless explicitly enabled', async () => {
+  const { ledger, calls, deps } = dependencies('inactive');
+  await requestNewsletterVerification('reader@example.com', 'blog_post', config, deps);
+  assert.equal(await confirmNewsletterVerification(ledger.token, config, deps), 'kit_confirmation_required');
+  const fetcher: typeof fetch = async input => {
+    const url = String(input);
+    if (url === 'https://api.kit.com/v4/subscribers/77') return Response.json({ subscriber: { id: 77, email_address: 'reader@example.com', state: 'active' } });
+    assert.equal(url, 'https://api.kit.com/v4/tags/23806915/subscribers/77');
+    return Response.json({ subscriber: { id: 77 } });
+  };
+  await reconcileVerifiedKitSignups({ apiKey: 'test-key', tagId: '23806915', tokenSecret: secret, welcome: async email => { calls.push(`welcome:${email}`); return 'sent'; } }, ledger, 1_800_000_000_000, fetcher);
+  assert.equal(calls.some(call => call.startsWith('welcome:')), false);
+  assert.equal(ledger.welcomeAddresses.size, 0);
+});
+
 test('failed partial Kit operation stays retryable and completion replay is safe', async () => {
   const { ledger, calls, deps } = dependencies('active');
   await requestNewsletterVerification('reader@example.com', 'blog_post', config, deps);
@@ -191,7 +214,9 @@ test('challenge has HMAC format and rejects tampering', () => {
   assert.equal(challenge.token.split('.').length, 4);
   assert.equal(isValidSignupChallenge(challenge.token, secret), true);
   assert.equal(decryptSignupEmail(challenge.record.encryptedEmail, secret), 'reader@example.com');
-  const changed = challenge.token.slice(0, -1) + (challenge.token.endsWith('a') ? 'b' : 'a');
+  const parts = challenge.token.split('.');
+  parts[3] = `${parts[3][0] === 'A' ? 'B' : 'A'}${parts[3].slice(1)}`;
+  const changed = parts.join('.');
   assert.equal(isValidSignupChallenge(changed, secret), false);
 });
 
@@ -199,6 +224,9 @@ test('verified reconciliation stays explicitly disabled unless opted in', () => 
   assert.equal(isKitReconciliationEnabled(undefined), false);
   assert.equal(isKitReconciliationEnabled('TRUE'), false);
   assert.equal(isKitReconciliationEnabled('true'), true);
+  assert.equal(isWorkWelcomeEnabled(undefined), false);
+  assert.equal(isWorkWelcomeEnabled('TRUE'), false);
+  assert.equal(isWorkWelcomeEnabled('true'), true);
 });
 
 test('IP abuse-limit keys use a secret-keyed digest and reject untrusted malformed values', () => {
