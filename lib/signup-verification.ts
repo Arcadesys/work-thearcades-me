@@ -111,6 +111,25 @@ function cooldownKey(emailDigest: string) { return `${namespace}:cooldown:${emai
 function ipWindowKey(fingerprint: string) { return `${namespace}:ip-window:${fingerprint}`; }
 const queueKey = `${namespace}:queue`;
 
+/** Upstash Redis may decode Lua cjson return values before resolving EVAL. */
+function parseSignupRecord(value: unknown): SignupRecord | null {
+  let candidate = value;
+  if (typeof candidate === 'string') {
+    try { candidate = JSON.parse(candidate) as unknown; } catch { return null; }
+  }
+  if (!candidate || typeof candidate !== 'object' || Array.isArray(candidate)) return null;
+  const record = candidate as Partial<SignupRecord>;
+  const states: SignupState[] = ['pending', 'processing', 'retry', 'waiting_kit_confirmation', 'completed', 'cancelled', 'suppressed', 'expired'];
+  if (typeof record.id !== 'string' || !/^[0-9a-f-]{36}$/i.test(record.id)
+    || typeof record.emailDigest !== 'string' || !/^[0-9a-f]{64}$/i.test(record.emailDigest)
+    || typeof record.tokenDigest !== 'string' || !/^[0-9a-f]{64}$/i.test(record.tokenDigest)
+    || !Number.isSafeInteger(record.expiresAt) || typeof record.placement !== 'string'
+    || !states.includes(record.state as SignupState)
+    || (record.encryptedEmail !== undefined && typeof record.encryptedEmail !== 'string')
+    || (record.subscriberId !== undefined && !Number.isSafeInteger(record.subscriberId))) return null;
+  return record as SignupRecord;
+}
+
 const issueScript = `
 if not redis.call('SET', KEYS[4], ARGV[2], 'EX', ARGV[9], 'NX') then return 0 end
 if #KEYS > 4 then
@@ -321,8 +340,9 @@ export class UpstashSignupLedger implements SignupLedger {
     if (typeof tokenId !== 'string') return { status: 'missing' };
     const raw = await this.redis.eval<unknown[]>(claimScript, [tokenKey(tokenDigest), requestKey(tokenId)], [tokenDigest, Date.now(), leaseMs, verificationRetryWindowMs / 1000, verificationRetryWindowMs, `${namespace}:latest:`]);
     if (!Array.isArray(raw) || typeof raw[0] !== 'string') return { status: 'invalid' };
-    if (raw[0] !== 'claimed' || typeof raw[1] !== 'string') return { status: raw[0] };
-    const record = JSON.parse(raw[1]) as SignupRecord;
+    if (raw[0] !== 'claimed') return { status: raw[0] };
+    const record = parseSignupRecord(raw[1]);
+    if (!record) return { status: 'invalid' };
     return { status: 'claimed', record };
   }
 
@@ -356,8 +376,9 @@ export class UpstashSignupLedger implements SignupLedger {
     const claimed: SignupRecord[] = [];
     for (const id of ids) {
       const result = await this.redis.eval<unknown[]>(queueClaimScript, [queueKey, requestKey(id)], [id, now, leaseMs, recordTtlSeconds]);
-      if (Array.isArray(result) && result[0] === 'claimed' && typeof result[1] === 'string') {
-        claimed.push(JSON.parse(result[1]) as SignupRecord);
+      if (Array.isArray(result) && result[0] === 'claimed') {
+        const record = parseSignupRecord(result[1]);
+        if (record) claimed.push(record);
       }
     }
     return claimed;
