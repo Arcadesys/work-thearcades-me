@@ -50,6 +50,25 @@ test('newsletter signup explains a failed request and allows retry', async ({ pa
   expect(attempts).toBe(2);
 });
 
+test('an already-active subscriber gets a recoverable message and can edit the address', async ({ page }) => {
+  await page.route('**/api/kit/subscribe', async route => {
+    await route.fulfill({ status: 409, contentType: 'application/json', body: JSON.stringify({ accepted: false, reason: 'already_active' }) });
+  });
+  await page.goto('/');
+
+  const form = page.locator('.subscribe form').first();
+  const email = form.getByRole('textbox', { name: 'Email address' });
+  const submit = form.getByRole('button', { name: 'Get the build notes' });
+  const status = form.getByRole('status');
+  await email.fill('reader@example.test');
+  await submit.press('Enter');
+
+  await expect(status).toContainText('it was not added to the Work confirmation form');
+  await expect(email).toBeEnabled();
+  await email.fill('different@example.test');
+  await expect(email).toHaveValue('different@example.test');
+});
+
 test('newsletter signup reflows without horizontal overflow at a 200% desktop zoom equivalent', async ({ page }) => {
   await page.setViewportSize({ width: 720, height: 900 });
   await page.goto('/');

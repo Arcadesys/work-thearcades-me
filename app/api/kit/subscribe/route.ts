@@ -2,7 +2,7 @@ import { isValidSignupEmail, submitKitSignup } from '@/lib/kit-subscription';
 
 export const runtime = 'nodejs';
 
-function json(body: { accepted: boolean }, status: number) {
+function json(body: { accepted: boolean; reason?: 'already_active' }, status: number) {
   return Response.json(body, {
     status,
     headers: { 'Cache-Control': 'no-store, max-age=0' },
@@ -31,6 +31,8 @@ export async function POST(request: Request) {
   const { KIT_API_KEY, KIT_FORM_ID } = process.env;
   if (!KIT_API_KEY || !KIT_FORM_ID) return json({ accepted: false }, 503);
 
-  const accepted = await submitKitSignup(email, { apiKey: KIT_API_KEY, formId: KIT_FORM_ID });
-  return accepted ? json({ accepted: true }, 200) : json({ accepted: false }, 502);
+  const result = await submitKitSignup(email, { apiKey: KIT_API_KEY, formId: KIT_FORM_ID });
+  if (result === 'accepted') return json({ accepted: true }, 200);
+  if (result === 'already_active') return json({ accepted: false, reason: 'already_active' }, 409);
+  return json({ accepted: false }, 502);
 }
