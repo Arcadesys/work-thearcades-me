@@ -10,7 +10,6 @@ const funnelEvents = new Set<AnalyticsEvent>([
   'booking_click',
   'triage_skill_download',
   'image_ratchet_skill_download',
-  'subscribe_submit',
 ]);
 
 /** Records only the public event name and placement supplied by the page. */

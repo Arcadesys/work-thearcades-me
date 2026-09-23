@@ -93,7 +93,14 @@ npm run build
 - **Automation audit:** active automation 19 notifies the administrator for any list; 28 targets the Parties form; 29 targets the Mabon list. No subscriber drip applies to the new form/list. Existing automations were not modified.
 - **Passed:** lint, production build, TypeScript, whitespace checks; local light/dark desktop and 320px signup rendering; homepage anchor visibility; invalid email; deployed preview homepage-to-case navigation and keyboard empty-field validation.
 - **Double opt-in verified:** authorized test inbox submitted through the homepage preview on September 12. Provider acknowledgment correctly requested email confirmation; contact 1/list membership 308 was status 0 (unconfirmed), attributed to form 11/list 20. Confirmation email arrived in Mail with the correct subject and link. Following the link changed that same membership to status 1 (active). Repeat submission through the AI-enablement case study returned the confirmed page and retained contact 1 with one active list-20 membership; the provider replaced membership 308 with 309.
-- **Pending acceptance:** provider failure response, stalled-navigation runtime test, measured contrast audit and verified 200% zoom. Do not merge/release until these checks are resolved. Production has not been changed.
+
+### 2026-09-23 — Kit newsletter signup code
+
+- **Form and endpoint:** replaced the ActiveCampaign embed with an accessible first-party form and `/api/kit/subscribe`. Configure server-only `KIT_API_KEY` and numeric `KIT_FORM_ID`; the route creates an inactive subscriber, then adds that subscriber to the configured Kit form so its double-opt-in flow can run. It sends no referrer or page URL to Kit.
+- **Confirmation behavior:** success copy asks readers to check their inbox and says the subscription starts after confirmation. The `Interest: Work / AI` tag must be applied by Kit automation only after confirmation; the site route does not tag subscribers.
+- **Analytics:** `subscribe_submit_intent` records a submitted signup attempt. `subscribe_request_accepted` records the route's successful Kit form response. Both retain only public placement; existing PostHog controls restrict production capture to the exact work-site host and filter form values and URLs.
+- **Still unverified:** Kit form double-opt-in settings and post-confirmation tag automation, production secrets, deployed route behavior, delivery/confirmation email, and production PostHog event receipt. This code change did not edit provider settings or deploy.
+- **Historical acceptance note:** those checks were open in the original ActiveCampaign implementation. The current Kit code has unit coverage for provider rejection and a rendered retry path, plus keyboard, 320/390px, desktop, and 720px reflow checks; no authenticated provider or deployed test has been run for this migration.
 - **Measurement:** dedicated form identifies site signups. Report confirmed memberships separately from submissions; no conversion rate without a matching traffic denominator.
 - **Preview:** https://work-thearcades-adwtijdha-austen-tuckers-projects.vercel.app
 

@@ -49,17 +49,17 @@ Implement these only after choosing an approved analytics provider and consent p
 
 Record a click before an external navigation where the chosen provider supports it; otherwise label the event as a best-effort click measurement. `resume_pdf_download_initiated` means activation of the download link only. It does not prove a completed file transfer. No click proves that an email was sent or a meeting was booked.
 
-## Blog funnel events (implemented)
+## Newsletter events (implemented)
 
-Unlike the proposed contract above, these two events are implemented in `components/analytics-events.tsx`, gated the same way as the existing `resume_click`/`contact_click`/`booking_click` events behind `NEXT_PUBLIC_VERCEL_CUSTOM_EVENTS_ENABLED`, using the same `data-funnel-event`/`data-funnel-placement` click delegation. Properties are limited to `placement`; no PII.
+Newsletter events are emitted by `components/subscribe-form.tsx`, with event names and properties filtered by `lib/analytics-policy.ts`. PostHog collection follows `docs/posthog.md`: production events require the exact `work.thearcades.me` hostname and production Vercel environment. Only the public `placement` value is retained; email addresses, submitted form values, and full URLs are excluded.
 
 | Event name | Page path | CTA placement |
 | --- | --- | --- |
 | `triage_skill_download` | `/layoff-triage` | `layoff_triage_page` — the main download link |
-| `subscribe_submit` | `/blog/[slug]` | `blog_post` — the inline mid-read subscribe card |
-| `subscribe_submit` | `/layoff-triage` | `layoff_triage_page` — the subscribe card |
+| `subscribe_submit_intent` | signup placements | Records a user-initiated signup submission |
+| `subscribe_request_accepted` | signup placements | The server reports that Kit accepted the double-opt-in form request |
 
-`subscribe_submit` records the click on the form's submit button, not a confirmed subscription — the form does a native POST to ActiveCampaign and subscription still requires the reader to confirm by email. `triage_skill_download` means activation of the download link only, for the same reason `resume_pdf_download_initiated` above does.
+These events represent different stages: intent records the submission attempt, and accepted means Kit accepted the request and initiated its form flow. Neither event establishes that the reader confirmed the email or remains subscribed. `triage_skill_download` means activation of the download link only, for the same reason `resume_pdf_download_initiated` above does.
 
 ## Qualified inquiries are a separate outcome
 

@@ -5,7 +5,7 @@ const outputDir = path.join(process.env.TMPDIR ?? '/tmp', 'work-thearcades-playw
 
 export default defineConfig({
   testDir: './tests/browser',
-  testMatch: 'engineering.spec.ts',
+  testMatch: '**/*.spec.ts',
   outputDir,
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
