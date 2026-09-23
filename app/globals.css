@@ -2512,7 +2512,7 @@ main [id] { scroll-margin-top: 16px; }
 .analytics-privacy-link a { display: inline-flex; align-items: center; min-height: 44px; font-size: 1.125rem; text-decoration: underline; }
 
 
-/* Letters from Next Door: editorial index */
+/* Work blog: editorial index */
 .blog-index-hero {
   position: relative;
   overflow: hidden;
@@ -2527,7 +2527,7 @@ main [id] { scroll-margin-top: 16px; }
   box-shadow: var(--elev-1);
 }
 .blog-index-hero::after {
-  content: 'NEXT DOOR';
+  content: 'BUILD NOTES';
   position: absolute;
   right: -0.04em;
   bottom: -0.24em;
