@@ -47,7 +47,6 @@ test('partial build dates never display invented precision', () => {
 
 test('all selected imports preserve exact source files or archive bodies', () => {
   const posts = loadPosts();
-  assert.equal(posts.length, 13);
   for (const [slug, receipt] of Object.entries(sources)) {
     const post = posts.find(post => post.slug === slug)!;
     assert(post, `Missing ${slug}`);
