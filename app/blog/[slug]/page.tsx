@@ -45,6 +45,7 @@ export default async function PostPage({ params }: PageProps<'/blog/[slug]'>) {
       <h3>{newsletter.heading}</h3>
       <p>{newsletter.body}</p>
       <SubscribeForm />
+      <p><a href="https://www.thearcades.me/subscribe">Choose from all email topics →</a></p>
     </div>
     {secondHalf && <div className="blog-prose"><Markdown {...markdownProps}>{secondHalf}</Markdown></div>}
     {source?.url && <p className="blog-provenance">Originally published on <a href={source.url}>The Arcades</a> on {displayDate(post.publishDate)}.</p>}
