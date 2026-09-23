@@ -32,6 +32,7 @@ export default function BlogPage() {
       <h2 id="blog-subscribe-heading">{newsletter.heading}</h2>
       <p>{newsletter.body}</p>
       <SubscribeForm placement="blog_index" />
+      <p><a href="https://www.thearcades.me/subscribe">Choose from all email topics →</a></p>
     </section>
     <aside className="blog-related" aria-labelledby="featured-guide-heading">
       <p className="label">Practical guide</p>
