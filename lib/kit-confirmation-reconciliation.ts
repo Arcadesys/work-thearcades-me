@@ -1,5 +1,9 @@
 type KitConfig = { apiKey: string; formId: string; tagId: string };
 type Fetcher = typeof fetch;
+
+export function isKitReconciliationEnabled(value: string | undefined) {
+  return value === 'true';
+}
 type KitSubscriber = { id?: unknown; state?: unknown };
 type KitPage = { subscribers?: unknown; pagination?: { has_next_page?: unknown; end_cursor?: unknown } };
 

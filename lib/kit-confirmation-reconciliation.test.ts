@@ -1,6 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { reconcileConfirmedKitSubscribers } from './kit-confirmation-reconciliation';
+import { isKitReconciliationEnabled, reconcileConfirmedKitSubscribers } from './kit-confirmation-reconciliation';
+
+test('confirmation reconciliation is disabled unless explicitly opted in', () => {
+  assert.equal(isKitReconciliationEnabled(undefined), false);
+  assert.equal(isKitReconciliationEnabled(''), false);
+  assert.equal(isKitReconciliationEnabled('TRUE'), false);
+  assert.equal(isKitReconciliationEnabled('true'), true);
+});
 
 test('reconciliation tags only active form subscribers missing the tag', async () => {
   const calls: Array<{ url: URL; method: string }> = [];

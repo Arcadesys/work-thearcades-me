@@ -1,5 +1,5 @@
 import { timingSafeEqual } from 'node:crypto';
-import { reconcileConfirmedKitSubscribers } from '@/lib/kit-confirmation-reconciliation';
+import { isKitReconciliationEnabled, reconcileConfirmedKitSubscribers } from '@/lib/kit-confirmation-reconciliation';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -18,6 +18,10 @@ function authorized(request: Request, secret: string) {
 }
 
 export async function GET(request: Request) {
+  if (!isKitReconciliationEnabled(process.env.KIT_RECONCILE_ENABLED)) {
+    return json({ error: 'reconciliation_disabled' }, 503);
+  }
+
   const secret = process.env.CRON_SECRET;
   if (!secret || secret.length < 16) return json({ error: 'not_configured' }, 503);
   if (!authorized(request, secret)) return json({ error: 'unauthorized' }, 401);
