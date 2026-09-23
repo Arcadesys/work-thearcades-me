@@ -1766,6 +1766,64 @@ main [id] { scroll-margin-top: 16px; }
   overflow-wrap: anywhere;
 }
 
+/* The provider injects ID-scoped styles after the site stylesheet. The :is()
+   selector matches every signup card while giving these overrides ID specificity. */
+:is(#subscribe, .subscribe) form._form_11 {
+  width: 100% !important;
+  max-width: none !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+:is(#subscribe, .subscribe) form._form_11 :is(._field_header, ._field_html) {
+  display: none !important;
+}
+
+:is(#subscribe, .subscribe) form._form_11 label {
+  color: var(--text) !important;
+  font-size: 1rem !important;
+}
+
+:is(#subscribe, .subscribe) form._form_11 input[name='email'] {
+  width: 100% !important;
+  min-height: 48px !important;
+  padding: 10px 14px !important;
+  border: 2px solid var(--text-muted) !important;
+  border-radius: var(--radius-sm) !important;
+  background: var(--bg) !important;
+  color: var(--text) !important;
+  font-size: 1rem !important;
+}
+
+:is(#subscribe, .subscribe) form._form_11 button[type='submit'] {
+  min-height: 48px !important;
+  padding: 10px 18px !important;
+  border-radius: var(--radius-sm) !important;
+  background: var(--text) !important;
+  color: var(--bg) !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+}
+
+:is(#subscribe, .subscribe) form._form_11 :is(input[name='email'], button[type='submit']):focus-visible {
+  outline: 3px solid var(--pink) !important;
+  outline-offset: 3px !important;
+}
+
+:is(#subscribe, .subscribe) form._form_11 ._marketing-by {
+  color: var(--text-soft) !important;
+}
+
+:is(#subscribe, .subscribe) form._form_11 a._logo {
+  filter: brightness(0) invert(1);
+}
+
+:root[data-theme='light'] :is(#subscribe, .subscribe) form._form_11 a._logo {
+  filter: none;
+}
+
 /* --------------------------------------------------------------------------
    Contact & footer
    -------------------------------------------------------------------------- */
@@ -2446,12 +2504,6 @@ main [id] { scroll-margin-top: 16px; }
 }
 
 
-/* Temporary email signup pause while the mailing-list provider is being brought online. */
-.subscribe {
-  display: none !important;
-}
-
-
 /* Privacy disclosure for the optional, session-scoped analytics service. */
 .privacy-copy { max-width: 48rem; margin: 0 auto; padding: 3rem var(--gutter); font-size: 1.125rem; line-height: 1.7; }
 .privacy-copy h1 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.2; }
@@ -2505,6 +2557,12 @@ main [id] { scroll-margin-top: 16px; }
   color: transparent;
 }
 .blog-index-hero .blog-intro { max-width: 62ch; }
+.blog-start { margin: 2rem 0; }
+.blog-start > p:not(.label) { color: var(--text-soft); line-height: 1.6; }
+.blog-start ul { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); list-style: none; margin: 1.5rem 0 0; padding: 0; }
+.blog-start li { display: flex; flex-direction: column; gap: .6rem; padding: 1.25rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.blog-start li a { display: inline-flex; align-items: center; min-height: 48px; font-weight: 700; line-height: 1.35; text-decoration: underline; text-underline-offset: .2em; }
+.blog-start li span { color: var(--text-soft); font-size: 1rem; line-height: 1.5; }
 .blog-index-meta {
   display: flex;
   flex-wrap: wrap;
