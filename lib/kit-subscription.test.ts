@@ -1,11 +1,24 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { addKitSubscriberToWorkForm, addKitWorkTag, createInactiveKitSubscriber, findKitSubscriber, getKitSubscriberById, isValidSignupEmail } from './kit-subscription';
+import { addKitSubscriberToWorkForm, addKitWorkTag, createInactiveKitSubscriber, findKitSubscriber, getKitSubscriberById, isValidSignupEmail, unsubscribeKitSubscriber } from './kit-subscription';
 
 test('signup validation accepts ordinary addresses and rejects malformed or oversized input', () => {
   assert.equal(isValidSignupEmail(' person@example.com '), true);
   assert.equal(isValidSignupEmail('not-an-email'), false);
   assert.equal(isValidSignupEmail(`a${'x'.repeat(250)}@example.com`), false);
+});
+
+test('Kit unsubscribe uses its subscriber-state endpoint and supports the documented 204 response', async () => {
+  let call: { url: string; init?: RequestInit } | undefined;
+  const fetcher: typeof fetch = async (input, init) => {
+    call = { url: String(input), init };
+    return new Response(null, { status: 204 });
+  };
+  assert.equal(await unsubscribeKitSubscriber(2718, 'key', fetcher), true);
+  assert.equal(call?.url, 'https://api.kit.com/v4/subscribers/2718/unsubscribe');
+  assert.equal(call?.init?.method, 'POST');
+  assert.deepEqual(JSON.parse(String(call?.init?.body)), {});
+  assert.equal(await unsubscribeKitSubscriber(0, 'key', fetcher), false);
 });
 
 test('lookup asks Kit for one exact address across all states and fails closed on malformed data', async () => {

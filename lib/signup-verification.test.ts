@@ -53,3 +53,31 @@ test('queue claim accepts auto-decoded records and records without encrypted ema
   const claimed = await new UpstashSignupLedger(redis as never).claimDueKitConfirmations(Date.now());
   assert.deepEqual(claimed, [queued]);
 });
+
+test('welcome address marker claims atomically and keeps sent or uncertain results durable', async () => {
+  const states = new Map<string, string>();
+  const redis = {
+    eval: async (_script: string, keys: string[], args: string[]) => {
+      const key = keys[0];
+      if (args.length === 0) {
+        if (states.has(key)) return states.get(key) === 'sending' ? 'busy' : 'already_handled';
+        states.set(key, 'sending');
+        return 'claimed';
+      }
+      if (args[0] === 'sent' || args[0] === 'uncertain') {
+        if (states.get(key) !== 'sending') return 0;
+        states.set(key, args[0]);
+        return 1;
+      }
+      if (states.get(key) === 'sending') { states.delete(key); return 1; }
+      return 0;
+    },
+  };
+  const ledger = new UpstashSignupLedger(redis as never);
+  const digest = 'c'.repeat(64);
+  assert.equal(await ledger.claimWorkWelcome(digest), 'claimed');
+  assert.equal(await ledger.claimWorkWelcome(digest), 'busy');
+  assert.equal(await ledger.settleWorkWelcome(digest, 'uncertain'), true);
+  assert.equal(await ledger.claimWorkWelcome(digest), 'already_handled');
+  assert.equal(await ledger.settleWorkWelcome('invalid', 'sent'), false);
+});

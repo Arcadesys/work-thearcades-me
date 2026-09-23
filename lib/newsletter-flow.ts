@@ -6,14 +6,18 @@ import {
   type KitSubscriber,
 } from './kit-subscription';
 import { createSignupChallenge, decryptSignupEmail, isValidSignupChallenge, type SignupLedger, type SignupRecord } from './signup-verification';
+import type { WelcomeMailResult } from './postmark-work-welcome';
+import { createWorkUnsubscribeToken } from './work-unsubscribe-token';
 
-export type SignupConfig = { apiKey: string; formId: string; tagId: string; tokenSecret: string };
+export type SignupConfig = { apiKey: string; formId: string; tagId: string; tokenSecret: string; welcomeEnabled?: boolean };
 export function isKitReconciliationEnabled(value: string | undefined) { return value === 'true'; }
+export function isWorkWelcomeEnabled(value: string | undefined) { return value === 'true'; }
 export type SignupMailResult = 'sent' | 'rejected' | 'uncertain';
 export type SignupMailer = (email: string, token: string) => Promise<SignupMailResult>;
 export type SignupDependencies = {
   ledger: SignupLedger;
   mail: SignupMailer;
+  welcome(email: string, unsubscribeToken: string): Promise<WelcomeMailResult>;
   kit: {
     find(email: string): ReturnType<typeof findKitSubscriber>;
     create(email: string): Promise<KitSubscriber | null>;
@@ -49,7 +53,7 @@ export async function requestNewsletterVerification(
 
 export type ConfirmNewsletterResult = 'active' | 'kit_confirmation_required' | 'completed' | 'cancelled' | 'suppressed' | 'invalid' | 'busy' | 'failed';
 
-async function applyActiveSubscriber(record: SignupRecord, subscriberId: number, dependencies: SignupDependencies) {
+async function applyActiveSubscriber(record: SignupRecord, subscriberId: number, email: string, config: SignupConfig, dependencies: SignupDependencies) {
   if (!await dependencies.kit.addToForm(subscriberId)) {
     await dependencies.ledger.retry(record.id);
     return false;
@@ -58,8 +62,40 @@ async function applyActiveSubscriber(record: SignupRecord, subscriberId: number,
     await dependencies.ledger.retry(record.id);
     return false;
   }
+  const welcomeResult = await deliverWorkWelcome(record, email, subscriberId, config.tokenSecret, config.welcomeEnabled === true, dependencies);
+  if (welcomeResult === 'retry') {
+    await dependencies.ledger.retry(record.id);
+    return true;
+  }
   await dependencies.ledger.complete(record.id);
   return true;
+}
+
+type WelcomeDependencies = Pick<SignupDependencies, 'ledger' | 'welcome'>;
+
+async function deliverWorkWelcome(record: SignupRecord, email: string, subscriberId: number, tokenSecret: string, enabled: boolean, dependencies: WelcomeDependencies): Promise<'done' | 'retry'> {
+  if (!enabled) return 'done';
+  const claim = await dependencies.ledger.claimWorkWelcome(record.emailDigest);
+  if (claim === 'already_handled') return 'done';
+  if (claim !== 'claimed') return 'retry';
+
+  const unsubscribeToken = createWorkUnsubscribeToken(subscriberId, record.emailDigest, tokenSecret);
+  if (!unsubscribeToken) {
+    await dependencies.ledger.releaseWorkWelcome(record.emailDigest);
+    return 'retry';
+  }
+  let result: WelcomeMailResult;
+  try { result = await dependencies.welcome(email, unsubscribeToken); } catch { result = 'uncertain'; }
+  if (result === 'rejected') {
+    await dependencies.ledger.releaseWorkWelcome(record.emailDigest);
+    return 'retry';
+  }
+  try {
+    await dependencies.ledger.settleWorkWelcome(record.emailDigest, result);
+  } catch {
+    // Leave the address-level sending marker in place if delivery may have succeeded.
+  }
+  return 'done';
 }
 
 export async function confirmNewsletterVerification(
@@ -108,7 +144,7 @@ export async function confirmNewsletterVerification(
   }
 
   if (subscriber.state === 'active') {
-    const completed = await applyActiveSubscriber(record, subscriber.id, dependencies);
+    const completed = await applyActiveSubscriber(record, subscriber.id, email, config, dependencies);
     return completed ? 'active' : 'failed';
   }
 
@@ -125,7 +161,7 @@ export async function confirmNewsletterVerification(
   return 'kit_confirmation_required';
 }
 
-export type ReconcileConfig = { apiKey: string; tagId: string };
+export type ReconcileConfig = { apiKey: string; tagId: string; tokenSecret: string; welcomeEnabled?: boolean; welcome: SignupDependencies['welcome'] };
 
 export async function reconcileVerifiedKitSignups(
   config: ReconcileConfig,
@@ -163,6 +199,12 @@ export async function reconcileVerifiedKitSignups(
       continue;
     }
     if (await addKitWorkTag(subscriberId, config.tagId, config.apiKey, fetcher)) {
+      const welcomeResult = await deliverWorkWelcome(record, subscriber.emailAddress, subscriber.id, config.tokenSecret, config.welcomeEnabled === true, { ledger, welcome: config.welcome });
+      if (welcomeResult === 'retry') {
+        await ledger.rescheduleKitConfirmation(record.id, now + 24 * 60 * 60 * 1000);
+        failed += 1;
+        continue;
+      }
       await ledger.complete(record.id);
       tagged += 1;
     } else {
