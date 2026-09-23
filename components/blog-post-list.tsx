@@ -29,7 +29,7 @@ export function BlogPostList({ posts }: { posts: BlogPost[] }) {
     const imageSrc = post.hero?.src ?? `${href}/opengraph-image`;
     const kindLabel = post.kind === 'demo'
       ? `Demo ${String(post.demoNumber ?? '').padStart(3, '0')}`.trim()
-      : 'Letter';
+      : 'Essay';
     return <li key={post.slug} data-kind={post.kind}>
       <article className={styles.post}>
         <Link className={styles.imageLink} href={href} aria-label={`Read ${post.title}`}>

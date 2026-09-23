@@ -9,13 +9,13 @@ import Link from 'next/link';
 export const metadata = blogIndexMetadata;
 export default function BlogPage() {
   const posts = publicPosts();
-  return <><JsonLd data={breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'Letters from Next Door', path: '/blog' }])} />
+  return <><JsonLd data={breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'AI Build Logs & Essays', path: '/blog' }])} />
     <header className="blog-index-hero">
-      <p className="label kicker"><span className="dot" />Dispatches from the workshop next door</p>
-      <h1>Letters from <span>Next Door</span></h1>
-      <p className="blog-intro">Building parallel spaces until we can come back together. Notes on AI, creative tools, accessibility, experiments, and the strange things that happen when you keep turning the ratchet.</p>
-      <div className="blog-index-meta"><span>{posts.length} dispatches</span><span>Build weird things.</span></div>
-      <nav className="blog-kind-nav" aria-label="Dispatch types"><a href="#dispatches">All</a><a href="#demos">Demos</a><a href="#letters">Letters</a></nav>
+      <p className="label kicker"><span className="dot" />The work blog</p>
+      <h1>AI Build Logs <span>&amp; Essays</span></h1>
+      <p className="blog-intro">Notes on AI engineering, creative tools, and accessibility: what I built, what worked, and what I’d change.</p>
+      <div className="blog-index-meta"><span>{posts.length} posts</span></div>
+      <nav className="blog-kind-nav" aria-label="Post types"><a href="#dispatches">All</a><a href="#demos">Demos</a><a href="#essays">Essays</a></nav>
     </header>
     <section className="blog-start" aria-labelledby="blog-start-heading">
       <p className="label">New here?</p>
@@ -40,9 +40,9 @@ export default function BlogPage() {
     </aside>
     <details className="blog-tag-browser"><summary>Browse tags ({allTags().length})</summary><nav aria-label="Browse by tag"><ul className="blog-tags">{allTags().map(tag => <li key={tag}><Link href={tagHref(tag)}>{tag}</Link></li>)}</ul></nav></details>
     <section id="dispatches" aria-labelledby="dispatches-heading">
-      <h2 id="dispatches-heading" className="blog-section-heading">Latest dispatches</h2>
+      <h2 id="dispatches-heading" className="blog-section-heading">Latest posts</h2>
       <BlogPostList posts={posts} />
     </section>
     {posts.some(post => post.kind === 'demo') && <section id="demos" className="blog-kind-section" aria-labelledby="demos-heading"><p className="label">Things that run</p><h2 id="demos-heading">Demos</h2><BlogPostList posts={posts.filter(post => post.kind === 'demo')} /></section>}
-    <section id="letters" className="blog-kind-section" aria-labelledby="letters-heading"><p className="label">Things that think</p><h2 id="letters-heading">Letters</h2><BlogPostList posts={posts.filter(post => post.kind === 'letter')} /></section></>;
+    <section id="essays" className="blog-kind-section" aria-labelledby="essays-heading"><p className="label">Writing about the work</p><h2 id="essays-heading">Essays</h2><BlogPostList posts={posts.filter(post => post.kind === 'letter')} /></section></>;
 }
