@@ -1,4 +1,4 @@
-export const eventNames = ['$pageview', 'case_study_view', 'resume_click', 'contact_click', 'booking_click', 'triage_skill_download', 'image_ratchet_skill_download', 'subscribe_submit', 'campaign_landing'] as const;
+export const eventNames = ['$pageview', 'case_study_view', 'resume_click', 'contact_click', 'booking_click', 'triage_skill_download', 'image_ratchet_skill_download', 'subscribe_submit_intent', 'subscribe_request_accepted', 'campaign_landing'] as const;
 export type AnalyticsEvent = typeof eventNames[number];
 type CapturedEvent = {
   event: string;
