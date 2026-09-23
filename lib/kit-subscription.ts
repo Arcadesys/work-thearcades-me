@@ -3,6 +3,7 @@ import { z } from 'zod';
 const emailSchema = z.email().max(254);
 const idSchema = /^[1-9]\d*$/;
 const blockedStates = new Set(['bounced', 'cancelled', 'complained']);
+const workSignupReferrer = 'https://work.thearcades.me/blog';
 
 type Fetcher = typeof fetch;
 export type KitSubscriberState = 'active' | 'inactive' | 'bounced' | 'cancelled' | 'complained';
@@ -75,7 +76,7 @@ export async function addKitSubscriberToWorkForm(subscriberId: number, formId: s
     const response = await fetcher(`https://api.kit.com/v4/forms/${formId}/subscribers/${subscriberId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Kit-Api-Key': apiKey },
-      body: '{}',
+      body: JSON.stringify({ referrer: workSignupReferrer }),
       signal: AbortSignal.timeout(8000),
     });
     return response.ok;

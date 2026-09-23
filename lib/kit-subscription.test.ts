@@ -34,9 +34,11 @@ test('Kit mutations use only numeric configured IDs and report provider acceptan
   const calls: Array<{ url: string; init?: RequestInit }> = [];
   const fetcher: typeof fetch = async (input, init) => {
     calls.push({ url: String(input), init });
+    if (String(input).includes('/forms/')) return Response.json({ subscriber: { id: 2718 } }, { status: 200 });
     return Response.json({ subscriber: { id: 2718, email_address: 'reader@example.com', state: 'inactive' } }, { status: 201 });
   };
   assert.deepEqual(await createInactiveKitSubscriber('reader@example.com', 'key', fetcher), { id: 2718, emailAddress: 'reader@example.com', state: 'inactive' });
+  // Kit's already-added response is 200; it remains accepted for idempotent retries.
   assert.equal(await addKitSubscriberToWorkForm(2718, '12345', 'key', fetcher), true);
   assert.equal(await addKitWorkTag(2718, '98765', 'key', fetcher), true);
   assert.deepEqual(calls.map(call => call.url), [
@@ -44,6 +46,7 @@ test('Kit mutations use only numeric configured IDs and report provider acceptan
     'https://api.kit.com/v4/forms/12345/subscribers/2718',
     'https://api.kit.com/v4/tags/98765/subscribers/2718',
   ]);
+  assert.deepEqual(JSON.parse(String(calls[1].init?.body)), { referrer: 'https://work.thearcades.me/blog' });
   assert.deepEqual(await getKitSubscriberById(2718, 'key', async () => Response.json({ subscriber: { id: 2718, email_address: 'reader@example.com', state: 'active' } })), {
     id: 2718, emailAddress: 'reader@example.com', state: 'active',
   });
