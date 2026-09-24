@@ -2009,6 +2009,9 @@ main [id] { scroll-margin-top: 16px; }
 .blog-prose pre { overflow: auto; }
 .blog-related { margin: 2rem 0; padding: 1.25rem; background: var(--surface); border: 1px solid var(--text-muted); border-radius: 8px; line-height: 1.65; }
 .blog-provenance { margin: 3rem 0 1.5rem; line-height: 1.7; }
+.blog-start { margin: 2.5rem 0 1rem; padding: 1rem 1.25rem; border: 1px solid var(--text-muted); border-radius: 8px; color: var(--text); font-size: 1rem; line-height: 1.65; }
+.blog-start p { margin: 0; }
+.blog-start a { color: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: .2em; }
 .blog-page .back-link { display: inline-flex; align-items: center; min-height: 44px; font-size: 1.125rem; }
 
 .blog-tag-browser { margin: 1.5rem 0; }
