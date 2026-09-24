@@ -1,9 +1,9 @@
 ---
-id: heinlein-2026-10-26
+id: heinlein-2026-09-24
 title: Why I Built Heinlein
 slug: why-i-built-heinlein
 group: work-notes
-publishDate: '2026-10-26T15:00:00.000Z'
+publishDate: '2026-09-24T22:37:28.000Z'
 excerpt: How I turned repeatable book-layout rules into a five-format publishing pipeline, with AI helping me build and review it.
 tags:
   - publishing-systems
