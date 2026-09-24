@@ -39,5 +39,3 @@ That became the useful lesson: **give the model the part that benefits from judg
 ## What I kept
 
 WizWor became an early ratchet click for how I build agentic products: explicit tool contracts, bounded authority, deterministic seams, and an experience where the AI is visible because it is actually doing something worth seeing.
-
-[Try WizWor](https://wizwor.vercel.app)
