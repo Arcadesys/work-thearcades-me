@@ -37,6 +37,8 @@ That realization became [Heinlein](https://github.com/Arcadesys/heinlein). I sta
 
 A Markdown manuscript goes in; Heinlein produces PDF, EPUB, Word, HTML, and plain text editions using the same design rules. I can preview the result, find what looks wrong, change the source, and build it again.
 
+**[Browse Heinlein on GitHub](https://github.com/Arcadesys/heinlein).** The code and example manuscript are there.
+
 ![A real Heinlein PDF interior page beside the five supported output formats.](https://puhixbchomgvn0ti.public.blob.vercel-storage.com/images/heinlein/2026-09/05-five-formats.png)
 
 The name nods to Robert Heinlein’s practical rules for working writers: write, finish, send the work out, and keep it in circulation. My tool helps with the part where the finished text has to become something people can open.
