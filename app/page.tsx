@@ -89,7 +89,7 @@ export default function Home() {
             <div>
               <h1 className="label kicker hero-eyebrow" id="hero-heading" data-reveal="1">
                 <span className="dot" />
-                AI engineering and enablement — Austen Tucker-Crowder
+                AI enablement leader who builds — Austen Tucker-Crowder
               </h1>
               <p className="hero-heading" data-reveal="2">
                 {hero.headingBefore}
@@ -111,7 +111,7 @@ export default function Home() {
                   data-funnel-event="contact_click"
                   data-funnel-placement="hero"
                 >
-                  Talk about AI engineering work
+                  Talk about an AI enablement role
                 </a>
               </div>
             </div>
@@ -132,13 +132,26 @@ export default function Home() {
 
         <section className="shell section-flush-top" id="work" aria-labelledby="work-heading">
           <Kicker>Selected work</Kicker>
-          <h2 className="h2 case-heading" id="work-heading">Working software first. Organizational leverage second.</h2>
+          <h2 className="h2 case-heading" id="work-heading">Adoption you can measure. Tools you can inspect.</h2>
+
+          <article
+            className="case case-split case-wide"
+            id={aiEnablement.id}
+            data-accent={aiEnablement.accent}
+            data-reveal="1"
+            aria-labelledby={`${aiEnablement.id}-title`}
+          >
+            <CaseSummary study={aiEnablement} />
+            <h4 className="stat">
+              2% → 43% <span className="label">agentic-coding adoption</span>
+            </h4>
+          </article>
 
           <article
             className="case case-featured"
             id={bunch.id}
             data-accent={bunch.accent}
-            data-reveal="1"
+            data-reveal="2"
             aria-labelledby={`${bunch.id}-title`}
           >
             <CaseSummary study={bunch} />
@@ -159,20 +172,7 @@ export default function Home() {
           </article>
 
           <article
-            className="case case-split"
-            id={aiEnablement.id}
-            data-accent={aiEnablement.accent}
-            data-reveal="2"
-            aria-labelledby={`${aiEnablement.id}-title`}
-          >
-            <CaseSummary study={aiEnablement} />
-            <h4 className="stat">
-              2% → 43% <span className="label">agentic-coding adoption</span>
-            </h4>
-          </article>
-
-          <article
-            className="case case-split-top"
+            className="case case-split-top case-wide"
             id={guaranteedRate.id}
             data-accent={guaranteedRate.accent}
             data-reveal="3"
@@ -318,7 +318,7 @@ export default function Home() {
                 data-funnel-placement="contact_section"
                 style={{ fontSize: '1.125rem' }}
               >
-                Talk about AI engineering work<Arrow />
+                Talk about an AI enablement role<Arrow />
               </a>
               <ExternalLink
                 className="btn btn-lg btn-outline"

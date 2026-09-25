@@ -4,7 +4,7 @@ import { SiteHeader } from '@/components/site-header';
 import { ExternalLink } from '@/components/external-link';
 import { caseStudyBySlug, site, workWithMe } from '@/lib/content';
 
-const SEARCH_TITLE = `AI Engineering & Workflow Consulting — ${site.name}`;
+const SEARCH_TITLE = `AI Enablement & Workflow Consulting — ${site.name}`;
 
 export const metadata: Metadata = {
   title: SEARCH_TITLE,
@@ -33,7 +33,7 @@ export default function WorkWithMePage() {
         <div className="services-intro">
           <h1>{workWithMe.title}</h1>
           <p>{workWithMe.intro}</p>
-          <p>For a hands-on AI engineering role, I&rsquo;m also open to the right full-time work.</p>
+          <p>For an AI enablement or transformation leadership role where I still build, I&rsquo;m also open to the right full-time work.</p>
           <a className="btn btn-gradient" href={`mailto:${site.email}`} data-funnel-event="contact_click" data-funnel-placement="work_with_me_intro">{workWithMe.roleLabel}<span aria-hidden="true"> →</span></a>
         </div>
         <section className="services-intro" aria-labelledby="consulting-heading">
