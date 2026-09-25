@@ -45,6 +45,14 @@ npm run build
 
 ## Iteration log
 
+### 2026-09-25 — Job-search cockpit case study; blog dates audited
+
+- **Metric and budget:** (1) blog posts show their real original publication dates, with nothing invented; (2) one new case study at `/work/job-search-cockpit`, every claim traceable to code, tests, or docs in this repo; no private data. One PR.
+- **Blog dates — no change, by evidence:** the nine posts sharing `2026-09-12T16:55:26.466Z` were unpublished drafts in `Arcadesys/writing-archive` (`sourceStatus: draft` in `content/blog-sources.json`); `content/README.md` records that they received their first publication date on this site. The shared timestamp is their true publication history, and `AGENTS.md` forbids rewriting it.
+- **Case study:** `lib/content.ts` `cockpit-case`, rendered by the existing `/work/[slug]` page. Evidence items are checked against `lib/job-drafting.ts` (the model returns claim IDs only; drafts are assembled from exact reviewed claim text; verified postings required; monthly budget closes on unmeasured calls), `docs/jobs-mcp-api.md` (hashed 90-day tokens, no submit endpoint, idempotent receipts), `lib/resume-truth.ts` (append-only claim versions), and the jobs tests. It makes no outcome claims. Linked from the homepage (third card), `llms.txt`, and the sitemap (automatic).
+- **Tests:** `lib/metadata.test.ts` now checks the new study's search title, self-canonical, and heading.
+- **Passed:** lint (3 pre-existing warnings, 0 errors), `npm test` 101/101, production build. Local production server at 1440px and 390px: canonical and `og:url` are `https://work.thearcades.me/work/job-search-cockpit`, 0px overflow, homepage order enablement → Bunch → cockpit → Guaranteed Rate, sitemap and `llms.txt` list the page.
+
 ### 2026-09-25 — Lane 1 positioning: AI enablement leader who builds
 
 - **Decision (Austen):** lead with "AI enablement leader who builds" instead of "hands-on AI engineer". The strongest proof (2% → 43% agentic-coding adoption, three-continent roadshow, Devin KPIs) is enablement-leader proof; the builds (Bunch, Wavelength, evals, this site) are the differentiator.

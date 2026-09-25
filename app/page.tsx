@@ -76,6 +76,7 @@ export default function Home() {
   const bunch = caseById['builder-case'];
   const guaranteedRate = caseById['owner-case'];
   const aiEnablement = caseById['evangelist-case'];
+  const cockpit = caseById['cockpit-case'];
 
   return (
     <>
@@ -173,9 +174,22 @@ export default function Home() {
 
           <article
             className="case case-split-top case-wide"
+            id={cockpit.id}
+            data-accent={cockpit.accent}
+            data-reveal="3"
+            aria-labelledby={`${cockpit.id}-title`}
+          >
+            <CaseSummary study={cockpit} />
+            <h4 className="stat">
+              0 <span className="label">résumé facts written by the model</span>
+            </h4>
+          </article>
+
+          <article
+            className="case case-split-top case-wide"
             id={guaranteedRate.id}
             data-accent={guaranteedRate.accent}
-            data-reveal="3"
+            data-reveal="4"
             aria-labelledby={`${guaranteedRate.id}-title`}
           >
             <CaseSummary study={guaranteedRate} />
