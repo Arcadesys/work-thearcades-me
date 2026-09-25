@@ -45,6 +45,15 @@ npm run build
 
 ## Iteration log
 
+### 2026-09-25 — Lane 1 positioning: AI enablement leader who builds
+
+- **Decision (Austen):** lead with "AI enablement leader who builds" instead of "hands-on AI engineer". The strongest proof (2% → 43% agentic-coding adoption, three-continent roadshow, Devin KPIs) is enablement-leader proof; the builds (Bunch, Wavelength, evals, this site) are the differentiator.
+- **Metric and budget:** every headline surface leads with the new lane, no new factual claims, one PR.
+- **Changed:** homepage H1, hero intro, CTAs, contact copy and work-section heading; homepage and OG metadata; résumé title line, summary, description and CTAs; `/work-with-me` role line, role CTA and search title; `llms.txt` heading. `public/resume.pdf` regenerated from `lib/resume.ts`.
+- **Homepage order:** the ActiveCampaign enablement case now leads, then Bunch, then Guaranteed Rate, each as a full-width row (`.case-wide`) so no card sits alone in a half-width column.
+- **Deliberately unchanged:** blog and newsletter copy still say "AI engineering" as a topic — they are build logs, and they prove the "who builds" half. No bracketed official job title was added to the ActiveCampaign role because the formal title is not in the source record.
+- **Passed:** lint (3 pre-existing warnings, 0 errors), `npm test` 101/101, production build. Local production server at 1440px and 390px: new H1/title rendered, three full-width case cards, 0px horizontal overflow; résumé renders the new title line and description.
+
 ### 2026-09-19 — Builder positioning and practical image guide
 
 - Aligned the homepage, default résumé, consulting page, and search metadata around hands-on AI engineering work and focused consulting while retaining leadership accomplishments as evidence.

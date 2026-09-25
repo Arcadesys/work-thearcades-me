@@ -100,7 +100,7 @@ export type Comment = {
 
 export const site = {
   name: 'Austen Tucker-Crowder',
-  role: 'AI Builder & Enablement Leader',
+  role: 'AI Enablement Leader Who Builds',
   email: 'austen@thearcades.me',
   bookingUrl: 'https://cal.com/austen-tucker-crowder/30min',
   resumeUrl: '/resume',
@@ -112,21 +112,21 @@ export const site = {
 } as const;
 
 export const hero = {
-  eyebrow: 'AI builder · product-minded engineer · enablement leader',
+  eyebrow: 'AI enablement leader · hands-on builder · product-minded engineer',
   headingBefore: 'Hi. I make ',
   headingAccent: 'useful',
   headingAfter: ' things.',
   authorship: 'Everything you see here was conceived, built, written, and shipped by me. I use AI heavily as part of my toolchain; I own the product decisions, architecture, judgment, iteration, and delivery.',
   evidence: 'Helped raise agentic-coding adoption from roughly 2% to 43% of merge requests',
   intro:
-    'I turn messy problems into working software, then make the systems around that software understandable enough for other people to own. I’m looking for hands-on AI engineering work and focused consulting where building is part of the job.',
+    'I lead AI adoption across engineering, product, and leadership, and I build the tools that make it stick: working prototypes, MCP-enabled operating artifacts, evaluation prompts, and learning experiences people can own. I’m looking for AI enablement and transformation leadership roles where building is part of the job, plus focused consulting.',
 } as const;
 
 export const workWithMe = {
   title: 'Build the first useful version',
-  description: 'AI engineering and workflow consulting from Austen Tucker-Crowder: practical prototypes, useful AI workflows, and team handoff for organizations with a concrete problem to solve.',
+  description: 'AI enablement and workflow consulting from Austen Tucker-Crowder: practical prototypes, useful AI workflows, and team handoff for organizations with a concrete problem to solve.',
   intro: 'I take on focused consulting for organizations with a messy workflow, a half-formed product idea, or an AI capability that needs to become real. A first engagement produces a working prototype or workflow, a way to evaluate it with the people who will use it, and clear next-step decisions your team can own.',
-  roleLabel: 'Talk about an AI engineering role',
+  roleLabel: 'Talk about an AI enablement role',
   consultingTitle: 'Focused consulting engagements',
   consultingIntro: 'For consulting, I scope around a concrete outcome rather than selling a vague bucket of hours.',
   bookingLabel: 'Discuss a project',
@@ -512,6 +512,6 @@ export const commentBox = {
 
 export const contact = {
   kicker: 'Say hello',
-  heading: 'Let’s talk about hands-on AI engineering work or a focused project.',
-  body: 'I’m seeking hands-on AI engineering work where building is part of the job. I also take on focused consulting projects with a concrete outcome.',
+  heading: 'Let’s talk about AI enablement leadership or a focused project.',
+  body: 'I’m seeking AI enablement and transformation leadership roles where I still build the tools, evaluations, and operating artifacts that turn adoption into practice. I also take on focused consulting projects with a concrete outcome.',
 } as const;
