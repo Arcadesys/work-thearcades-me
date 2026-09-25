@@ -23,6 +23,10 @@ export function safePath(path: string) {
   // Public route shapes only; unknown paths cannot leak user-entered URL data.
   return /^\/(?:work-with-me|resume|privacy|layoff-triage|guides(?:\/how-to-make-ai-generated-pictures-that-arent-slop)?|blog(?:\/(?:tag\/)?[a-z0-9-]+)?|work\/(?:bunch|guaranteed-rate|ai-enablement))?\/?$/.test(path) ? path : '/other';
 }
+export function isPrivateAnalyticsPath(path: string) {
+  return path === '/jobs' || path.startsWith('/jobs/')
+    || path === '/api/jobs' || path.startsWith('/api/jobs/');
+}
 export function referrerDomain(referrer: string) {
   try { const url = new URL(referrer); return /^https?:$/.test(url.protocol) ? url.hostname : ''; } catch { return ''; }
 }
@@ -50,6 +54,8 @@ export function sanitizeProperties(properties: Record<string, unknown>) {
 
 export function outgoingEvent(event: CapturedEvent | null, token: string) {
   if (!event || !event.uuid || !event.timestamp || !eventNames.includes(event.event as AnalyticsEvent)) return null;
+  const routeValues = [event.properties?.pathname, event.properties?.landing_page];
+  if (routeValues.some(value => typeof value === 'string' && isPrivateAnalyticsPath(value))) return null;
   return {
     event: event.event,
     uuid: event.uuid,

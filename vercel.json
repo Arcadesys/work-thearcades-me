@@ -5,6 +5,10 @@
     {
       "path": "/api/kit/reconcile-confirmations",
       "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/jobs/discovery",
+      "schedule": "0 14 * * *"
     }
   ]
 }
