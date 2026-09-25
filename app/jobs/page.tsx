@@ -1,6 +1,7 @@
 import { authorizedJobsAccount, requireJobsAccount } from '@/lib/jobs-auth';
 import { listLeads, listSearchQueries, listSearchStatus } from '@/lib/job-discovery';
 import { listResumeTruth } from '@/lib/resume-truth';
+import { centralDate } from '@/lib/jobs-review';
 import { signIn } from '@/auth';
 import Link from 'next/link';
 import JobsShell from './jobs-shell';
@@ -24,7 +25,7 @@ export default async function JobsPage() {
   const [queries = [], status, leads = [], truths = []] = reads ?? [];
   const decisions = leads.filter((lead: any) => lead.decision === 'review').length;
   const kept = leads.filter((lead: any) => lead.decision === 'keep').length;
-  const today = new Date().toISOString().slice(0, 10);
+  const today = centralDate();
   const due = leads.filter((lead: any) => lead.nextActionDate && String(lead.nextActionDate).slice(0, 10) <= today && lead.decision !== 'pass').length;
   const unreviewed = truths.filter((claim: any) => claim.reviewStatus === 'unreviewed').length;
   const connected = queries.filter((query: any) => query.enabled && query.feedUrl).length;
