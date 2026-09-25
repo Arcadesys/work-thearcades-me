@@ -1,10 +1,11 @@
 import posthog from 'posthog-js';
-import { campaignProperties, collectionEnvironment, outgoingEvent, referrerDomain, safePath, sanitizeProperties, type AnalyticsEvent } from './analytics-policy';
+import { campaignProperties, collectionEnvironment, isPrivateAnalyticsPath, outgoingEvent, referrerDomain, safePath, sanitizeProperties, type AnalyticsEvent } from './analytics-policy';
 let enabled = false;
 let entry: Record<string, string> = {};
 let lastPath: string | undefined;
 let firstPage = true;
 export function initializeAnalytics() {
+  if (isPrivateAnalyticsPath(location.pathname)) return;
   const environment = collectionEnvironment(location.hostname, process.env.NEXT_PUBLIC_VERCEL_ENV, process.env.NEXT_PUBLIC_POSTHOG_PREVIEW_ENABLED);
   const token = process.env.NEXT_PUBLIC_POSTHOG_KEY;
   const host = process.env.NEXT_PUBLIC_POSTHOG_HOST;
@@ -35,12 +36,14 @@ export function initializeAnalytics() {
   } catch { enabled = false; }
 }
 export function track(name: AnalyticsEvent, properties: Record<string, string> = {}) {
+  if (typeof location !== 'undefined' && isPrivateAnalyticsPath(location.pathname)) return;
   if (!enabled) return;
   try {
     posthog.capture(name, { ...entry, ...properties, hostname: location.hostname, pathname: safePath(location.pathname), environment: collectionEnvironment(location.hostname, process.env.NEXT_PUBLIC_VERCEL_ENV, process.env.NEXT_PUBLIC_POSTHOG_PREVIEW_ENABLED) });
   } catch { /* Analytics must never interfere with navigation. */ }
 }
 export function trackNavigation(pathname: string) {
+  if (isPrivateAnalyticsPath(pathname)) return;
   if (lastPath === pathname) return;
   lastPath = pathname;
   track('$pageview');
