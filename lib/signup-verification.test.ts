@@ -35,6 +35,37 @@ test('claim accepts Upstash EVAL replies with an auto-decoded record object', as
   assert.deepEqual(result.record, processing);
 });
 
+test('verification and Kit-active readiness are counted once in atomic ledger transitions', async () => {
+  const secret = 'c'.repeat(32);
+  const { token, record } = createSignupChallenge('reader@example.com', 'work', secret);
+  const calls: Array<{ script: string; keys: string[]; args: unknown[] }> = [];
+  const processing = { ...record, state: 'processing' as const, verifiedAt: Date.now(), leaseUntil: Date.now() + 60_000 };
+  const redis = {
+    get: async () => record.id,
+    eval: async (script: string, keys: string[], args: unknown[]) => {
+      calls.push({ script, keys, args });
+      if (script.includes("local status = record.state")) return ['claimed', processing];
+      return 1;
+    },
+  };
+
+  const ledger = new UpstashSignupLedger(redis as never);
+  assert.equal((await ledger.claim(token)).status, 'claimed');
+  await ledger.complete(record.id);
+
+  assert.equal(calls.length, 2);
+  assert.match(calls[0].script, /if status == 'pending' then[\s\S]*HINCRBY/);
+  assert.match(calls[0].script, /first_party_verified/);
+  assert.match(calls[1].script, /record\.state ~= 'processing' and record\.state ~= 'waiting_kit_confirmation'/);
+  assert.match(calls[1].script, /kit_active_ready/);
+  assert.match(calls[1].script, /record\.kitActiveAt = tonumber\(ARGV\[3\]\)/);
+  assert.match(calls[0].script, /if status == 'pending' then/);
+  assert.equal(calls[0].keys[2].startsWith('work-newsletter:v1:metrics:'), true);
+  assert.equal(calls[1].keys[2].startsWith('work-newsletter:v1:metrics:'), true);
+  assert.match(calls[0].script, /EXPIRE/);
+  assert.match(calls[1].script, /EXPIRE/);
+});
+
 test('queue claim accepts auto-decoded records and records without encrypted email', async () => {
   const secret = 'b'.repeat(32);
   const { record } = createSignupChallenge('reader@example.com', 'work', secret);
