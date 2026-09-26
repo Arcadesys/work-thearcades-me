@@ -48,6 +48,10 @@ test('case studies use exact search titles without changing their visible editor
 
   assert.equal(caseStudyMetadata(bunch, site.name).title, 'Building an MCP Context System: Bunch');
   assert.equal(caseStudyMetadata(enablement, site.name).title, 'AI Adoption Case Study: ActiveCampaign');
+  const cockpit = caseStudyBySlug('job-search-cockpit')!;
+  assert.equal(caseStudyMetadata(cockpit, site.name).title, 'Human-in-the-Loop AI Case Study: Job-Search Cockpit');
+  assert.equal(absolute(canonical(caseStudyMetadata(cockpit, site.name))!), `${SITE_URL}/work/job-search-cockpit`);
+  assert.equal(cockpit.title, 'A job-search cockpit where AI can draft but cannot invent');
   assert.equal(bunch.title, 'Bunch: free, open software for continuity across memory gaps');
   assert.equal(enablement.title, 'Turning AI adoption into measurable, repeatable practice');
   assert.equal(blogIndexMetadata.title, 'AI Engineering Build Logs & Essays');

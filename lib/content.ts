@@ -405,6 +405,66 @@ export const caseStudies: CaseStudy[] = [
     },
     principle: 'People do not need permission to be experts. They need permission to try.',
   },
+  {
+    id: 'cockpit-case',
+    slug: 'job-search-cockpit',
+    lane: 'Builder · AI systems',
+    title: 'A job-search cockpit where AI can draft but cannot invent',
+    seoTitle: 'Human-in-the-Loop AI Case Study: Job-Search Cockpit',
+    body: 'I built a private workspace to run my own job search: it finds leads, drafts tailored applications, and hands batches to a local MCP worker. The design problem was trust. An AI that writes applications will happily invent experience, so the model only chooses which of my reviewed résumé claims fit a role. The draft is assembled from those claims’ exact text, and nothing counts as submitted without a saved confirmation.',
+    tags: ['AI systems', 'Human-in-the-loop', 'MCP', 'Privacy by design'],
+    links: [
+      { label: 'Read the MCP API design', href: 'https://github.com/Arcadesys/work-thearcades-me/blob/main/docs/jobs-mcp-api.md', emphasis: 'primary' },
+      { label: 'Read the workspace setup notes', href: 'https://github.com/Arcadesys/work-thearcades-me/blob/main/docs/private-jobs-foundation.md', emphasis: 'secondary' },
+      { label: 'View the source code', href: 'https://github.com/Arcadesys/work-thearcades-me', emphasis: 'quiet' },
+    ],
+    accent: 'amber',
+    evidence: {
+      heading: 'Guardrails you can inspect',
+      items: [
+        { label: 'The model selects; it does not write facts', value: 'The model returns claim IDs. Any ID that is not a reviewed claim is dropped, and the résumé variant and outreach are assembled from the exact approved claim text.' },
+        { label: 'Verified postings only', value: 'Drafting requires the original posting text and a source note. Search snippets are rejected, and posting text is passed to the model as untrusted data.' },
+        { label: 'No silent submissions', value: 'The MCP API has no employer submit endpoint. An item becomes submitted only with a saved confirmation receipt, and retries are idempotent.' },
+        { label: 'Audit trail', value: 'Every résumé-claim edit appends an immutable version row in the same database statement that changes the claim.' },
+        { label: 'Bounded spend', value: 'Each request reserves budget against a monthly cap. A failed or unmeasured provider call closes the budget rather than risking unaccounted spend.' },
+        { label: 'Private by default', value: 'GitHub sign-in with an account allowlist, rechecked on every read; the workspace is noindex, excluded from the sitemap, and skipped by analytics.' },
+      ],
+      note: 'This describes how the system is built, not job-search outcomes. The design docs and source code are public; the leads, drafts, and résumé review data are not.',
+    },
+    buildNotes: [
+      {
+        heading: 'Under the hood',
+        paragraphs: [
+          'Leads arrive two ways: a daily job polls Google Alerts RSS feeds under a monthly cap, and LinkedIn alert emails can be imported on demand. Both land as unverified leads, because a feed snippet is a hint, not proof that a posting is live.',
+          'A local MCP client works through batches of pursued jobs using scoped bearer tokens that are stored only as hashes, expire after 90 days, and can be revoked. The worker can move an item through queued, preparing, awaiting approval, blocked, or skipped. It cannot mark anything submitted through the status route.',
+        ],
+      },
+      {
+        heading: 'The product insight',
+        paragraphs: [
+          'Enabling AI in a workflow is mostly deciding where it is not allowed to decide. The model is fast at drafting. The system is built so that speed never outruns what I can stand behind.',
+          'That is the same operating pattern I use for team adoption: permission to experiment, paired with a way to inspect the result.',
+        ],
+      },
+    ],
+    star: {
+      situation: [
+        'I started a job search and wanted AI help with the repetitive parts: finding postings, tailoring a résumé, drafting outreach. The obvious failure mode is an assistant that confidently writes experience I do not have, into documents that go to real employers under my name.',
+      ],
+      task: [
+        'I needed a system that could move quickly without ever putting an unverified claim in front of a hiring manager, and without counting an application as sent unless it really was.',
+      ],
+      action: [
+        'I seeded a private **résumé-truth store** from my public résumé, with every claim starting as unreviewed and carrying a source note. Drafting only runs against a verified original posting; the model assesses fit and returns the IDs of reviewed claims that apply, and the draft is built from those claims’ exact text. I added lead discovery from Google Alerts and LinkedIn alert emails, a pipeline with weekly review of kept leads, applications, replies, interviews, and offers, and a narrow MCP API so a local agent can prepare batches while I approve what goes out.',
+        'The guardrails are covered by unit tests alongside the rest of the site: claim filtering, queue transitions, discovery limits, and weekly counts.',
+      ],
+      result: [
+        'The system now runs my own search. Every generated draft is built from claims I have reviewed, with a snapshot of those claims saved alongside it, and the weekly count of applications comes only from saved submission receipts, not from what an agent says it did.',
+        'I am not claiming outcomes yet. The weekly review will say whether it works; the design already says what it is allowed to do.',
+      ],
+    },
+    principle: 'Let the AI move fast. Make it prove every claim.',
+  },
 ];
 
 export function caseStudyBySlug(slug: string): CaseStudy | undefined {

@@ -7,6 +7,7 @@ Canonical professional site: https://work.thearcades.me
 - Bunch: https://work.thearcades.me/work/bunch
 - Guaranteed Rate: https://work.thearcades.me/work/guaranteed-rate
 - ActiveCampaign AI enablement: https://work.thearcades.me/work/ai-enablement
+- Job-search cockpit (human-in-the-loop AI): https://work.thearcades.me/work/job-search-cockpit
 
 ## Practical pages
 
