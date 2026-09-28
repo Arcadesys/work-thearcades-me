@@ -2504,6 +2504,7 @@ main [id] { scroll-margin-top: 16px; }
 .blog-index-hero .blog-intro { max-width: 62ch; }
 .blog-start { margin: 2rem 0; }
 .blog-start > p:not(.label) { color: var(--text-soft); line-height: 1.6; }
+.blog-start > p + p { margin-top: 1rem; }
 .blog-start ul { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); list-style: none; margin: 1.5rem 0 0; padding: 0; }
 .blog-start li { display: flex; flex-direction: column; gap: .6rem; padding: 1.25rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
 .blog-start li a { display: inline-flex; align-items: center; min-height: 48px; font-weight: 700; line-height: 1.35; text-decoration: underline; text-underline-offset: .2em; }
