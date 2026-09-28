@@ -97,12 +97,7 @@ export default function Home() {
                 <span className="glow-accent">{hero.headingAccent}</span>
                 {hero.headingAfter}
               </p>
-              <p className="hero-intro" data-reveal="3">{hero.intro}</p>
-              <p className="hero-payoff" data-reveal="4">{hero.authorship}</p>
-              <p className="hero-payoff" data-reveal="5">
-                <Link href="/work/ai-enablement">{hero.evidence}</Link>.
-              </p>
-              <div className="btn-row" data-reveal="6">
+              <div className="btn-row" data-reveal="3">
                 <a className="btn btn-gradient" href="#work">
                   See what I’ve built<Arrow />
                 </a>
@@ -115,6 +110,11 @@ export default function Home() {
                   Talk about an AI enablement role
                 </a>
               </div>
+              <p className="hero-intro" data-reveal="4">{hero.intro}</p>
+              <p className="hero-payoff" data-reveal="5">{hero.authorship}</p>
+              <p className="hero-payoff" data-reveal="6">
+                <Link href="/work/ai-enablement">{hero.evidence}</Link>.
+              </p>
             </div>
             <div className={styles.heroPortrait}>
               <Image
