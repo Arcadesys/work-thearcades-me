@@ -1,5 +1,5 @@
 import posthog from 'posthog-js';
-import { campaignProperties, collectionEnvironment, isPrivateAnalyticsPath, outgoingEvent, referrerDomain, safePath, sanitizeProperties, type AnalyticsEvent } from './analytics-policy';
+import { campaignProperties, caseStudySlug, collectionEnvironment, isPrivateAnalyticsPath, outgoingEvent, referrerDomain, safePath, sanitizeProperties, type AnalyticsEvent } from './analytics-policy';
 
 const DEFAULT_POSTHOG_KEY = 'phc_wH8qGy3tzYkfwDCLe9rZuBPxP7kaXWVocAnj6vVJFnaa';
 const DEFAULT_POSTHOG_HOST = 'https://us.i.posthog.com';
@@ -115,6 +115,6 @@ export function trackNavigation(pathname: string) {
   }
   firstPage = false;
 
-  const match = /^\/work\/(bunch|guaranteed-rate|ai-enablement)\/?$/.exec(pathname);
-  if (match) track('case_study_view', { slug: match[1] });
+  const slug = caseStudySlug(pathname);
+  if (slug) track('case_study_view', { slug });
 }

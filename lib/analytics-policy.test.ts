@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { campaignProperties, collectionEnvironment, eventNames, outgoingEvent, referrerDomain, safePath, sanitizeProperties } from './analytics-policy';
+import { campaignProperties, caseStudySlug, collectionEnvironment, eventNames, outgoingEvent, referrerDomain, safePath, sanitizeProperties } from './analytics-policy';
 
 test('canonical production and explicitly enabled preview are isolated', () => {
   assert.equal(collectionEnvironment('work.thearcades.me'), 'production');
@@ -64,9 +64,19 @@ test('outgoing SDK properties fail closed while retaining privacy-safe web analy
 
   assert.equal(safePath('/layoff-triage'), '/layoff-triage');
   assert.equal(safePath('/guides/how-to-make-ai-generated-pictures-that-arent-slop'), '/guides/how-to-make-ai-generated-pictures-that-arent-slop');
+  assert.equal(safePath('/engineering'), '/engineering');
+  assert.equal(safePath('/journeys'), '/other');
+  assert.equal(safePath('/work/job-search-cockpit'), '/work/job-search-cockpit');
   assert.equal(safePath('/private@example.com'), '/other');
   assert.equal(referrerDomain('https://example.com/private?token=secret#fragment'), 'example.com');
   assert.equal(referrerDomain('mailto:private@example.com'), '');
+});
+
+test('public case studies have a stable view slug without exposing private paths', () => {
+  assert.equal(caseStudySlug('/work/job-search-cockpit'), 'job-search-cockpit');
+  assert.equal(caseStudySlug('/work/bunch'), 'bunch');
+  assert.equal(caseStudySlug('/jobs'), undefined);
+  assert.equal(caseStudySlug('/work/private@example.com'), undefined);
 });
 
 test('outgoing events retain only the project token plus safe analytics identity/context', () => {

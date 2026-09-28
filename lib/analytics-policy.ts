@@ -30,7 +30,11 @@ export function collectionEnvironment(hostname: string, environment?: string, pr
 
 export function safePath(path: string) {
   // Public route shapes only; unknown paths cannot leak user-entered URL data.
-  return /^\/(?:work-with-me|resume|privacy|layoff-triage|guides(?:\/how-to-make-ai-generated-pictures-that-arent-slop)?|blog(?:\/(?:tag\/)?[a-z0-9-]+)?|work\/(?:bunch|guaranteed-rate|ai-enablement))?\/?$/.test(path) ? path : '/other';
+  return /^\/(?:work-with-me|resume|privacy|layoff-triage|engineering|guides(?:\/how-to-make-ai-generated-pictures-that-arent-slop)?|blog(?:\/(?:tag\/)?[a-z0-9-]+)?|work\/(?:bunch|guaranteed-rate|ai-enablement|job-search-cockpit))?\/?$/.test(path) ? path : '/other';
+}
+
+export function caseStudySlug(path: string) {
+  return /^\/work\/(bunch|guaranteed-rate|ai-enablement|job-search-cockpit)\/?$/.exec(path)?.[1];
 }
 
 export function isPrivateAnalyticsPath(path: string) {
