@@ -56,7 +56,7 @@ export default function ResumePage() {
         </div>
         <div className={styles.roleActions}>
           <a className={`btn btn-gradient ${styles.rolePrimary}`} href={`mailto:${RESUME_PROFILE.email}`} data-funnel-event="contact_click" data-funnel-placement="resume_header">
-            Discuss an AI enablement role <span aria-hidden="true">→</span>
+            Discuss a hands-on AI role <span aria-hidden="true">→</span>
           </a>
           <a className={styles.roleSecondary} href={RESUME_PDF_PATH} download data-funnel-event="resume_click" data-funnel-placement="resume_pdf">Download résumé PDF (2 pages)</a>
         </div>
@@ -139,12 +139,12 @@ export default function ResumePage() {
       </section>
 
       <section className={`${styles.section} ${styles.contactSection}`} aria-labelledby="resume-hire">
-        <h2 id="resume-hire" className={styles.sectionHeading}>Discuss an AI enablement role</h2>
+        <h2 id="resume-hire" className={styles.sectionHeading}>Discuss a hands-on AI role</h2>
         <div className={styles.hire}>
-          <p className={styles.hireCopy}>Seeking AI enablement and transformation leadership roles where building is part of the job.</p>
+          <p className={styles.hireCopy}>Seeking hands-on AI work: rapid prototyping, useful systems, and the judgment to get from experiment to something a team can own.</p>
           <div className={styles.hireActions}>
             <a className={styles.hirePrimary} href={`mailto:${RESUME_PROFILE.email}`} data-funnel-event="contact_click" data-funnel-placement="resume_footer">
-              Discuss an AI enablement role <span aria-hidden="true">→</span>
+              Discuss a hands-on AI role <span aria-hidden="true">→</span>
             </a>
             <ExternalLink className={styles.hireSecondary} href={site.bookingUrl} data-funnel-event="booking_click" data-funnel-placement="resume_footer">Discuss a focused project</ExternalLink>
             <Link className={styles.hireSecondary} href="/#work">Read the case studies</Link>

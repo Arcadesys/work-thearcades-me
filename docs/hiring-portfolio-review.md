@@ -1,5 +1,7 @@
 # Hiring portfolio review — September 30, 2026
 
+This records the initial hiring-clarity pass, merged in [PR #85](https://github.com/Arcadesys/work-thearcades-me/pull/85). The later builder-origin-story revision follows the author’s updated direction and is documented in the README iteration log. The evidence boundaries below still apply; the enablement-led positioning described here is historical.
+
 ## What changed and why
 
 - **Lead with the role.** The actual H1 is now “AI enablement leader who builds.” The shorter introduction, attributed adoption proof, and work/engineering/résumé actions appear together. This preserves the author's September 25 positioning decision recorded in the README; it does not recast a program/enablement career as a different engineering job title.

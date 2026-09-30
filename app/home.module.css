@@ -87,7 +87,7 @@
   align-content: start;
 }
 
-/* Full-width rows: the enablement lead story, then Bunch, then Guaranteed Rate. */
+/* Full-width rows for the cockpit, enablement, and Guaranteed Rate stories. */
 .home :global(#work > .case.case-wide) {
   grid-column: 1 / -1;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));

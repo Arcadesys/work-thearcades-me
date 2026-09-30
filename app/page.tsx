@@ -94,15 +94,15 @@ export default function Home() {
           <div className="hero-grid">
             <div>
               <p className="label kicker hero-eyebrow">
-                <span className="dot" />Austen Tucker-Crowder · Chicago
+                <span className="dot" />Austen Tucker-Crowder · Hands-on AI builder
               </p>
               <h1 className="hero-heading" id="hero-heading">
                 {hero.headingBefore}<span className="glow-accent">{hero.headingAccent}</span>{hero.headingAfter}
               </h1>
               <p className="hero-intro">{hero.intro}</p>
               <p className="hero-proof">
-                <Link href="/work/ai-enablement">{hero.evidence}</Link>
-                <span>At ActiveCampaign, as part of the broader transformation effort.</span>
+                <Link href="/engineering">Bunch: web + MCP, one set of tested rules.</Link>
+                <span><Link href="/work/ai-enablement">{hero.evidence}</Link> at ActiveCampaign, as part of the broader transformation effort.</span>
               </p>
               <div className="btn-row">
                 <a className="btn btn-gradient" href="#work">Selected work<Arrow /></a>
@@ -110,7 +110,7 @@ export default function Home() {
                 <Link className="btn btn-outline" href={site.resumeUrl} data-funnel-event="resume_click" data-funnel-placement="hero">Résumé</Link>
               </div>
               <a className="hero-role-link" href={`mailto:${site.email}`} data-funnel-event="contact_click" data-funnel-placement="hero">
-                Discuss an AI enablement role<Arrow />
+                Discuss a hands-on AI role<Arrow />
               </a>
             </div>
             <div className={styles.heroPortrait}>
@@ -130,27 +130,14 @@ export default function Home() {
 
         <section className="shell section-flush-top" id="work" aria-labelledby="work-heading">
           <Kicker>Selected work</Kicker>
-          <h2 className="h2 case-heading" id="work-heading">Adoption you can measure. Tools you can inspect.</h2>
+          <h2 className="h2 case-heading" id="work-heading">Working systems. Evidence you can inspect.</h2>
           <p className="work-authorship">{hero.authorship}</p>
-
-          <article
-            className="case case-split case-wide"
-            id={aiEnablement.id}
-            data-accent={aiEnablement.accent}
-            data-reveal="1"
-            aria-labelledby={`${aiEnablement.id}-title`}
-          >
-            <CaseSummary study={aiEnablement} />
-            <h4 className="stat">
-              2% → 43% <span className="label">agentic-coding adoption</span>
-            </h4>
-          </article>
 
           <article
             className="case case-featured"
             id={bunch.id}
             data-accent={bunch.accent}
-            data-reveal="2"
+            data-reveal="1"
             aria-labelledby={`${bunch.id}-title`}
           >
             <CaseSummary study={bunch} />
@@ -174,12 +161,25 @@ export default function Home() {
             className="case case-split-top case-wide"
             id={cockpit.id}
             data-accent={cockpit.accent}
-            data-reveal="3"
+            data-reveal="2"
             aria-labelledby={`${cockpit.id}-title`}
           >
             <CaseSummary study={cockpit} />
             <h4 className="stat">
               0 <span className="label">résumé facts written by the model</span>
+            </h4>
+          </article>
+
+          <article
+            className="case case-split case-wide"
+            id={aiEnablement.id}
+            data-accent={aiEnablement.accent}
+            data-reveal="3"
+            aria-labelledby={`${aiEnablement.id}-title`}
+          >
+            <CaseSummary study={aiEnablement} />
+            <h4 className="stat">
+              2% → 43% <span className="label">agentic-coding adoption</span>
             </h4>
           </article>
 
@@ -254,7 +254,7 @@ export default function Home() {
                 data-funnel-placement="contact_section"
                 style={{ fontSize: '1.125rem' }}
               >
-                Talk about an AI enablement role<Arrow />
+                Talk about a hands-on AI role<Arrow />
               </a>
               <ExternalLink
                 className="btn btn-lg btn-outline"
