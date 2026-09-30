@@ -45,6 +45,15 @@ npm run build
 
 ## Iteration log
 
+### 2026-09-30 — Hiring path and evidence clarity
+
+- Kept the approved “AI enablement leader who builds” lane and made it the visible hero headline. Adoption proof, selected work, the technical tour, and résumé are grouped at the top; collapsed navigation keeps hiring shortcuts available.
+- Promoted Bunch's existing demo and technical tour, clarified public source rights without changing a licence, and added role/context/system summaries across the case studies.
+- Restored the author-confirmed Senior Program Owner title at ActiveCampaign, expanded concrete responsibilities from the author's career account, and preserved the limits on shared outcomes and personal observations.
+- Reworked the public résumé into a two-page PDF with recent experience on page 1 and linked AI builds. Full underlying résumé-claim arrays stay ordered to protect private claim identities.
+- Moved role contact before writing/newsletter material and curated the enablement case study's related reading. Private routes, analytics boundaries, and subscription behavior are unchanged.
+- Rationale, source boundaries, and remaining evidence gaps: [`docs/hiring-portfolio-review.md`](docs/hiring-portfolio-review.md). Exact checks and browser QA limits are recorded in the draft PR; publication remains separate.
+
 ### 2026-09-25 — Job-search cockpit case study; blog dates audited
 
 - **Metric and budget:** (1) blog posts show their real original publication dates, with nothing invented; (2) one new case study at `/work/job-search-cockpit`, every claim traceable to code, tests, or docs in this repo; no private data. One PR.

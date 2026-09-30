@@ -39,7 +39,7 @@ test('social metadata stays route-specific and requests raster large-image cards
     assert.equal(metadata.twitter.card, 'summary_large_image');
   }
   assert.equal(tea.openGraph?.title, 'What I Did After a Layoff: Start With Tea — Austen Tucker-Crowder');
-  assert.equal(bunch.openGraph?.title, 'Bunch: free, open software for continuity across memory gaps — Austen Tucker-Crowder');
+  assert.equal(bunch.openGraph?.title, 'Bunch: a context system for continuity across memory gaps — Austen Tucker-Crowder');
 });
 
 test('case studies use exact search titles without changing their visible editorial headings', () => {
@@ -52,7 +52,7 @@ test('case studies use exact search titles without changing their visible editor
   assert.equal(caseStudyMetadata(cockpit, site.name).title, 'Human-in-the-Loop AI Case Study: Job-Search Cockpit');
   assert.equal(absolute(canonical(caseStudyMetadata(cockpit, site.name))!), `${SITE_URL}/work/job-search-cockpit`);
   assert.equal(cockpit.title, 'A job-search cockpit where AI can draft but cannot invent');
-  assert.equal(bunch.title, 'Bunch: free, open software for continuity across memory gaps');
+  assert.equal(bunch.title, 'Bunch: a context system for continuity across memory gaps');
   assert.equal(enablement.title, 'Turning AI adoption into measurable, repeatable practice');
   assert.equal(blogIndexMetadata.title, 'AI Engineering Build Logs & Essays');
   assert.equal(blogIndexMetadata.openGraph?.url, '/blog');

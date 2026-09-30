@@ -2584,3 +2584,20 @@ main [id] { scroll-margin-top: 16px; }
   border-color: rgb(var(--pink-rgb) / .38);
   background: linear-gradient(135deg, rgb(var(--pink-rgb) / .065), rgb(var(--orange-rgb) / .035));
 }
+
+/* Keep hiring paths visible even when the full navigation is collapsed. */
+.hiring-shortcuts {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  border-top: 1px solid var(--line);
+}
+.hiring-shortcuts a { display: inline-flex; align-items: center; min-height: 48px; text-decoration: underline; font-size: 1rem; }
+@media (min-width: 1200px) { .hiring-shortcuts { display: none; } }
+.case-snapshot { margin-block: 24px; }
+.case-snapshot dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 20px; }
+.case-snapshot dt { font-weight: 700; margin-bottom: 6px; }
+.case-snapshot dd { margin: 0; font-size: 1.125rem; line-height: 1.6; }

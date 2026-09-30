@@ -1,4 +1,6 @@
-// Content copied from the live Arcades Lab resume; see README source record.
+// Employment facts originate in the Arcades Lab resume; see README source record.
+// Keep the complete claim arrays stable: the private truth-review workflow seeds
+// positional IDs from them. Public selections below shorten the hiring edition.
 export interface ResumeProfile {
   name: string;
   titleLine: string;
@@ -35,6 +37,13 @@ export interface ResumeSkillGroup {
   skills: string;
 }
 
+export interface ResumeBuild {
+  name: string;
+  description: string;
+  proofHref: string;
+  proofLabel: string;
+}
+
 export const RESUME_PROFILE: ResumeProfile = {
   name: 'Austen Tucker-Crowder',
   titleLine: 'AI Enablement Leader & Hands-On Builder',
@@ -47,12 +56,10 @@ export const RESUME_PROFILE: ResumeProfile = {
 };
 
 export const RESUME_SUMMARY =
-  'AI enablement and transformation leader with 16+ years delivering customer-focused software as a program '
-  + 'manager, agile coach, and hands-on builder. I turn AI adoption goals into measurable practice, including helping '
-  + 'raise agentic-coding adoption from roughly 2% to 43% of merge requests, and I build the tools that make it stick: '
-  + 'MCP-enabled operating artifacts, Claude skills, LLM evaluation prompts, and accessibility-first learning experiences. '
-  + 'Seeking AI enablement and transformation leadership roles where building is part of the job, and focused '
-  + 'consulting with a concrete outcome.';
+  'AI enablement and transformation leader with 16+ years delivering customer-focused software. '
+  + 'I lead adoption across engineering, product, and leadership, pairing goals and operating metrics with '
+  + 'hands-on learning. I also build the MCP tools, Claude skills, and evaluation workflows that turn '
+  + 'experimentation into repeatable practice.';
 
 export const RESUME_ACCOMPLISHMENTS: ResumeAccomplishment[] = [
   { text: 'Helped raise agentic-coding adoption from roughly 2% to 43% of merge requests; it was still climbing at departure' },
@@ -69,7 +76,7 @@ export const RESUME_EXPERIENCE: ResumeRole[] = [
   {
     company: 'ActiveCampaign',
     location: 'Chicago, IL',
-    title: 'AI Enablement and Transformation',
+    title: 'Senior Program Owner | AI Enablement & Transformation',
     dates: '06/2025–09/2026',
     bullets: [
       'Led AI enablement and transformation across engineering, product, and leadership, turning adoption goals into measurable, repeatable practice',
@@ -129,6 +136,36 @@ export const RESUME_EXPERIENCE: ResumeRole[] = [
   },
 ];
 
+/** Select from the original bullets without changing private claim identities. */
+const HIRING_BULLET_INDICES = [
+  [1, 2, 3, 4, 5, 6],
+  [0, 2],
+  [0, 1],
+  [0, 2],
+  [0, 1],
+];
+
+export const RESUME_HIRING_EXPERIENCE: ResumeRole[] = RESUME_EXPERIENCE.map((role, index) => ({
+  ...role,
+  bullets: HIRING_BULLET_INDICES[index].map((bulletIndex) => role.bullets[bulletIndex]),
+}));
+
+/** Public implementation evidence from lib/engineering.ts and lib/content.ts. */
+export const RESUME_BUILDS: ResumeBuild[] = [
+  {
+    name: 'Bunch',
+    description: 'Built a continuity tool with web and MCP interfaces sharing typed contracts and transactional rules. Added owner-scoped records, version checks, retry safety, audit events, and AI spend controls. Source and a fictional-data demo are publicly inspectable.',
+    proofHref: '/engineering',
+    proofLabel: 'Read the technical tour',
+  },
+  {
+    name: 'Job-search cockpit',
+    description: 'Built a private workspace that assembles application drafts from exact, reviewed claims. Added verified-posting requirements, version history, bounded AI spend, and submission receipts; the MCP API has no employer-submit endpoint.',
+    proofHref: '/work/job-search-cockpit',
+    proofLabel: 'Read the case study',
+  },
+];
+
 export const RESUME_EARLIER: ResumeEarlierRole[] = [
   { org: 'Chicago Housing Authority', role: 'Business Analyst & Scrum Master', dates: '2012–2015' },
   { org: 'Technology Partnership Group', role: 'Business Analyst', dates: '2009–2012' },
@@ -141,6 +178,13 @@ export const RESUME_SKILLS: ResumeSkillGroup[] = [
   { label: 'Tracking & Analysis', skills: 'Google Analytics, Hotjar, Datadog, Grafana, Tableau' },
   { label: 'Communication', skills: 'Video, Audio, and Graphic Production, Training Production, Professional Writing, Accessibility-First Design' },
   { label: 'Methodologies', skills: "Paper Prototyping, Constructivism, Kolb's Experiential Learning, Think-Pair-Share, MoSCoW, Rose/Thorn/Bud, Spotify Squad Health Check" },
+];
+
+export const RESUME_HIRING_SKILLS: ResumeSkillGroup[] = [
+  RESUME_SKILLS[0],
+  RESUME_SKILLS[2],
+  RESUME_SKILLS[1],
+  RESUME_SKILLS[4],
 ];
 
 export const RESUME_EDUCATION: string[] = [
