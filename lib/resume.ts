@@ -1,4 +1,6 @@
-// Content copied from the live Arcades Lab resume; see README source record.
+// Employment facts originate in the Arcades Lab resume; see README source record.
+// Keep the complete claim arrays stable: the private truth-review workflow seeds
+// positional IDs from them. Public selections below shorten the hiring edition.
 export interface ResumeProfile {
   name: string;
   titleLine: string;
@@ -35,9 +37,16 @@ export interface ResumeSkillGroup {
   skills: string;
 }
 
+export interface ResumeBuild {
+  name: string;
+  description: string;
+  proofHref: string;
+  proofLabel: string;
+}
+
 export const RESUME_PROFILE: ResumeProfile = {
   name: 'Austen Tucker-Crowder',
-  titleLine: 'AI Builder & Product-Minded Engineer',
+  titleLine: 'Hands-On AI Builder | Product & Program Leadership',
   location: 'Chicago, IL',
   email: 'austen@thearcades.me',
   site: 'work.thearcades.me',
@@ -47,11 +56,10 @@ export const RESUME_PROFILE: ResumeProfile = {
 };
 
 export const RESUME_SUMMARY =
-  'AI builder, product-minded engineer, program manager, and agile coach with 16+ years delivering '
-  + 'customer-focused software. I build practical AI systems, prototypes, and workflows, then help teams evaluate, '
-  + 'understand, and own what ships. My leadership work is grounded in hands-on building: MCP-enabled operating '
-  + 'artifacts, AI skills, and accessibility-first learning experiences. Seeking hands-on AI engineering roles and '
-  + 'focused consulting with a concrete outcome.';
+  'I build useful AI systems, backed by 16+ years delivering customer-focused software through program '
+  + 'ownership, agile coaching, and hands-on building. AI lets me take more of the work directly from '
+  + 'prototype to working system. I bring product judgment, measurable goals, evaluation, and handoff '
+  + 'discipline to the things I build.';
 
 export const RESUME_ACCOMPLISHMENTS: ResumeAccomplishment[] = [
   { text: 'Helped raise agentic-coding adoption from roughly 2% to 43% of merge requests; it was still climbing at departure' },
@@ -68,7 +76,7 @@ export const RESUME_EXPERIENCE: ResumeRole[] = [
   {
     company: 'ActiveCampaign',
     location: 'Chicago, IL',
-    title: 'AI Enablement and Transformation',
+    title: 'Senior Program Owner | AI Enablement & Transformation',
     dates: '06/2025–09/2026',
     bullets: [
       'Led AI enablement and transformation across engineering, product, and leadership, turning adoption goals into measurable, repeatable practice',
@@ -128,6 +136,36 @@ export const RESUME_EXPERIENCE: ResumeRole[] = [
   },
 ];
 
+/** Select from the original bullets without changing private claim identities. */
+const HIRING_BULLET_INDICES = [
+  [1, 2, 3, 4, 5, 6],
+  [0, 2],
+  [0, 1],
+  [0, 2],
+  [0, 1],
+];
+
+export const RESUME_HIRING_EXPERIENCE: ResumeRole[] = RESUME_EXPERIENCE.map((role, index) => ({
+  ...role,
+  bullets: HIRING_BULLET_INDICES[index].map((bulletIndex) => role.bullets[bulletIndex]),
+}));
+
+/** Public implementation evidence from lib/engineering.ts and lib/content.ts. */
+export const RESUME_BUILDS: ResumeBuild[] = [
+  {
+    name: 'Bunch',
+    description: 'Built a continuity tool with web and MCP interfaces sharing typed contracts and transactional rules. Added owner-scoped records, version checks, retry safety, audit events, and AI spend controls. Source and a fictional-data demo are publicly inspectable.',
+    proofHref: '/engineering',
+    proofLabel: 'Read the technical tour',
+  },
+  {
+    name: 'Job-search cockpit',
+    description: 'Built a private workspace that assembles application drafts from exact, reviewed claims. Added verified-posting requirements, version history, bounded AI spend, and submission receipts; the MCP API has no employer-submit endpoint.',
+    proofHref: '/work/job-search-cockpit',
+    proofLabel: 'Read the case study',
+  },
+];
+
 export const RESUME_EARLIER: ResumeEarlierRole[] = [
   { org: 'Chicago Housing Authority', role: 'Business Analyst & Scrum Master', dates: '2012–2015' },
   { org: 'Technology Partnership Group', role: 'Business Analyst', dates: '2009–2012' },
@@ -142,6 +180,13 @@ export const RESUME_SKILLS: ResumeSkillGroup[] = [
   { label: 'Methodologies', skills: "Paper Prototyping, Constructivism, Kolb's Experiential Learning, Think-Pair-Share, MoSCoW, Rose/Thorn/Bud, Spotify Squad Health Check" },
 ];
 
+export const RESUME_HIRING_SKILLS: ResumeSkillGroup[] = [
+  RESUME_SKILLS[0],
+  RESUME_SKILLS[2],
+  RESUME_SKILLS[1],
+  RESUME_SKILLS[4],
+];
+
 export const RESUME_EDUCATION: string[] = [
   'Wabash College — B.A. in English, Rhetoric, and Teacher Education, 2007',
   'Certified Scrum Master (CSM) — 2011–Present',
@@ -151,8 +196,8 @@ export const RESUME_CANONICAL_PATH = '/resume';
 export const RESUME_PDF_PATH = '/resume.pdf';
 
 export const RESUME_DESCRIPTION =
-  'AI builder and product-minded engineer with 16+ years delivering customer-focused software, practical AI systems, '
-  + 'and accessibility-first learning experiences.';
+  'Hands-on AI builder with product and program leadership experience: working systems, MCP tools, evaluations, '
+  + 'and 16+ years delivering customer-focused software.';
 
 export const RESUME_COMMUNITY = {
   organization: 'Midwest FurFest',

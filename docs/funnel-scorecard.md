@@ -2,7 +2,7 @@
 
 ## Sources and filters
 
-For PostHog, use production events only with `hostname=work.thearcades.me` and `environment=production`; exclude `utm_campaign=analytics-verification`. Set the report timezone to UTC so its daily buckets match the Redis counters. Work-site pages and click events are already instrumented; do not add a cross-site visitor identifier.
+For PostHog, use production events only with `hostname=work.thearcades.me` and `environment=production`; exclude `utm_campaign=analytics-verification`. Set the report timezone to UTC so its daily buckets match the Redis counters. These are raw browser event counts, not confirmed human visitor counts: the removed IP and raw user agent prevent reliable PostHog bot classification. Work-site pages and click events are already instrumented; do not add a cross-site visitor identifier.
 
 | Step | Event or source | Definition |
 | --- | --- | --- |
@@ -12,7 +12,7 @@ For PostHog, use production events only with `hostname=work.thearcades.me` and `
 | Booking intent | `booking_click`, `placement` | Activation of a Cal.com link. It does not prove a booking was completed. |
 | First-party verification | Daily Redis aggregate `first_party_verified` | A signed verification link was claimed once through the Work endpoint. |
 | Kit-active ready | Daily Redis aggregate `kit_active_ready` | Kit reported the verified subscriber active, and the Work form/tag updates completed. This is a delivery-eligibility state, not proof that a broadcast or email was delivered. |
-| Actual inquiry/booking | Manually reviewed mailbox and Cal.com totals | Count an inquiry only when the mailbox contains a real role/project request; count a booking only when Cal.com reports a completed booking. Keep those outcomes separate from click events. |
+| Actual inquiry/booking | Private evidence-backed entries in `/jobs/review`, reviewed against mailbox and Cal.com | Count an inquiry only when the mailbox contains a real role/project request; count a booking only when Cal.com reports a completed booking. Keep those outcomes separate from click events. An open review week does not establish zero. |
 
 For the Work journey, use the existing same-session PostHog funnel from a work-site landing pageview to `case_study_view` to either `contact_click` or `booking_click`. The creative-to-work transition is summarized by source-domain/campaign totals only; do not join visitor identities across the two domains. Report click/request rows as intent.
 

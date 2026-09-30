@@ -8,12 +8,12 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         // Working brief with unresolved status notes. The route returns 404;
         // this rule also avoids unnecessary crawler requests.
-        disallow: '/journeys',
+        disallow: ['/journeys', '/jobs'],
       },
       ...['GPTBot', 'ClaudeBot', 'PerplexityBot', 'Google-Extended'].map(userAgent => ({
         userAgent,
         allow: '/',
-        disallow: '/journeys',
+        disallow: ['/journeys', '/jobs'],
       })),
     ],
     sitemap: 'https://work.thearcades.me/sitemap.xml',

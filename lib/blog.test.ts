@@ -96,7 +96,11 @@ test('robots disallows journeys, points at the sitemap, and permits named AI cra
   const config = robots();
   assert.equal(config.sitemap, 'https://work.thearcades.me/sitemap.xml');
   const rules = Array.isArray(config.rules) ? config.rules : [config.rules];
-  for (const rule of rules) assert.equal(rule.disallow, '/journeys');
+  for (const rule of rules) {
+    const disallowed = Array.isArray(rule.disallow) ? rule.disallow : [rule.disallow];
+    assert(disallowed.includes('/journeys'));
+    assert(disallowed.includes('/jobs'));
+  }
   for (const userAgent of ['GPTBot', 'ClaudeBot', 'PerplexityBot', 'Google-Extended']) {
     const rule = rules.find(candidate => candidate.userAgent === userAgent);
     assert(rule, `${userAgent} rule missing`);

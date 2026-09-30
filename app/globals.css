@@ -2504,6 +2504,7 @@ main [id] { scroll-margin-top: 16px; }
 .blog-index-hero .blog-intro { max-width: 62ch; }
 .blog-start { margin: 2rem 0; }
 .blog-start > p:not(.label) { color: var(--text-soft); line-height: 1.6; }
+.blog-start > p + p { margin-top: 1rem; }
 .blog-start ul { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); list-style: none; margin: 1.5rem 0 0; padding: 0; }
 .blog-start li { display: flex; flex-direction: column; gap: .6rem; padding: 1.25rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
 .blog-start li a { display: inline-flex; align-items: center; min-height: 48px; font-weight: 700; line-height: 1.35; text-decoration: underline; text-underline-offset: .2em; }
@@ -2583,3 +2584,20 @@ main [id] { scroll-margin-top: 16px; }
   border-color: rgb(var(--pink-rgb) / .38);
   background: linear-gradient(135deg, rgb(var(--pink-rgb) / .065), rgb(var(--orange-rgb) / .035));
 }
+
+/* Keep hiring paths visible even when the full navigation is collapsed. */
+.hiring-shortcuts {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  border-top: 1px solid var(--line);
+}
+.hiring-shortcuts a { display: inline-flex; align-items: center; min-height: 48px; text-decoration: underline; font-size: 1rem; }
+@media (min-width: 1200px) { .hiring-shortcuts { display: none; } }
+.case-snapshot { margin-block: 24px; }
+.case-snapshot dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 20px; }
+.case-snapshot dt { font-weight: 700; margin-bottom: 6px; }
+.case-snapshot dd { margin: 0; font-size: 1.125rem; line-height: 1.6; }

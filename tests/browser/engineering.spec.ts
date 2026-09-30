@@ -60,7 +60,7 @@ test('the engineering tour explains the public architecture without losing keybo
 test('the Bunch case study exposes the engineering tour as a secondary path', async ({ page }) => {
   await page.goto('/work/bunch');
 
-  const technicalTour = page.getByRole('link', { name: 'Building with Bunch? → Technical tour' });
+  const technicalTour = page.getByRole('link', { name: 'How I engineered Bunch →' });
   await expect(technicalTour).toBeVisible();
   await expect(technicalTour).toHaveAttribute('href', '/engineering');
 
@@ -68,5 +68,5 @@ test('the Bunch case study exposes the engineering tour as a secondary path', as
   await expect(demo).toHaveClass(/case-link-primary/);
   await expect(technicalTour).toHaveClass(/case-link-secondary/);
   await expect(page.locator('.case-links a').nth(0)).toContainText('Try the interactive demo');
-  await expect(page.locator('.case-links a').nth(1)).toContainText('Building with Bunch? → Technical tour');
+  await expect(page.locator('.case-links a').nth(1)).toContainText('How I engineered Bunch →');
 });
