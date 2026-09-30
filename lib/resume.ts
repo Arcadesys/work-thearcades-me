@@ -46,7 +46,7 @@ export interface ResumeBuild {
 
 export const RESUME_PROFILE: ResumeProfile = {
   name: 'Austen Tucker-Crowder',
-  titleLine: 'AI Enablement Leader & Hands-On Builder',
+  titleLine: 'Hands-On AI Builder | Product & Program Leadership',
   location: 'Chicago, IL',
   email: 'austen@thearcades.me',
   site: 'work.thearcades.me',
@@ -56,10 +56,10 @@ export const RESUME_PROFILE: ResumeProfile = {
 };
 
 export const RESUME_SUMMARY =
-  'AI enablement and transformation leader with 16+ years delivering customer-focused software. '
-  + 'I lead adoption across engineering, product, and leadership, pairing goals and operating metrics with '
-  + 'hands-on learning. I also build the MCP tools, Claude skills, and evaluation workflows that turn '
-  + 'experimentation into repeatable practice.';
+  'I build useful AI systems, backed by 16+ years delivering customer-focused software through program '
+  + 'ownership, agile coaching, and hands-on building. AI lets me take more of the work directly from '
+  + 'prototype to working system. I bring product judgment, measurable goals, evaluation, and handoff '
+  + 'discipline to the things I build.';
 
 export const RESUME_ACCOMPLISHMENTS: ResumeAccomplishment[] = [
   { text: 'Helped raise agentic-coding adoption from roughly 2% to 43% of merge requests; it was still climbing at departure' },
@@ -196,8 +196,8 @@ export const RESUME_CANONICAL_PATH = '/resume';
 export const RESUME_PDF_PATH = '/resume.pdf';
 
 export const RESUME_DESCRIPTION =
-  'AI enablement and transformation leader who builds: 16+ years delivering customer-focused software, measurable AI '
-  + 'adoption, practical AI tools, and accessibility-first learning experiences.';
+  'Hands-on AI builder with product and program leadership experience: working systems, MCP tools, evaluations, '
+  + 'and 16+ years delivering customer-focused software.';
 
 export const RESUME_COMMUNITY = {
   organization: 'Midwest FurFest',

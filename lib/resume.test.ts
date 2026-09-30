@@ -15,7 +15,7 @@ import {
 } from './resume';
 
 test('the hiring edition preserves the approved lane, official title, and shared attribution', () => {
-  assert.equal(RESUME_PROFILE.titleLine, 'AI Enablement Leader & Hands-On Builder');
+  assert.equal(RESUME_PROFILE.titleLine, 'Hands-On AI Builder | Product & Program Leadership');
   assert.equal(RESUME_HIRING_EXPERIENCE[0].title, 'Senior Program Owner | AI Enablement & Transformation');
   assert.match(RESUME_HIRING_EXPERIENCE[0].bullets[0], /^Helped raise agentic-coding adoption from roughly 2% to 43% of merge requests/);
   assert.doesNotMatch(RESUME_SUMMARY, /2%|43%/);

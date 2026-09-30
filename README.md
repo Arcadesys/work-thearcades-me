@@ -45,6 +45,13 @@ npm run build
 
 ## Iteration log
 
+### 2026-09-30 — Builder origin story, following #85
+
+- The author's latest direction supersedes the September 25 enablement-led framing: program ownership was a route toward making things; AI now lets them carry more of the work directly from prototype to working system. The approved introduction lands on “I’m hooked.”
+- Lead with hands-on AI building across hero, contact, résumé, search/social metadata, services-role copy, and `llms.txt`. Put Bunch and the cockpit before the ActiveCampaign case while retaining its attributed adoption result and all employment evidence.
+- Keep the distinction between AI expanding building capacity and starting from no coding experience: the Guaranteed Rate JavaScript story remains intact. Do not invent production-scale numbers or tailor to an unconfirmed employer role.
+- Regenerate the two-page résumé from the same factual record. This is a narrative revision, not a rewritten employment history or a production-release request.
+
 ### 2026-09-30 — Hiring path and evidence clarity
 
 - Kept the approved “AI enablement leader who builds” lane and made it the visible hero headline. Adoption proof, selected work, the technical tour, and résumé are grouped at the top; collapsed navigation keeps hiring shortcuts available.

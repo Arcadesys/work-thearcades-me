@@ -6,8 +6,8 @@ import { relatedPosts } from './blog';
 
 const source = (path: string) => readFileSync(new URL(path, import.meta.url), 'utf8');
 
-test('hiring entry leads with the approved enablement lane and immediate proof paths', () => {
-  assert.equal(`${hero.headingBefore}${hero.headingAccent}${hero.headingAfter}`, 'AI enablement leader who builds.');
+test('hiring entry leads with the approved builder narrative and immediate proof paths', () => {
+  assert.equal(`${hero.headingBefore}${hero.headingAccent}${hero.headingAfter}`, 'I turn ideas into working systems.');
   const home = source('../app/page.tsx');
   const heroMarkup = home.slice(home.indexOf('<section className="shell section-top hero"'), home.indexOf('<div className="shell"><hr'));
   assert.match(heroMarkup, /<h1 className="hero-heading" id="hero-heading">/);
@@ -41,4 +41,13 @@ test('the hiring path reaches contact before the newsletter and prioritizes rele
   assert(home.indexOf('id="contact"') < home.indexOf('id="notes"'));
   const slugs = relatedPosts(caseStudyBySlug('ai-enablement')!).map(post => post.slug);
   assert.deepEqual(slugs, ['context-engineering-is-a-soda-gun', 'four-stages-nobody-tells-you-about']);
+});
+
+test('the builder story keeps the approved voice and the program-leadership evidence', () => {
+  assert.equal(hero.intro, 'I spent years turning ambitious ideas into products by bringing teams together. AI has given me a way to build those ideas directly, from prototype to working system, and I’m hooked.');
+  const home = source('../app/page.tsx');
+  assert(home.indexOf('id={bunch.id}') < home.indexOf('id={cockpit.id}'));
+  assert(home.indexOf('id={cockpit.id}') < home.indexOf('id={aiEnablement.id}'));
+  assert.match(hero.evidence, /Helped raise.*roughly 2% to 43% of merge requests/);
+  assert.match(caseStudyBySlug('guaranteed-rate')!.star!.action!.join(' '), /learned JavaScript/i);
 });

@@ -90,21 +90,21 @@ export function guideJsonLd(guide: { title: string; description: string; path: s
 }
 
 export const homepageMetadata: Metadata = {
-  title: 'AI Enablement Leader Who Builds | Austen Tucker-Crowder',
-  description: 'Austen Tucker-Crowder leads AI adoption across engineering, product, and leadership, and builds the prototypes, evaluations, and operating tools that make it stick.',
+  title: 'Hands-On AI Builder | Austen Tucker-Crowder',
+  description: 'Austen Tucker-Crowder builds useful AI systems, from prototype to working product, backed by program leadership, product judgment, and measurable AI-adoption experience.',
   metadataBase: new URL(SITE_URL),
   alternates: { canonical: '/', types: { 'application/rss+xml': '/feed.xml' } },
   openGraph: {
     type: 'website',
     url: '/',
-    title: 'AI Enablement Leader Who Builds | Austen Tucker-Crowder',
-    description: 'Austen Tucker-Crowder leads AI adoption across engineering, product, and leadership, and builds the prototypes, evaluations, and operating tools that make it stick.',
+    title: 'Hands-On AI Builder | Austen Tucker-Crowder',
+    description: 'Austen Tucker-Crowder builds useful AI systems, from prototype to working product, backed by program leadership, product judgment, and measurable AI-adoption experience.',
     siteName: 'Austen Tucker-Crowder',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AI Enablement Leader Who Builds | Austen Tucker-Crowder',
-    description: 'Austen Tucker-Crowder leads AI adoption across engineering, product, and leadership, and builds the prototypes, evaluations, and operating tools that make it stick.',
+    title: 'Hands-On AI Builder | Austen Tucker-Crowder',
+    description: 'Austen Tucker-Crowder builds useful AI systems, from prototype to working product, backed by program leadership, product judgment, and measurable AI-adoption experience.',
   },
 };
 

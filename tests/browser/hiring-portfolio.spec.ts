@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 // Run with the existing browser suite in an environment with local-browser access.
 test('hiring proof and next steps are directly discoverable', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('AI enablement leader who builds.');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('I turn ideas into working systems.');
   const hero = page.locator('#top');
   await expect(hero.getByRole('link', { name: 'Technical tour', exact: true })).toHaveAttribute('href', '/engineering');
   await expect(hero.getByRole('link', { name: 'Résumé', exact: true })).toHaveAttribute('href', '/resume');

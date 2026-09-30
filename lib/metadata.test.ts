@@ -95,3 +95,10 @@ test('thin tag archives are noindex while established tags remain indexable', ()
   assert.deepEqual(thinTag.robots, { index: false, follow: true });
   assert.deepEqual(establishedTag.robots, { index: true, follow: true });
 });
+
+test('builder positioning is consistent across search and social surfaces', () => {
+  assert.equal(homepageMetadata.title, 'Hands-On AI Builder | Austen Tucker-Crowder');
+  assert.equal(homepageMetadata.openGraph?.title, homepageMetadata.title);
+  assert.equal(homepageMetadata.twitter?.title, homepageMetadata.title);
+  assert.match(String(homepageMetadata.description), /builds useful AI systems/);
+});
