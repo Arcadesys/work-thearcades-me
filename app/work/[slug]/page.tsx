@@ -69,6 +69,14 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
             </ul>
           ) : null}
 
+          {study.snapshot && (
+            <section className="case-snapshot" aria-label="Project at a glance">
+              <dl>{study.snapshot.map((item) => (
+                <div key={item.label}><dt>{item.label}</dt><dd>{item.value}</dd></div>
+              ))}</dl>
+            </section>
+          )}
+
           {study.image && (
             <figure className="case-figure case-page-figure">
               <div>

@@ -46,7 +46,11 @@ const projectTags: Record<string, string[]> = {
   'claude-design-and-the-novel-t': ['novel-t'],
 };
 export function relatedPosts(study: typeof caseStudies[number]) {
-  return publicPosts().filter(post => study.blogTags?.some(tag => postTags(post).includes(tag)));
+  const posts = publicPosts();
+  if (study.relatedPostSlugs) {
+    return study.relatedPostSlugs.flatMap(slug => posts.filter(post => post.slug === slug));
+  }
+  return posts.filter(post => study.blogTags?.some(tag => postTags(post).includes(tag)));
 }
 export function relatedWork(post: BlogPost) {
   return caseStudies.filter(study => study.blogTags?.some(tag => postTags(post).includes(tag)));
