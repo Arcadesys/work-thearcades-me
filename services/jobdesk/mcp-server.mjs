@@ -64,7 +64,7 @@ export function createTools(request) {
     },
     {
       name: 'job_hunt_get_item',
-      description: 'Read one selected lead, its saved draft, and approved résumé truths.',
+      description: 'Read one selected lead, its saved draft, review status, draftVersion/draftHash for submission, and reviewed résumé truths.',
       inputSchema: {
         type: 'object',
         properties: {

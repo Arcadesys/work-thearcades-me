@@ -11,6 +11,8 @@ import * as leases from './queue';
 import { createReviewPacket } from './artifacts';
 import { bootstrap, privateBootstrap } from './bootstrap';
 import type { JobdeskStore } from './store';
+import { readSubmissionDraft } from './submission-draft';
+import { JobdeskError } from './errors';
 
 export const LOCAL_OWNER = 'local-user';
 function operation<S extends z.ZodType>(
@@ -131,14 +133,22 @@ export function createService(store: JobdeskStore) {
     'batches.items': operation(schemas['batches.items'], async ([id], sql) => ({
       items: await queue.listApplicationBatchItems(LOCAL_OWNER, id, sql),
     })),
-    'items.read': operation(schemas['items.read'], async ([id], sql) => ({
-      item: await queue.readApplicationBatchItem(LOCAL_OWNER, id, sql),
-      attempts:
-        await sql`SELECT id,state,note,created_at AS "createdAt" FROM jobdesk_submission_attempts WHERE item_id=${id} AND owner_id=${LOCAL_OWNER} ORDER BY created_at DESC`,
-    })),
-    'items.claim': operation(schemas['items.claim'], ([input], sql) =>
-      leases.claimItem(LOCAL_OWNER, input, sql),
-    ),
+    'items.read': operation(schemas['items.read'], async ([id], sql) => {
+      const item = await queue.readApplicationBatchItem(LOCAL_OWNER, id, sql);
+      const draft = await readSubmissionDraft(LOCAL_OWNER, id, sql);
+      return {
+        item: item && { ...item, draftVersion: draft?.draftVersion ?? null,
+          draftHash: draft?.draftHash ?? null, draftReviewStatus: draft?.draftReviewStatus ?? null },
+        attempts:
+          await sql`SELECT id,state,note,draft_version AS "draftVersion",draft_hash AS "draftHash",created_at AS "createdAt" FROM jobdesk_submission_attempts WHERE item_id=${id} AND owner_id=${LOCAL_OWNER} ORDER BY created_at DESC`,
+      };
+    }),
+    'items.claim': operation(schemas['items.claim'], async ([input], sql) => {
+      const claimed = await leases.claimItem(LOCAL_OWNER, input, sql);
+      const draft = await readSubmissionDraft(LOCAL_OWNER, input.itemId, sql);
+      return { ...claimed, draftVersion: draft?.draftVersion ?? null,
+        draftHash: draft?.draftHash ?? null, draftReviewStatus: draft?.draftReviewStatus ?? null };
+    }),
     'items.renew': operation(schemas['items.renew'], ([input], sql) =>
       leases.renewLease(LOCAL_OWNER, input, sql),
     ),
@@ -155,16 +165,13 @@ export function createService(store: JobdeskStore) {
       return rows[0];
     }),
     'submission.begin': operation(schemas['submission.begin'], async ([input], sql) => {
-      const drafts =
-        await sql`SELECT d.id FROM job_application_batch_items i JOIN job_application_drafts d ON d.lead_id=i.lead_id
-        WHERE i.id=${input.itemId} AND i.owner_id=${LOCAL_OWNER} AND d.review_status='approved' AND jsonb_array_length(d.truth_snapshot)>0 AND NOT EXISTS(
-          SELECT 1 FROM jsonb_array_elements(d.truth_snapshot) s LEFT JOIN resume_truth_claims c ON c.id=s->>'id'
-          WHERE c.id IS NULL OR c.review_status<>'reviewed' OR c.updated_at::text IS DISTINCT FROM s->>'version')`;
-      if (!drafts[0])
-        throw new Error(
-          'Approve the current draft and its reviewed truth snapshot before starting submission.',
-        );
-      return leases.beginSubmission(LOCAL_OWNER, input, sql);
+      const draft = await readSubmissionDraft(LOCAL_OWNER, input.itemId, sql);
+      if (!draft || draft.draftReviewStatus !== 'approved' || !draft.snapshotCurrent ||
+        draft.draftVersion !== input.draftVersion || draft.draftHash !== input.draftHash)
+        throw new JobdeskError('STALE_DRAFT',
+          'Draft changed or needs review. Read the current approved draft and refill the employer form before starting submission.');
+      const lease = { itemId: input.itemId, workerId: input.workerId, generation: input.generation };
+      return leases.beginSubmission(LOCAL_OWNER, lease, draft, sql);
     }),
     'submission.uncertain': operation(schemas['submission.uncertain'], ([id, note], sql) =>
       leases.markUncertain(LOCAL_OWNER, id, note, sql),
@@ -210,7 +217,7 @@ export function createService(store: JobdeskStore) {
       throw new Error('Browser launch requires the foreground server.');
     const handler = operations[method];
     return store.run((sql) =>
-      ['submission.record', 'draft.edit', 'draft.approve', 'submission.begin'].includes(method)
+      ['submission.record', 'draft.edit', 'draft.approve', 'submission.begin', 'submission.notSubmitted'].includes(method)
         ? store.db.transaction((tx) => handler(args, parameterizedSql(tx)))
         : handler(args, sql),
     );

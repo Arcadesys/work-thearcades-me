@@ -24,8 +24,11 @@ export function localCall(method, args, socketPath) {
         res.on('end', () => {
           try {
             const result = JSON.parse(Buffer.concat(chunks).toString());
-            if (res.statusCode !== 200)
-              throw new Error(result.error ?? 'Local Jobdesk rejected the operation.');
+            if (res.statusCode !== 200) {
+              const error = new Error(result.error ?? 'Local Jobdesk rejected the operation.');
+              error.code = result.code;
+              throw error;
+            }
             resolve(result.data);
           } catch (error) {
             reject(error);
@@ -51,11 +54,30 @@ export function createLocalApiClient({
 } = {}) {
   const workerId = `mcp-${randomUUID()}`;
   const leases = new Map();
+  // Dispatching begin may have committed even if its response is lost. Keep
+  // this barrier on transport errors; only explicit pre-attempt rejections
+  // permit preparation recovery. The broker independently enforces it.
+  const submissions = new Map();
   const call = (method, args) => localCall(method, args, socketPath);
   const lease = (itemId) => {
     const current = leases.get(itemId);
     if (!current) throw new Error('Claim preparation first by setting this item to preparing.');
     return { itemId, workerId, generation: current.generation };
+  };
+  const withLease = async (method, itemId, extra = {}) => {
+    try {
+      return await call(method, [{ ...lease(itemId), ...extra }]);
+    } catch (error) {
+      if (error.code === 'STALE_LEASE') leases.delete(itemId);
+      throw error;
+    }
+  };
+  const claim = async (itemId) => {
+    if (submissions.has(itemId))
+      throw new Error('Submission may have begun. Reconcile it before claiming preparation again.');
+    const current = await call('items.claim', [{ itemId, workerId }]);
+    leases.set(itemId, current);
+    return { item: { id: itemId, status: 'preparing', lease: current } };
   };
   const request = async (method, pathname, body) => {
     if (method === 'GET' && pathname === '/api/jobs/mcp/batches') return call('batches.list', []);
@@ -66,19 +88,26 @@ export function createLocalApiClient({
     const itemId = match[1];
     if (method === 'GET' && !match[2]) return call('items.read', [itemId]);
     if (method === 'PATCH' && !match[2]) {
-      if (body.status === 'preparing' && !leases.has(itemId)) {
-        const current = await call('items.claim', [{ itemId, workerId }]);
-        leases.set(itemId, current);
-        return { item: { id: itemId, status: 'preparing', lease: current } };
+      if (body.status === 'preparing' && !leases.has(itemId)) return claim(itemId);
+      let item;
+      try {
+        item = await withLease('items.status', itemId,
+          { status: body.status, note: (body.note ?? '').slice(0, 1000) });
+      } catch (error) {
+        // Only a definitive stale lease before any submission dispatch gets
+        // one claim retry. Never retry on transport/reconciliation failures.
+        if (body.status === 'preparing' && error.code === 'STALE_LEASE' && !submissions.has(itemId))
+          return claim(itemId);
+        throw error;
       }
-      const item = await call('items.status', [
-        { ...lease(itemId), status: body.status, note: (body.note ?? '').slice(0, 1000) },
-      ]);
       if (body.status !== 'preparing') leases.delete(itemId);
       return { item };
     }
-    if (method === 'POST' && match[2])
-      return { receipt: await call('submission.record', [{ itemId, ...body }]) };
+    if (method === 'POST' && match[2]) {
+      const attemptId = submissions.get(itemId)?.id;
+      return { receipt: await call('submission.record', [{ itemId, ...body,
+        ...(attemptId ? { attemptId } : {}) }]) };
+    }
     throw new Error('Unsupported local Jobdesk operation.');
   };
   const itemSchema = {
@@ -93,14 +122,39 @@ export function createLocalApiClient({
       description:
         'Renew this worker’s preparation lease before it expires. A stale worker cannot write progress.',
       inputSchema: itemSchema,
-      run: (args) => call('items.renew', [lease(args.itemId)]),
+      run: (args) => withLease('items.renew', args.itemId),
     },
     {
       name: 'job_hunt_begin_submission',
       description:
-        'Save a durable attempt before clicking Submit. Requires the current approved draft and lease. This tool performs no employer action.',
-      inputSchema: itemSchema,
-      run: (args) => call('submission.begin', [lease(args.itemId)]),
+        'Save a durable attempt before clicking Submit. Pass draftVersion and draftHash from the exact approved get_item draft used to fill the form. If stale, read and refill before retrying. This tool performs no employer action.',
+      inputSchema: {
+        ...itemSchema,
+        properties: { ...itemSchema.properties,
+          draftVersion: { type: 'string', minLength: 1, maxLength: 100 },
+          draftHash: { type: 'string', pattern: '^[a-f0-9]{64}$' } },
+        required: ['itemId', 'draftVersion', 'draftHash'],
+      },
+      run: async (args) => {
+        if (submissions.has(args.itemId))
+          throw new Error('Submission may have begun. Reconcile the existing attempt before another submission.');
+        lease(args.itemId);
+        // Validate locally before setting the ambiguous-dispatch barrier.
+        if (typeof args.draftVersion !== 'string' || !args.draftVersion || args.draftVersion.length > 100 ||
+          typeof args.draftHash !== 'string' || !/^[a-f0-9]{64}$/.test(args.draftHash))
+          throw new Error('Pass the draftVersion and draftHash read from the approved draft used to fill the form.');
+        submissions.set(args.itemId, { state: 'dispatching' });
+        try {
+          const attempt = await withLease('submission.begin', args.itemId,
+            { draftVersion: args.draftVersion, draftHash: args.draftHash });
+          submissions.set(args.itemId, attempt);
+          return attempt;
+        } catch (error) {
+          if (error.code === 'STALE_LEASE' || error.code === 'STALE_DRAFT')
+            submissions.delete(args.itemId);
+          throw error;
+        }
+      },
     },
     {
       name: 'job_hunt_mark_submission_uncertain',

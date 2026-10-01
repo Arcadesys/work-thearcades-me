@@ -66,7 +66,17 @@ The local adapter adds `job_hunt_renew_lease`, `job_hunt_begin_submission`, and
 not claims about the previously installed plugin. Setting an item to preparing
 atomically claims its 120-second lease; the worker renews it during preparation.
 Stale generations cannot update the item. Before clicking Submit, the worker
-must have a reviewed current draft and save a durable submission attempt.
+must read the approved draft used to fill the form and pass its `draftVersion`
+and `draftHash` to `job_hunt_begin_submission`. The broker rejects a changed
+version, content hash, approval, or claim snapshot. On stale rejection, read the
+current approved draft and refill the form before retrying. The durable attempt
+retains that exact version, hash, and content snapshot; its confirmation receipt
+inherits the attempt's binding even if the saved draft is edited afterward.
+
+Definitive stale-lease errors clear the MCP adapter's cached lease. Setting an
+item to preparing can reacquire it once before any submission dispatch. A
+pending/uncertain attempt or an ambiguous begin response prevents automatic
+reclaim and another submission; reconcile it first.
 
 Submission takes place outside Jobdesk and still requires the user's employer
 action authorization. After observing confirmation, the existing receipt tool
@@ -74,8 +84,9 @@ records it. Receipt, item, lead, weekly event, and attempt update are atomic.
 Same-key retries return the receipt; conflicting receipts fail. A timeout or
 owner restart leaves the attempt uncertain and prevents another claim, batch,
 or requeue. Inspect employer confirmation/history before reconciliation. If
-evidence establishes no submission, record that evidence; the item remains
-blocked until a deliberate requeue. No browser or model operation spans a DB
+evidence establishes no submission, record that evidence; pending and uncertain
+attempts atomically block the item and clear/fence the old lease. A deliberate
+requeue and a new claim are required before further preparation. No browser or model operation spans a DB
 transaction. The service serializes domain requests; model work can delay other
 requests while in flight.
 

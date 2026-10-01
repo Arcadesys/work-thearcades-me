@@ -7,6 +7,7 @@ import { build } from 'esbuild';
 import { handleTruthReview } from '../../lib/resume-truth-http';
 import { JobdeskStore, DEFAULT_ROOT } from './store';
 import { createService, initializeService } from './service';
+import { JobdeskError } from './errors';
 
 const hash = (value: string) => createHash('sha256').update(value).digest('hex');
 const PRIVATE_HEADERS = {
@@ -285,9 +286,10 @@ export async function startJobdesk({
           return;
         }
         json(res, 200, { data: await service(input) });
-      } catch {
+      } catch (error) {
         json(res, 409, {
-          error:
+          ...(error instanceof JobdeskError ? { code: error.code } : {}),
+          error: error instanceof JobdeskError ? error.message :
             'Jobdesk rejected the operation. Check input, ownership, versions, leases, and submission reconciliation.',
         });
       }

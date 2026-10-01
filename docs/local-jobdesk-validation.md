@@ -5,10 +5,15 @@ Validated on the selected Mac, 1 October 2026, from an isolated checkout based o
 temporary private directories, synthetic employer records, mocked feed/model
 responses, and a separately spawned stdio worker. No employer was contacted.
 
+The review follow-up reran all five local disk/domain/IPC tests, TypeScript,
+scoped service lint, and whitespace checks after the submission/lease fixes.
+The existing unit, browser, full lint, and production-build rows below were
+measured on `367c641`; their affected public/UI code is unchanged by the follow-up.
+
 | Check | Result | Evidence |
 | --- | --- | --- |
 | Existing unit tests | 123 passed | `node --import tsx --test lib/*.test.ts` |
-| Local disk/domain/IPC tests | 4 comprehensive tests passed | `npm run test:jobdesk` |
+| Local disk/domain/IPC tests | 5 comprehensive tests passed | `npm run test:jobdesk` |
 | Local desktop/mobile cockpit | 2 passed | `npm run test:jobdesk:browser` |
 | Existing truth-review browser suite | 21 passed | `npm run test:truths` |
 | Public portfolio/newsletter browser suite | 33 passed | `npm run test:browser` |
@@ -17,7 +22,7 @@ responses, and a separately spawned stdio worker. No employer was contacted.
 | Production build | Passed | `npm run build`, no jobs DB configured |
 | Whitespace | Passed | `git diff --check` |
 
-The local tests exercise all migrations 0001–0008 on real disk, repeated startup,
+The local tests exercise all migrations 0001–0009 on real disk, repeated startup,
 checksum drift, unsupported/gapped schema, failed DDL rollback, pre-upgrade
 backup, duplicate owner rejection, explicit dead-PID recovery, and private file
 permissions. Backup tests load a supported binary dump into another directory
@@ -30,6 +35,15 @@ submitted/application-stage barriers, reviewed-only drafting, snapshot
 preservation, empty/stale draft approval rejection, uncertainty blocking
 requeue/new batches, idempotent/conflicting receipts, and atomic receipt/event/
 applied-stage/attempt writes. No tests use actual employer receipts.
+
+The review regressions exercise worker-read A followed by reviewed draft B,
+stale version and content-hash rejection, attempt snapshot/receipt binding after
+later draft edits, and persistence of those bindings after backup and restart.
+They cover pending/uncertain reconciliation blocking and fencing the old lease,
+explicit requeue before another attempt, one long-lived MCP client's renewal
+and status expiry recovery, no reclaim after submission dispatch, and ambiguous
+begin-response blocking. A forced receipt-binding constraint failure proves
+the receipt/event/applied-stage/attempt transaction rolls back together.
 
 Real SQL tests check monthly reservations, a successful scan's UTC date dedupe,
 cap exhaustion without another feed call, unmeasured and failed model-call

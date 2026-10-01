@@ -22,7 +22,7 @@ test('real disk: migrations, fresh approvals, leases, uncertainty, atomic receip
     let call = createService(store);
     assert.equal(
       (await store.sql`SELECT count(*)::int AS count FROM jobdesk_migrations`)[0].count,
-      8,
+      9,
     );
     await assert.rejects(JobdeskStore.open(root), /owner/);
     assert.equal((await stat(path.join(root, 'owner.lock'))).mode & 0o777, 0o600);
@@ -88,7 +88,8 @@ test('real disk: migrations, fresh approvals, leases, uncertainty, atomic receip
     })) as any;
     await assert.rejects(call({ method: 'items.renew', args: [lease] }));
     lease = { itemId, workerId: reacquired.workerId, generation: reacquired.generation };
-    await assert.rejects(call({ method: 'submission.begin', args: [lease] }), /Approve/);
+    await assert.rejects(call({ method: 'submission.begin', args: [{ ...lease,
+      draftVersion: 'missing-draft', draftHash: '0'.repeat(64) }] }), /Draft/);
     await store.sql`INSERT INTO job_application_drafts(lead_id,resume_variant,outreach,claim_ids,truth_snapshot)
       VALUES(${leadId},${snapshot[0].claim},'Fixture outreach',${snapshot.map((c) => c.id)},${JSON.stringify(snapshot)}::jsonb)`;
     let draft = (await call({ method: 'draft.read', args: [leadId] })) as any;
@@ -114,7 +115,9 @@ test('real disk: migrations, fresh approvals, leases, uncertainty, atomic receip
       (await readFile(path.join(root, packet.relativePath))).subarray(0, 5).toString(),
       /^%PDF-/,
     );
-    const attempt = (await call({ method: 'submission.begin', args: [lease] })) as any;
+    const read = (await call({ method: 'items.read', args: [itemId] })) as any;
+    const attempt = (await call({ method: 'submission.begin', args: [{ ...lease,
+      draftVersion: read.item.draftVersion, draftHash: read.item.draftHash }] })) as any;
     await call({
       method: 'submission.uncertain',
       args: [attempt.id, 'Fixture timeout after intended submit. No employer contacted.'],
@@ -229,6 +232,10 @@ test('real disk: migrations, fresh approvals, leases, uncertainty, atomic receip
       (await store.sql`SELECT owner_id FROM job_application_receipts`)[0].owner_id,
       LOCAL_OWNER,
     );
+    const persisted = (await store.sql`SELECT attempt_id,draft_version,draft_hash FROM job_application_receipts`)[0];
+    assert.equal(persisted.attempt_id, attempt.id);
+    assert.equal(persisted.draft_version, read.item.draftVersion);
+    assert.equal(persisted.draft_hash, read.item.draftHash);
     // URL-deduped imports preserve source status and do not turn user reports
     // into fabricated browser receipts or queue either reported application.
     const blockedUrl = 'https://example.test/jobs/fixture-role-001';
@@ -276,7 +283,7 @@ test('migration drift, unknown schema, failed DDL rollback and explicit crash-lo
     await assert.rejects(migrate(store.db, directory), /checksum drift/);
     await writeFile(path.join(directory, '0001_resume_truth.sql'), original);
     await writeFile(
-      path.join(directory, '0009_failure.sql'),
+      path.join(directory, '0010_failure.sql'),
       'CREATE TABLE jobdesk_should_rollback(id text); SELECT no_such_column;',
     );
     await assert.rejects(migrate(store.db, directory));
@@ -286,9 +293,9 @@ test('migration drift, unknown schema, failed DDL rollback and explicit crash-lo
     );
     assert.equal(
       (await store.sql`SELECT count(*)::int AS count FROM jobdesk_migrations`)[0].count,
-      8,
+      9,
     );
-    await rm(path.join(directory, '0009_failure.sql'));
+    await rm(path.join(directory, '0010_failure.sql'));
     await store.sql`INSERT INTO jobdesk_migrations(version,checksum) VALUES('9999_newer.sql','fixture')`;
     await assert.rejects(migrate(store.db, directory), /newer/);
     await store.sql`DELETE FROM jobdesk_migrations WHERE version='9999_newer.sql'`;
@@ -305,14 +312,14 @@ test('migration drift, unknown schema, failed DDL rollback and explicit crash-lo
     await recoverOwnerLock(root);
     store = await JobdeskStore.open(root, directory);
     await writeFile(
-      path.join(directory, '0009_upgrade.sql'),
+      path.join(directory, '0010_upgrade.sql'),
       'CREATE TABLE jobdesk_upgrade_proof(id text);',
     );
     await store.close();
     store = await JobdeskStore.open(root, directory);
     assert.equal(
       (await store.sql`SELECT count(*)::int AS count FROM jobdesk_migrations`)[0].count,
-      9,
+      10,
     );
     const backups = await import('node:fs/promises').then((fs) =>
       fs.readdir(path.join(root, 'backups')),
@@ -321,7 +328,7 @@ test('migration drift, unknown schema, failed DDL rollback and explicit crash-lo
     const manifest = JSON.parse(
       await readFile(path.join(root, 'backups', backups[0], 'manifest.json'), 'utf8'),
     );
-    assert.equal(manifest.migrations.length, 8);
+    assert.equal(manifest.migrations.length, 9);
   } finally {
     await store.close();
     await rm(root, { recursive: true, force: true });

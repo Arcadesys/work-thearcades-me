@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { reviewBatchSchema } from '../../lib/resume-truth-review';
 import { leaseSchema, claimSchema } from './queue';
+import { draftBindingSchema } from './submission-draft';
 
 const id = z.string().regex(/^[a-f0-9]{64}$/);
 const text = z.string().max(1000);
@@ -88,7 +89,7 @@ export const methodSchemas = {
     }),
   ]),
   'items.requeue': z.tuple([z.uuid(), text]),
-  'submission.begin': z.tuple([lease]),
+  'submission.begin': z.tuple([lease.extend(draftBindingSchema.shape)]),
   'submission.uncertain': z.tuple([z.uuid(), text.min(1)]),
   'submission.notSubmitted': z.tuple([z.uuid(), text.min(8)]),
   'submission.record': z.tuple([
