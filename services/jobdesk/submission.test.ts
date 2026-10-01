@@ -118,6 +118,27 @@ test('submission binds the worker-read draft; stale forms fail and receipts pres
       statusRecovered.item.lease.generation);
     assert.equal((await sql`SELECT count(*)::int AS count FROM jobdesk_submission_attempts WHERE item_id=${third.itemId}`)[0].count, 1);
     await assert.rejects(brokerCall('items.claim', [{ itemId: third.itemId, workerId: 'new-process' }], runtime.socketPath));
+    // Keep this exact adapter alive through reconciliation and explicit requeue.
+    // Reconciliation alone cannot clear its barrier; the broker's queued state
+    // and matching not_submitted attempt together permit a fresh generation.
+    await call('submission.notSubmitted', [inFlight.id, 'Synthetic history proves no application was submitted.']);
+    await assert.rejects(preparing(longLived, third.itemId));
+    await assert.rejects(workerTool(longLived, 'job_hunt_begin_submission')({ itemId: third.itemId,
+      draftVersion: read.draftVersion, draftHash: read.draftHash }), /may have begun/);
+    await call('items.requeue', [third.itemId, 'Explicit synthetic user requeue.']);
+    const afterRequeue = await preparing(longLived, third.itemId);
+    assert.ok(BigInt(afterRequeue.item.lease.generation) > BigInt(statusRecovered.item.lease.generation));
+    const nextAttempt = await workerTool(longLived, 'job_hunt_begin_submission')({ itemId: third.itemId,
+      draftVersion: read.draftVersion, draftHash: read.draftHash });
+    assert.notEqual(nextAttempt.id, inFlight.id);
+    assert.equal((await sql`SELECT count(*)::int AS count FROM jobdesk_submission_attempts WHERE item_id=${third.itemId}`)[0].count, 2);
+    await call('submission.notSubmitted', [nextAttempt.id, 'Synthetic pending-attempt reconciliation confirms no application.']);
+    await assert.rejects(preparing(longLived, third.itemId));
+    await call('items.requeue', [third.itemId, 'Explicit synthetic second user requeue.']);
+    await preparing(longLived, third.itemId);
+    const thirdAttempt = await workerTool(longLived, 'job_hunt_begin_submission')({ itemId: third.itemId,
+      draftVersion: read.draftVersion, draftHash: read.draftHash });
+    assert.notEqual(thirdAttempt.id, nextAttempt.id);
 
     // Receipt binding is part of the same short transaction as the original
     // receipt/event/applied-stage write. A binding failure rolls everything back.

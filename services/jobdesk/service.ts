@@ -140,7 +140,7 @@ export function createService(store: JobdeskStore) {
         item: item && { ...item, draftVersion: draft?.draftVersion ?? null,
           draftHash: draft?.draftHash ?? null, draftReviewStatus: draft?.draftReviewStatus ?? null },
         attempts:
-          await sql`SELECT id,state,note,draft_version AS "draftVersion",draft_hash AS "draftHash",created_at AS "createdAt" FROM jobdesk_submission_attempts WHERE item_id=${id} AND owner_id=${LOCAL_OWNER} ORDER BY created_at DESC`,
+          await sql`SELECT id,state,note,worker_id AS "workerId",lease_generation::text AS generation,draft_version AS "draftVersion",draft_hash AS "draftHash",created_at AS "createdAt" FROM jobdesk_submission_attempts WHERE item_id=${id} AND owner_id=${LOCAL_OWNER} ORDER BY created_at DESC`,
       };
     }),
     'items.claim': operation(schemas['items.claim'], async ([input], sql) => {

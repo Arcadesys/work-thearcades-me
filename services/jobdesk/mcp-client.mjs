@@ -72,8 +72,25 @@ export function createLocalApiClient({
       throw error;
     }
   };
+  const resetAfterRequeue = async (itemId) => {
+    const cached = submissions.get(itemId);
+    if (!cached) return false;
+    const { item, attempts } = await call('items.read', [itemId]);
+    const reconciled = attempts.find((attempt) => cached.id ? attempt.id === cached.id :
+      attempt.workerId === workerId && attempt.generation === cached.generation &&
+      attempt.draftVersion === cached.draftVersion && attempt.draftHash === cached.draftHash);
+    // Both facts must come from the owner: the exact dispatched attempt was
+    // reconciled, and a user explicitly requeued the now-blocked item. A timer,
+    // missing attempt, transport failure, or uncertainty never resets this.
+    if (item?.status !== 'queued' || reconciled?.state !== 'not_submitted' ||
+      attempts.some((attempt) => ['pending', 'uncertain', 'confirmed'].includes(attempt.state)))
+      return false;
+    submissions.delete(itemId);
+    leases.delete(itemId);
+    return true;
+  };
   const claim = async (itemId) => {
-    if (submissions.has(itemId))
+    if (submissions.has(itemId) && !await resetAfterRequeue(itemId))
       throw new Error('Submission may have begun. Reconcile it before claiming preparation again.');
     const current = await call('items.claim', [{ itemId, workerId }]);
     leases.set(itemId, current);
@@ -88,6 +105,8 @@ export function createLocalApiClient({
     const itemId = match[1];
     if (method === 'GET' && !match[2]) return call('items.read', [itemId]);
     if (method === 'PATCH' && !match[2]) {
+      if (body.status === 'preparing' && submissions.has(itemId) && await resetAfterRequeue(itemId))
+        return claim(itemId);
       if (body.status === 'preparing' && !leases.has(itemId)) return claim(itemId);
       let item;
       try {
@@ -138,16 +157,17 @@ export function createLocalApiClient({
       run: async (args) => {
         if (submissions.has(args.itemId))
           throw new Error('Submission may have begun. Reconcile the existing attempt before another submission.');
-        lease(args.itemId);
+        const current = lease(args.itemId);
         // Validate locally before setting the ambiguous-dispatch barrier.
         if (typeof args.draftVersion !== 'string' || !args.draftVersion || args.draftVersion.length > 100 ||
           typeof args.draftHash !== 'string' || !/^[a-f0-9]{64}$/.test(args.draftHash))
           throw new Error('Pass the draftVersion and draftHash read from the approved draft used to fill the form.');
-        submissions.set(args.itemId, { state: 'dispatching' });
+        submissions.set(args.itemId, { ...current, draftVersion: args.draftVersion,
+          draftHash: args.draftHash, state: 'dispatching' });
         try {
           const attempt = await withLease('submission.begin', args.itemId,
             { draftVersion: args.draftVersion, draftHash: args.draftHash });
-          submissions.set(args.itemId, attempt);
+          submissions.set(args.itemId, { ...current, ...attempt });
           return attempt;
         } catch (error) {
           if (error.code === 'STALE_LEASE' || error.code === 'STALE_DRAFT')

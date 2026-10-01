@@ -5,7 +5,7 @@ Validated on the selected Mac, 1 October 2026, from an isolated checkout based o
 temporary private directories, synthetic employer records, mocked feed/model
 responses, and a separately spawned stdio worker. No employer was contacted.
 
-The review follow-up reran all five local disk/domain/IPC tests, TypeScript,
+The review follow-up reran all six local disk/domain/IPC tests, TypeScript,
 scoped service lint, and whitespace checks after the submission/lease fixes.
 The existing unit, browser, full lint, and production-build rows below were
 measured on `367c641`; their affected public/UI code is unchanged by the follow-up.
@@ -13,7 +13,7 @@ measured on `367c641`; their affected public/UI code is unchanged by the follow-
 | Check | Result | Evidence |
 | --- | --- | --- |
 | Existing unit tests | 123 passed | `node --import tsx --test lib/*.test.ts` |
-| Local disk/domain/IPC tests | 5 comprehensive tests passed | `npm run test:jobdesk` |
+| Local disk/domain/IPC tests | 6 comprehensive tests passed | `npm run test:jobdesk` |
 | Local desktop/mobile cockpit | 2 passed | `npm run test:jobdesk:browser` |
 | Existing truth-review browser suite | 21 passed | `npm run test:truths` |
 | Public portfolio/newsletter browser suite | 33 passed | `npm run test:browser` |
@@ -44,6 +44,11 @@ explicit requeue before another attempt, one long-lived MCP client's renewal
 and status expiry recovery, no reclaim after submission dispatch, and ambiguous
 begin-response blocking. A forced receipt-binding constraint failure proves
 the receipt/event/applied-stage/attempt transaction rolls back together.
+The same adapter remains alive through pending and uncertain reconciliation,
+requires explicit requeue, then obtains a fresh claim and begins a new attempt.
+An actual CLI restore starts from migrations 0001–0008 with a registered PDF,
+stages its verified bytes before the migration 0009 pre-upgrade backup, and
+checks the restored PDF and that backup's artifact bytes and original ledger.
 
 Real SQL tests check monthly reservations, a successful scan's UTC date dedupe,
 cap exhaustion without another feed call, unmeasured and failed model-call

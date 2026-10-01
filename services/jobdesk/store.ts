@@ -79,7 +79,8 @@ export class JobdeskStore {
     this.sql = parameterizedSql(db);
   }
 
-  static async open(directory = DEFAULT_ROOT, migrations = MIGRATIONS, restore?: Blob) {
+  static async open(directory = DEFAULT_ROOT, migrations = MIGRATIONS, restore?: Blob,
+    stageRestoredArtifacts?: (root: string) => Promise<void>) {
     const root = await privateRoot(directory);
     const lockValue = JSON.stringify({ pid: process.pid, nonce: randomUUID() });
     const lock = await open(path.join(root, 'owner.lock'), 'wx', 0o600).catch(() => {
@@ -96,6 +97,9 @@ export class JobdeskStore {
         } catch (error) {
           if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
         }
+        // Stage verified restore artifacts while holding the sole-owner lock,
+        // before migration's pre-upgrade backup reads the restored registry.
+        await stageRestoredArtifacts?.(root);
       }
       db = await PGlite.create({
         dataDir: path.join(root, 'database'),

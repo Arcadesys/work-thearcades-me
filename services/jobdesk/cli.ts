@@ -1,6 +1,6 @@
 import { execFile } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { cp, readFile, mkdir } from 'node:fs/promises';
+import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { brokerCall } from './client';
 import { JobdeskStore, DEFAULT_ROOT, recoverOwnerLock, PGLITE_VERSION } from './store';
@@ -43,23 +43,24 @@ async function main() {
       createHash('sha256').update(data).digest('hex') !== manifest.sha256
     )
       throw new Error('Backup manifest or runtime checksum does not match.');
-    const store = await JobdeskStore.open(destination, undefined, new Blob([new Uint8Array(data)]));
+    const artifacts: { id: string; bytes: Buffer }[] = [];
+    if (!Array.isArray(manifest.artifacts)) throw new Error('Invalid artifact manifest.');
+    for (const artifact of manifest.artifacts) {
+      if (!/^[a-f0-9-]{36}$/.test(artifact.id) || artifacts.some((file) => file.id === artifact.id))
+        throw new Error('Invalid or duplicate artifact in manifest.');
+      const bytes = await readFile(path.join(backup, 'artifacts', `${artifact.id}.pdf`));
+      if (createHash('sha256').update(bytes).digest('hex') !== artifact.content_hash)
+        throw new Error('Artifact checksum mismatch.');
+      artifacts.push({ id: artifact.id, bytes });
+    }
+    const store = await JobdeskStore.open(destination, undefined, new Blob([new Uint8Array(data)]),
+      async (root) => {
+        await mkdir(path.join(root, 'artifacts'), { recursive: true, mode: 0o700 });
+        for (const artifact of artifacts)
+          await writeFile(path.join(root, 'artifacts', `${artifact.id}.pdf`), artifact.bytes,
+            { flag: 'wx', mode: 0o600 });
+      });
     try {
-      for (const artifact of manifest.artifacts) {
-        if (!/^[a-f0-9-]{36}$/.test(artifact.id)) throw new Error('Invalid artifact in manifest.');
-        const file = await readFile(path.join(backup, 'artifacts', `${artifact.id}.pdf`));
-        if (createHash('sha256').update(file).digest('hex') !== artifact.content_hash)
-          throw new Error('Artifact checksum mismatch.');
-      }
-      if (manifest.artifacts.length) {
-        await mkdir(path.join(store.root, 'artifacts'), { recursive: true, mode: 0o700 });
-        for (const artifact of manifest.artifacts)
-          await cp(
-            path.join(backup, 'artifacts', `${artifact.id}.pdf`),
-            path.join(store.root, 'artifacts', `${artifact.id}.pdf`),
-            { errorOnExist: true, force: false },
-          );
-      }
       console.log(
         'Restored and verified a separate database. Review it before any configuration switch.',
       );

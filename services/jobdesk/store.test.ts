@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { cp, mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises';
+import { cp, mkdtemp, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -9,6 +9,7 @@ import { MIGRATIONS, migrate } from './migrate';
 import { createService, initializeService, LOCAL_OWNER } from './service';
 import { leadIdForUrl } from '../../lib/job-discovery';
 import { fixtureReports } from '../../tests/fixtures/jobdesk-reports';
+import { createReviewPacket } from './artifacts';
 
 test('real disk: migrations, fresh approvals, leases, uncertainty, atomic receipts, snapshots, backup and restart', async () => {
   const root = await mkdtemp('/tmp/jobdesk-disk-');
@@ -333,5 +334,50 @@ test('migration drift, unknown schema, failed DDL rollback and explicit crash-lo
     await store.close();
     await rm(root, { recursive: true, force: true });
     await rm(directory, { recursive: true, force: true });
+  }
+});
+
+test('actual CLI restore stages a real 0008 backup artifact before migration 0009 upgrade backup', async () => {
+  const root = await mkdtemp('/tmp/jobdesk-legacy-'),
+    directory = await mkdtemp('/tmp/jobdesk-legacy-migrations-'),
+    restored = await mkdtemp('/tmp/jobdesk-legacy-restored-');
+  await cp(MIGRATIONS, directory, { recursive: true });
+  await rm(path.join(directory, '0009_submission_draft_binding.sql'));
+  const legacy = await JobdeskStore.open(root, directory);
+  let current: JobdeskStore | undefined;
+  try {
+    await initializeService(legacy);
+    const call = createService(legacy);
+    const claims = (await call({ method: 'truth.list', args: [] })) as any[];
+    const url = 'https://example.test/jobs/legacy-restore-fixture', leadId = leadIdForUrl(url);
+    await call({ method: 'leads.add', args: [{ url, title: 'Synthetic legacy restore' }] });
+    await legacy.sql`INSERT INTO job_application_drafts(lead_id,resume_variant,outreach,claim_ids,truth_snapshot)
+      VALUES(${leadId},${claims[0].claim},'Synthetic legacy outreach',${[claims[0].id]},${JSON.stringify([claims[0]])}::jsonb)`;
+    const packet = await createReviewPacket(root, leadId, legacy.sql);
+    const bytes = await readFile(path.join(root, packet.relativePath));
+    const backup = await legacy.backup();
+    assert.equal(backup.manifest.migrations.length, 8);
+    assert.equal(backup.manifest.artifacts.length, 1);
+    await legacy.close();
+    await promisify(execFile)(process.execPath,
+      ['--import', 'tsx', 'services/jobdesk/cli.ts', 'restore', backup.directory, restored],
+      { cwd: process.cwd() });
+    current = await JobdeskStore.open(restored);
+    assert.equal((await current.sql`SELECT count(*)::int AS count FROM jobdesk_migrations`)[0].count, 9);
+    assert.deepEqual(await readFile(path.join(restored, packet.relativePath)), bytes);
+    assert.equal((await stat(path.join(restored, packet.relativePath))).mode & 0o777, 0o600);
+    const preUpgrade = await readdir(path.join(restored, 'backups'));
+    assert.equal(preUpgrade.length, 1);
+    const preUpgradeRoot = path.join(restored, 'backups', preUpgrade[0]);
+    const manifest = JSON.parse(await readFile(path.join(preUpgradeRoot, 'manifest.json'), 'utf8'));
+    assert.equal(manifest.migrations.length, 8);
+    assert.equal(manifest.artifacts[0].content_hash, packet.contentHash);
+    assert.deepEqual(await readFile(path.join(preUpgradeRoot, packet.relativePath)), bytes);
+  } finally {
+    await legacy.close();
+    await current?.close();
+    await rm(root, { recursive: true, force: true });
+    await rm(directory, { recursive: true, force: true });
+    await rm(restored, { recursive: true, force: true });
   }
 });

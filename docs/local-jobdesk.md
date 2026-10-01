@@ -76,7 +76,9 @@ inherits the attempt's binding even if the saved draft is edited afterward.
 Definitive stale-lease errors clear the MCP adapter's cached lease. Setting an
 item to preparing can reacquire it once before any submission dispatch. A
 pending/uncertain attempt or an ambiguous begin response prevents automatic
-reclaim and another submission; reconcile it first.
+reclaim and another submission; reconcile it first. The same MCP process resets
+its attempt cache only after the broker confirms its exact attempt is
+`not_submitted` and the item was explicitly requeued, with no open/confirmed attempt.
 
 Submission takes place outside Jobdesk and still requires the user's employer
 action authorization. After observing confirmation, the existing receipt tool
@@ -137,7 +139,8 @@ Backup admission runs through the owner, quiesces operations, and uses PGlite's
 supported `dumpDataDir`, not a hot directory copy. Each snapshot includes a
 runtime/migration/checksum manifest, a JSON logical table export, and registry
 artifact hashes plus copies. Credentials and sessions are not exported. Restore
-requires a new directory, checks the runtime and dump/artifact hashes, then opens
+requires a new directory, checks the runtime and dump/artifact hashes, stages
+verified artifact bytes under the owner lock before any upgrade backup, then opens
 and verifies the migration ledger. Inspect the restored store before promotion;
 there is no automatic active-directory overwrite or configuration switch.
 
