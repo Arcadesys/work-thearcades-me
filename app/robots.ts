@@ -4,17 +4,13 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
+        // Public work is intentionally open to search engines, AI search,
+        // answer engines, and other standards-respecting crawlers. Keep the
+        // small private working surfaces out of discovery.
         userAgent: '*',
         allow: '/',
-        // Working brief with unresolved status notes. The route returns 404;
-        // this rule also avoids unnecessary crawler requests.
         disallow: ['/journeys', '/jobs'],
       },
-      ...['OAI-SearchBot', 'GPTBot', 'ClaudeBot', 'PerplexityBot', 'Google-Extended'].map(userAgent => ({
-        userAgent,
-        allow: '/',
-        disallow: ['/journeys', '/jobs'],
-      })),
     ],
     sitemap: 'https://work.thearcades.me/sitemap.xml',
   };
