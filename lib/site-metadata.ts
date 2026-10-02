@@ -17,6 +17,18 @@ export function personJsonLd() {
     '@id': PERSON_ID,
     name: PERSON_NAME,
     url: SITE_URL,
+    jobTitle: 'Hands-On AI Builder',
+    description: 'Hands-on AI builder and product-minded program owner who turns ambiguous problems into working systems, with a focus on accessibility, legibility, handoff, and participation.',
+    knowsAbout: [
+      'AI engineering',
+      'Agentic AI',
+      'AI enablement',
+      'Human-in-the-loop systems',
+      'Accessibility',
+      'Product development',
+      'Program leadership',
+      'Rapid prototyping',
+    ],
     sameAs: [site.linkedinUrl, site.githubUrl, site.creativeUrl, site.publishingUrl],
   };
 }
@@ -155,7 +167,10 @@ export function caseStudyMetadata(study: CaseStudy, siteName: string): Metadata 
   return {
     title,
     description: study.body,
-    alternates: { canonical: `/work/${study.slug}` },
+    alternates: {
+      canonical: `/work/${study.slug}`,
+      types: { 'text/markdown': `/work/${study.slug}.md` },
+    },
     openGraph: { type: 'article', url: `/work/${study.slug}`, title: socialTitle, description: study.body },
     twitter: { card: 'summary_large_image', title: socialTitle, description: study.body },
   };

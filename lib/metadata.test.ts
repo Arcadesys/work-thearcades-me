@@ -23,6 +23,7 @@ test('public entry points keep their explicit, absolute canonical contracts', as
   assert.equal(absolute('/layoff-triage'), `${SITE_URL}/layoff-triage`);
   assert.equal(absolute(canonical(tea)!), `${SITE_URL}/blog/when-in-crisis-make-tea`);
   assert.equal(absolute(canonical(bunch)!), `${SITE_URL}/work/bunch`);
+  assert.equal(bunch.alternates?.types?.['text/markdown'], '/work/bunch.md');
   assert.equal(absolute(RESUME_CANONICAL_PATH), `${SITE_URL}/resume`);
 });
 
@@ -80,8 +81,21 @@ test('structured data is canonical, source-bounded, and safe to embed in HTML', 
   assert.match(serializeJsonLd({ headline: '</script>' }), /\\u003c\/script>/);
 });
 
-test('Person references all established public identities', () => {
-  assert.deepEqual(personJsonLd().sameAs, [
+test('Person describes Austen’s role, expertise, and established public identities', () => {
+  const person = personJsonLd();
+  assert.equal(person.jobTitle, 'Hands-On AI Builder');
+  assert.match(person.description, /product-minded program owner/);
+  assert.deepEqual(person.knowsAbout, [
+    'AI engineering',
+    'Agentic AI',
+    'AI enablement',
+    'Human-in-the-loop systems',
+    'Accessibility',
+    'Product development',
+    'Program leadership',
+    'Rapid prototyping',
+  ]);
+  assert.deepEqual(person.sameAs, [
     'https://www.linkedin.com/in/austen-tucker-0968a914',
     'https://github.com/Arcadesys',
     'https://www.thearcades.me',
