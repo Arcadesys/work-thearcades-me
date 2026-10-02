@@ -220,6 +220,11 @@ export const beliefs = [
     body: 'Good systems should be maintainable, teachable, and bigger than one heroic person.',
     accent: 'rose' as Accent,
   },
+  {
+    title: 'Build for people, not just problems.',
+    body: 'I look for the thing keeping people from participating, then build a door through it: lower friction, widen access, create connection, and give people new ways to take part.',
+    accent: 'amber' as Accent,
+  },
 ] as const;
 
 export const lanes: Lane[] = [
