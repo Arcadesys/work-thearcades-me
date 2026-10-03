@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { BlogPost } from './blog';
 import { site, type CaseStudy } from './content';
+import { originalEditionUrl } from './original-edition';
 
 export const SITE_URL = 'https://work.thearcades.me';
 export const PERSON_NAME = 'Austen Tucker-Crowder';
@@ -63,7 +64,8 @@ export function breadcrumbJsonLd(items: Array<{ name: string; path: string }>) {
 }
 
 export function blogPostJsonLd(post: BlogPost) {
-  const url = absoluteUrl(`/blog/${post.slug}`);
+  // A copy of a thearcades.me original takes the original's document identity.
+  const url = originalEditionUrl(post.slug) ?? absoluteUrl(`/blog/${post.slug}`);
   const description = post.seo?.description ?? post.excerpt;
   return {
     '@context': 'https://schema.org',
@@ -170,13 +172,15 @@ export function blogTagMetadata(tag: string, postCount: number): Metadata {
 export function blogPostMetadata(post: BlogPost): Metadata {
   const title = `${post.seo?.title ?? post.title} — Austen Tucker-Crowder`;
   const description = post.seo?.description ?? post.excerpt;
+  // Copies of thearcades.me originals point there; work-only posts self-canonicalize.
+  const canonical = originalEditionUrl(post.slug) ?? `/blog/${post.slug}`;
   return {
     title,
     description,
-    alternates: { canonical: `/blog/${post.slug}`, types: { 'application/rss+xml': '/feed.xml' } },
+    alternates: { canonical, types: { 'application/rss+xml': '/feed.xml' } },
     // The co-located PNG response is deliberately the share image for every article.
     // Display heroes may be SVGs, while social services consistently accept this raster card.
-    openGraph: { type: 'article', url: `/blog/${post.slug}`, title, description, publishedTime: post.publishDate },
+    openGraph: { type: 'article', url: canonical, title, description, publishedTime: post.publishDate },
     twitter: { card: 'summary_large_image', title, description },
   };
 }

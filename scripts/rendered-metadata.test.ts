@@ -55,6 +55,24 @@ test('article and case-study JSON-LD images point at the same card as og:image',
   assert.deepEqual(all(html('/resume'), /<meta property="og:title" content="([^"]*)"/g), ['Résumé — Austen Tucker-Crowder']);
 });
 
+test('copies of thearcades.me originals point there and leave the work sitemap', () => {
+  const sitemap = readFileSync(join(APP_DIR, 'sitemap.xml.body'), 'utf8');
+  for (const [slug, original] of [
+    ['bunch', 'https://www.thearcades.me/projects/bunch/bunch'],
+    ['four-stages-nobody-tells-you-about', 'https://www.thearcades.me/projects/arcade-blog/four-stages-nobody-tells-you-about'],
+    ['claude-design-and-the-novel-t', 'https://www.thearcades.me/projects/the-singularity-log/claude-design-and-the-novel-t'],
+  ]) {
+    const source = html(`/blog/${slug}`);
+    assert.deepEqual(canonicals(source), [original], `${slug} canonical`);
+    assert.deepEqual(ogUrls(source), [original], `${slug} og:url`);
+    assert.deepEqual(all(source, /"mainEntityOfPage":"([^"]*)"/g), [original], `${slug} mainEntityOfPage`);
+    assert.match(source, new RegExp(`Originally published on <a href="${original}">The Arcades</a>`), `${slug} provenance line`);
+    assert(!sitemap.includes(`${SITE_URL}/blog/${slug}<`), `${slug} still in work sitemap`);
+  }
+  assert(sitemap.includes(`${SITE_URL}/work/bunch<`), 'distinct case study stays in the sitemap');
+  assert(sitemap.includes(`${SITE_URL}/blog/when-in-crisis-make-tea<`), 'work-only posts stay in the sitemap');
+});
+
 test('noindex utility pages emit no canonical at all', () => {
   for (const route of ['/newsletter/verify', '/newsletter/unsubscribe']) {
     const source = html(route);
