@@ -10,6 +10,7 @@ type CapturedEvent = {
 
 const safeValue = /^[a-z0-9_-]{1,64}$/;
 const safeHost = /^[a-z0-9.-]{1,253}$/;
+const safeUserAgent = /^[\x20-\x7e]{1,512}$/;
 
 export function campaignProperties(search: string): Record<string, string> {
   const parameters = new URLSearchParams(search);
@@ -57,6 +58,14 @@ export function sanitizeProperties(properties: Record<string, unknown>) {
   for (const key of ['distinct_id', '$session_id', '$window_id', '$lib', '$lib_version']) {
     const value = properties[key];
     if (typeof value === 'string' && /^[a-zA-Z0-9_.-]{1,100}$/.test(value)) clean[key] = value;
+  }
+
+  // Keep the SDK-provided browser user agent only for PostHog's traffic
+  // classification. It remains event-scoped: person profiles and IP enrichment
+  // stay disabled, and malformed/control-bearing values fail closed.
+  const rawUserAgent = properties.$raw_user_agent;
+  if (typeof rawUserAgent === 'string' && safeUserAgent.test(rawUserAgent)) {
+    clean.$raw_user_agent = rawUserAgent;
   }
 
   for (const key of ['placement', 'slug', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content']) {
