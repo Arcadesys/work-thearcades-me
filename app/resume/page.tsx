@@ -26,13 +26,13 @@ export const metadata: Metadata = {
   alternates: { canonical: RESUME_CANONICAL_PATH },
   openGraph: {
     type: 'profile',
-    title: `Resume — ${RESUME_PROFILE.name}`,
+    title: `Résumé — ${RESUME_PROFILE.name}`,
     description: RESUME_DESCRIPTION,
     url: RESUME_CANONICAL_PATH,
   },
   twitter: {
     card: 'summary_large_image',
-    title: `Resume — ${RESUME_PROFILE.name}`,
+    title: `Résumé — ${RESUME_PROFILE.name}`,
     description: RESUME_DESCRIPTION,
   },
 };

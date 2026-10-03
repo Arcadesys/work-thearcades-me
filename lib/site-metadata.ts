@@ -10,6 +10,11 @@ export function absoluteUrl(path: string): string {
   return new URL(path, SITE_URL).toString();
 }
 
+/** Absolute URL of a route's co-located raster social card (its opengraph-image.tsx). */
+export function socialCardUrl(pagePath: string): string {
+  return absoluteUrl(`${pagePath}/opengraph-image`);
+}
+
 export function personJsonLd() {
   return {
     '@context': 'https://schema.org',
@@ -70,7 +75,8 @@ export function blogPostJsonLd(post: BlogPost) {
     datePublished: post.publishDate,
     dateModified: post.updatedDate ?? post.publishDate,
     author: personJsonLd(),
-    ...(post.hero ? { image: absoluteUrl(post.hero.src) } : {}),
+    // Same raster card as og:image; display heroes may be SVG.
+    image: socialCardUrl(`/blog/${post.slug}`),
   };
 }
 
@@ -84,7 +90,7 @@ export function caseStudyJsonLd(study: CaseStudy) {
     url,
     mainEntityOfPage: url,
     author: personJsonLd(),
-    ...(study.image ? { image: absoluteUrl(study.image.src) } : {}),
+    image: socialCardUrl(`/work/${study.slug}`),
   };
 }
 
