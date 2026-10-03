@@ -8,6 +8,7 @@ import sources from '../content/blog-sources.json';
 import { allTags, loadPosts, publicPosts, postTags, relatedPosts, relatedWork, displayBuildDate, articleBody, archiveLinks } from './blog';
 import { blogPostMetadata } from './site-metadata';
 import { caseStudies } from './content';
+import { originalEditionUrl } from './original-edition';
 import sitemap from '../app/sitemap';
 import robots from '../app/robots';
 import { GET as feedRoute } from '../app/feed.xml/route';
@@ -82,10 +83,13 @@ test('the layoff triage skill download exists and is referenced by the post and 
   assert(readFileSync('app/layoff-triage/page.tsx', 'utf8').includes('Illustrative response, derived from the skill'));
 });
 
-test('sitemap includes every public post and excludes private routes, APIs, and every tag archive', () => {
+test('sitemap includes every work-original public post and excludes copies, private routes, APIs, and every tag archive', () => {
   const entries = sitemap();
   const urls = entries.map(entry => entry.url);
-  for (const post of publicPosts()) assert(urls.includes(`https://work.thearcades.me/blog/${post.slug}`), post.slug);
+  for (const post of publicPosts()) {
+    // Copies of thearcades.me originals belong in that site's sitemap.
+    assert.equal(urls.includes(`https://work.thearcades.me/blog/${post.slug}`), !originalEditionUrl(post.slug), post.slug);
+  }
   assert(urls.includes('https://work.thearcades.me/blog/when-in-crisis-make-tea'));
   assert(urls.includes('https://work.thearcades.me/layoff-triage'));
   assert(!urls.some(url => /^\/(?:journeys|jobs|api)(?:\/|$)/.test(new URL(url).pathname)));
@@ -118,12 +122,16 @@ test('llms.txt directs readers to public evidence and practical entry points', (
     '/work-with-me',
     '/resume',
     '/guides',
-    '/blog/bunch',
     '/blog/bunch-part-three',
-    '/blog/four-stages-nobody-tells-you-about',
     '/blog/the-fox-and-the-eval',
     '/blog/when-in-crisis-make-tea',
   ]) assert(llms.includes(`https://work.thearcades.me${path}`), path);
+  // Copies are listed by their thearcades.me original, never the work URL.
+  for (const slug of ['bunch', 'four-stages-nobody-tells-you-about', 'claude-design-and-the-novel-t']) {
+    assert(!llms.includes(`https://work.thearcades.me/blog/${slug}\n`), slug);
+  }
+  assert(llms.includes('https://www.thearcades.me/projects/bunch/bunch'));
+  assert(llms.includes('https://www.thearcades.me/projects/arcade-blog/four-stages-nobody-tells-you-about'));
 });
 
 test('the RSS feed lists exactly the public posts', async () => {

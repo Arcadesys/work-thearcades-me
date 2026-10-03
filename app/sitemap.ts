@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { publicPosts } from '@/lib/blog';
+import { originalEditionUrl } from '@/lib/original-edition';
 import { caseStudies, site } from '@/lib/content';
 import { pictureGuide } from '@/lib/guides';
 
@@ -19,7 +20,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}${pictureGuide.path}`, changeFrequency: 'monthly', priority: 0.7 },
   ];
 
-  const postRoutes: MetadataRoute.Sitemap = posts.map((post) => ({
+  // Copies of thearcades.me originals are listed in that site's sitemap, not here.
+  const postRoutes: MetadataRoute.Sitemap = posts.filter((post) => !originalEditionUrl(post.slug)).map((post) => ({
     url: `${BASE_URL}/blog/${post.slug}`,
     lastModified: new Date(post.updatedDate ?? post.publishDate),
     changeFrequency: 'monthly',
