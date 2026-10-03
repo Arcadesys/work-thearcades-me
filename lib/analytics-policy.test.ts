@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { campaignProperties, caseStudySlug, collectionEnvironment, eventNames, outgoingEvent, referrerDomain, safePath, sanitizeProperties } from './analytics-policy';
 
+const browserUserAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36';
+
 test('canonical production and explicitly enabled preview are isolated', () => {
   assert.equal(collectionEnvironment('work.thearcades.me'), 'production');
   assert.equal(collectionEnvironment('work.thearcades.me', 'production'), 'production');
@@ -30,6 +32,7 @@ test('outgoing SDK properties fail closed while retaining privacy-safe web analy
     distinct_id: 'abc-123',
     $session_id: 'session-123',
     $window_id: 'window-123',
+    $raw_user_agent: browserUserAgent,
     $current_url: 'https://evil.example/?email=private@example.com#secret',
     $referrer: 'https://evil.example/private?token=secret',
     $set: { email: 'private@example.com' },
@@ -47,6 +50,7 @@ test('outgoing SDK properties fail closed while retaining privacy-safe web analy
     distinct_id: 'abc-123',
     $session_id: 'session-123',
     $window_id: 'window-123',
+    $raw_user_agent: browserUserAgent,
     placement: 'hero',
     hostname: 'work.thearcades.me',
     referring_domain: 'example.com',
@@ -62,6 +66,8 @@ test('outgoing SDK properties fail closed while retaining privacy-safe web analy
     $ip: '0.0.0.0',
   });
 
+  assert.equal(sanitizeProperties({ $raw_user_agent: 'Mozilla/5.0\nprivate@example.com' }).$raw_user_agent, undefined);
+  assert.equal(sanitizeProperties({ $raw_user_agent: 'x'.repeat(513) }).$raw_user_agent, undefined);
   assert.equal(safePath('/layoff-triage'), '/layoff-triage');
   assert.equal(safePath('/guides/how-to-make-ai-generated-pictures-that-arent-slop'), '/guides/how-to-make-ai-generated-pictures-that-arent-slop');
   assert.equal(safePath('/engineering'), '/engineering');
@@ -89,6 +95,7 @@ test('outgoing events retain only the project token plus safe analytics identity
       token: 'untrusted-token',
       distinct_id: 'visitor-123',
       $session_id: 'session-123',
+      $raw_user_agent: browserUserAgent,
       hostname: 'work.thearcades.me',
       referring_domain: 'example.com',
       $current_url: 'https://evil.example/?email=private@example.com',
@@ -105,6 +112,7 @@ test('outgoing events retain only the project token plus safe analytics identity
     properties: {
       distinct_id: 'visitor-123',
       $session_id: 'session-123',
+      $raw_user_agent: browserUserAgent,
       hostname: 'work.thearcades.me',
       referring_domain: 'example.com',
       pathname: '/resume',
