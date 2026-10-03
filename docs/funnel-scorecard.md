@@ -2,7 +2,7 @@
 
 ## Sources and filters
 
-For PostHog, use production events only with `hostname=work.thearcades.me` and `environment=production`; exclude `utm_campaign=analytics-verification`. Set the report timezone to UTC so its daily buckets match the Redis counters. These are raw browser event counts, not confirmed human visitor counts: the removed IP and raw user agent prevent reliable PostHog bot classification. Work-site pages and click events are already instrumented; do not add a cross-site visitor identifier.
+For PostHog, use production events only with `hostname=work.thearcades.me` and `environment=production`; exclude `utm_campaign=analytics-verification`. Set the report timezone to UTC so its daily buckets match the Redis counters. For events captured after the user-agent classification fix, use `$virt_traffic_type=Regular` when you want human-like browser traffic and report bot/AI traffic separately when useful. The raw browser user agent is retained only for traffic classification; IP capture and location enrichment remain disabled, so IP-only bot signals are intentionally unavailable. Historical events captured before the fix have no usable raw user agent and remain classified as automation. Work-site pages and click events are already instrumented; do not add a cross-site visitor identifier.
 
 | Step | Event or source | Definition |
 | --- | --- | --- |
