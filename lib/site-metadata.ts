@@ -101,6 +101,20 @@ export function guideJsonLd(guide: { title: string; description: string; path: s
   };
 }
 
+/**
+ * Root-layout defaults. Every route inherits these, so they must never name a
+ * page: no canonical and no og:url. A route that forgets its own canonical then
+ * emits none, rather than silently claiming to be the homepage.
+ */
+export const siteDefaultMetadata: Metadata = {
+  title: 'Hands-On AI Builder | Austen Tucker-Crowder',
+  description: 'Austen Tucker-Crowder builds useful AI systems, from prototype to working product, backed by program leadership, product judgment, and measurable AI-adoption experience.',
+  metadataBase: new URL(SITE_URL),
+  alternates: { types: { 'application/rss+xml': '/feed.xml' } },
+  openGraph: { type: 'website', siteName: PERSON_NAME },
+  twitter: { card: 'summary_large_image' },
+};
+
 export const homepageMetadata: Metadata = {
   title: 'Hands-On AI Builder | Austen Tucker-Crowder',
   description: 'Austen Tucker-Crowder builds useful AI systems, from prototype to working product, backed by program leadership, product judgment, and measurable AI-adoption experience.',

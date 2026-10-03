@@ -1,6 +1,11 @@
 import type { Metadata } from 'next';
 import { SiteHeader } from '@/components/site-header';
-export const metadata: Metadata = { title: 'Privacy — Austen Tucker-Crowder' };
+export const metadata: Metadata = {
+  title: 'Privacy — Austen Tucker-Crowder',
+  description: 'How work.thearcades.me uses PostHog to understand which pages people read and which links they choose.',
+  alternates: { canonical: '/privacy' },
+  openGraph: { type: 'website', url: '/privacy', title: 'Privacy — Austen Tucker-Crowder' },
+};
 export default function PrivacyPage() {
   return <div className="services-page">
     <a className="skip-link" href="#main">Skip to content</a>
