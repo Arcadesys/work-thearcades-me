@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import { publicPosts, displayDate } from '@/lib/blog';
 import Link from 'next/link';
@@ -7,6 +8,7 @@ import { ExternalLink } from '@/components/external-link';
 import { RevealOnScroll } from '@/components/reveal-on-scroll';
 import { SubscribeForm } from '@/components/subscribe-form';
 import styles from './home.module.css';
+import { homepageMetadata } from '@/lib/site-metadata';
 import {
   about,
   beliefs,
@@ -20,6 +22,8 @@ import {
   quote,
   site,
 } from '@/lib/content';
+
+export const metadata: Metadata = homepageMetadata;
 
 function Arrow() {
   return <span aria-hidden="true"> →</span>;

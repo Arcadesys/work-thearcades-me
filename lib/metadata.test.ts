@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import type { Metadata } from 'next';
-import { homepageMetadata, PERSON_ID, SITE_URL, blogPostMetadata, caseStudyMetadata, blogPostJsonLd, caseStudyJsonLd, blogIndexMetadata, blogTagMetadata, guideJsonLd, personJsonLd, websiteJsonLd } from './site-metadata';
+import { homepageMetadata, siteDefaultMetadata, PERSON_ID, SITE_URL, blogPostMetadata, caseStudyMetadata, blogPostJsonLd, caseStudyJsonLd, blogIndexMetadata, blogTagMetadata, guideJsonLd, personJsonLd, websiteJsonLd } from './site-metadata';
 import { loadPosts } from './blog';
 import { caseStudyBySlug, site, workWithMe } from './content';
 import { pictureGuide } from './guides';
@@ -14,17 +14,25 @@ function canonical(metadata: Metadata) {
   return metadata.alternates?.canonical?.toString();
 }
 
+// Page-level routes (/work-with-me, /layoff-triage, /privacy, /resume) are checked
+// against emitted HTML in scripts/rendered-metadata.test.ts.
 test('public entry points keep their explicit, absolute canonical contracts', async () => {
   const tea = blogPostMetadata(loadPosts().find((post) => post.slug === 'when-in-crisis-make-tea')!);
   const bunch = caseStudyMetadata(caseStudyBySlug('bunch')!, site.name);
 
   assert.equal(absolute(canonical(homepageMetadata)!), `${SITE_URL}/`);
-  assert.equal(absolute('/work-with-me'), `${SITE_URL}/work-with-me`);
-  assert.equal(absolute('/layoff-triage'), `${SITE_URL}/layoff-triage`);
   assert.equal(absolute(canonical(tea)!), `${SITE_URL}/blog/when-in-crisis-make-tea`);
   assert.equal(absolute(canonical(bunch)!), `${SITE_URL}/work/bunch`);
   assert.equal(bunch.alternates?.types?.['text/markdown'], '/work/bunch.md');
   assert.equal(absolute(RESUME_CANONICAL_PATH), `${SITE_URL}/resume`);
+});
+
+test('root-layout defaults never name a page, so routes cannot inherit the homepage canonical', () => {
+  assert.equal(siteDefaultMetadata.alternates?.canonical, undefined);
+  assert.deepEqual(siteDefaultMetadata.alternates?.types, { 'application/rss+xml': '/feed.xml' });
+  assert(siteDefaultMetadata.openGraph);
+  assert.equal(siteDefaultMetadata.openGraph.url, undefined);
+  assert.equal(String(siteDefaultMetadata.metadataBase), `${SITE_URL}/`);
 });
 
 test('social metadata stays route-specific and requests raster large-image cards', async () => {

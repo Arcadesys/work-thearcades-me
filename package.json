@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "test": "tsx --test lib/*.test.ts",
+    "test:rendered": "tsx --test scripts/rendered-metadata.test.ts",
     "test:browser": "playwright test",
     "test:truths": "playwright test --config=playwright.truths.config.ts",
     "jobs:start": "node --import tsx services/jobdesk/server.ts",
