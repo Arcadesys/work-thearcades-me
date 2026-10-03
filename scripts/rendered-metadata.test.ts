@@ -44,6 +44,17 @@ test('public pages emit exactly one self-canonical and a matching og:url', () =>
   }
 });
 
+test('article and case-study JSON-LD images point at the same card as og:image', () => {
+  for (const route of ['/blog/when-in-crisis-make-tea', '/work/bunch']) {
+    const source = html(route);
+    const [ogImage] = all(source, /<meta property="og:image" content="([^"]*)"/g);
+    const images = all(source, /"image":"([^"]*)"/g);
+    assert.deepEqual(images, [`${SITE_URL}${route}/opengraph-image`], `${route} JSON-LD image`);
+    assert.equal(ogImage.split('?')[0], images[0], `${route} og:image`);
+  }
+  assert.deepEqual(all(html('/resume'), /<meta property="og:title" content="([^"]*)"/g), ['Résumé — Austen Tucker-Crowder']);
+});
+
 test('noindex utility pages emit no canonical at all', () => {
   for (const route of ['/newsletter/verify', '/newsletter/unsubscribe']) {
     const source = html(route);

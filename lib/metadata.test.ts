@@ -80,6 +80,13 @@ test('structured data is canonical, source-bounded, and safe to embed in HTML', 
   assert.equal(postSchema.url, `${SITE_URL}/blog/when-in-crisis-make-tea`);
   assert.equal(postSchema.datePublished, post.publishDate);
   assert.equal(postSchema.dateModified, post.updatedDate ?? post.publishDate);
+  // Structured-data images are the same raster cards as og:image, never an SVG hero.
+  assert.equal(postSchema.image, `${SITE_URL}/blog/when-in-crisis-make-tea/opengraph-image`);
+  assert.match(post.hero?.src ?? '', /\.svg$/);
+  assert.equal(studySchema.image, `${SITE_URL}/work/bunch/opengraph-image`);
+  const heroless = loadPosts().find((candidate) => !candidate.hero);
+  assert(heroless, "expected at least one post without a hero");
+  assert.equal(blogPostJsonLd(heroless).image, `${SITE_URL}/blog/${heroless.slug}/opengraph-image`);
   assert.equal(studySchema['@type'], 'Article');
   assert.equal(studySchema.url, `${SITE_URL}/work/bunch`);
   assert.equal(studySchema.author.name, 'Austen Tucker-Crowder');
