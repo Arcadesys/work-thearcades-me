@@ -173,9 +173,49 @@ files, so no Python or inference runs on a request. Vercel needs neither.
 Limitations: no claim of universal ATS compatibility or accessibility
 certification; the PDF is untagged ReportLab output with a simple reading order.
 
+## Web editions (#50)
+
+| URL | Behaviour |
+| --- | --- |
+| `/resume` | AI Builder, the default edition and its canonical URL (unchanged) |
+| `/resume/ai-builder` | 308 → `/resume`, so the default has one address and no duplicate |
+| `/resume/<id>` | Prerendered only for **approved** editions other than the default, with its own title, description, absolute self-canonical, `og:url` and sitemap entry |
+| draft, unknown, or any other segment | Real 404 (`dynamicParams = false`); no arbitrary file selection |
+| `/resume.pdf`, `/resume/<file>.pdf`, `/resume/<file>.txt` | Static exports from #51 |
+
+**Why `/resume` stays canonical** rather than redirecting to `/resume/ai-builder`:
+the creative site's permanent redirect, the cutover gate, the live audit and
+existing links all point at `/resume`. Keeping it means one address, no
+redirect chain, and no change to those gates. Switching later is a single
+redirect swap plus a canonical change.
+
+- `app/resume/resume-document.tsx` renders any resolved document. Selection
+  never happens in the renderer. Headline, summary, sections, role evidence
+  links, contact call to action and pitch all come from the document. Edition
+  page copy (`page.description`, `page.cta`, `page.pitch`) lives in each profile.
+- Downloads come from the manifest. The default keeps `/resume.pdf` (same
+  bytes as its named PDF) with its existing `resume_click` / `resume_pdf`
+  event; the plain-text link has no analytics. Any new event properties are
+  proposed under #45.
+- `<main data-resume-profile data-resume-digest>` exposes the edition and
+  content digest. A rendered test asserts it equals the manifest's
+  `contentDigest`.
+- The edition switcher appears only when two or more editions are approved.
+  The current edition is marked with `aria-current="page"`, bold text, a
+  3px border and "(current)" in text, so color isn't the only cue.
+- Pages are static files. They do not depend on MCP, editing services or
+  credentials.
+
+Verified 2026-10-04 with Technical Program Owner temporarily approved
+(local only, then reverted). Checked `/resume` and the edition page at 1280px
+light, 320px dark and 320px with 200% root text, with reduced motion: no
+horizontal overflow, zero axe WCAG 2.1 A/AA violations, keyboard reached the
+edition switcher and PDF download with a 3px focus ring, targets ≥ 48px.
+
 ## Rollback
 
 Revert the #48 commit. `lib/resume.ts` returns to its literal constants. No
 route, PDF, URL or stored data changes, and the truth-review seeds are identical
 either way. Reverting #51 restores the previous `public/resume.pdf` layout and
-removes `public/resume/`; nothing links to those files until #50.
+removes `public/resume/`. Reverting #50 restores the hand-written `/resume`
+page and removes the edition route and redirect.

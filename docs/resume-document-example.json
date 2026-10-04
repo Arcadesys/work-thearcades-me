@@ -4,7 +4,7 @@
   "profileStatus": "approved",
   "schemaVersion": 1,
   "sourceRevision": "example",
-  "digest": "813a087032ed6ad98938816826b84ceef2b60627ec555ad06eeb60ba284fa5f4",
+  "digest": "0716ef0e45d87d28d6f081d0000361363028f0482741af39589d6db314aaeb36",
   "identity": {
     "name": "Austen Tucker-Crowder",
     "location": "Chicago, IL",
@@ -16,6 +16,11 @@
   },
   "headline": "Hands-On AI Builder | Product & Program Leadership",
   "summary": "I build useful AI systems, backed by 16+ years delivering customer-focused software through program ownership, agile coaching, and hands-on building. AI lets me take more of the work directly from prototype to working system. I bring product judgment, measurable goals, evaluation, and handoff discipline to the things I build.",
+  "page": {
+    "description": "Hands-on AI builder with product and program leadership experience: working systems, MCP tools, evaluations, and 16+ years delivering customer-focused software.",
+    "cta": "Discuss a hands-on AI role",
+    "pitch": "Seeking hands-on AI work: rapid prototyping, useful systems, and the judgment to get from experiment to something a team can own."
+  },
   "sections": [
     {
       "kind": "experience",
@@ -29,6 +34,10 @@
           "start": "2025-06",
           "end": "2026-09",
           "dates": "06/2025–09/2026",
+          "evidence": {
+            "href": "/work/ai-enablement",
+            "label": "Read the AI enablement case study"
+          },
           "items": [
             {
               "id": "ach.ac.adoption",

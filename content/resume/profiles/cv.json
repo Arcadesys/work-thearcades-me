@@ -4,6 +4,7 @@
   "status": "draft",
   "headlineId": "headline.ai-builder",
   "summaryId": "summary.ai-builder",
+  "page": {"description": "Draft edition for review: the complete approved public professional record.", "cta": "Get in touch", "pitch": "Draft for review: the full chronology, projects, education, and community work."},
   "sections": [
     {
       "kind": "experience",

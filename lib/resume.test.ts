@@ -13,6 +13,7 @@ import {
   RESUME_SKILLS,
   RESUME_SUMMARY,
 } from './resume';
+import { resolveResume } from './resume/index';
 
 test('the hiring edition preserves the approved lane, official title, and shared attribution', () => {
   assert.equal(RESUME_PROFILE.titleLine, 'Hands-On AI Builder | Product & Program Leadership');
@@ -36,12 +37,12 @@ test('public selections keep the full claim bank and its positional identities i
 
 test('the résumé gives builds direct proof paths without a repeated accomplishments section', () => {
   assert.deepEqual(RESUME_BUILDS.map((build) => build.proofHref), ['/engineering', '/work/job-search-cockpit']);
+  // The page renders the resolved AI Builder document, so its order is the profile's.
+  const kinds = resolveResume('ai-builder').sections.map((section) => section.kind);
+  assert(!kinds.includes('highlights'));
+  assert(kinds.indexOf('experience') < kinds.indexOf('projects'));
   const page = readFileSync(new URL('../app/resume/page.tsx', import.meta.url), 'utf8');
-  assert(page.includes('RESUME_HIRING_EXPERIENCE.map'));
-  assert(page.includes('RESUME_HIRING_SKILLS.map'));
-  assert(page.includes('RESUME_BUILDS.map'));
-  assert(!page.includes('RESUME_ACCOMPLISHMENTS'));
-  assert(page.indexOf('id="resume-experience"') < page.indexOf('id="resume-builds"'));
+  assert(page.includes('resolveResume(DEFAULT_EDITION)') && page.includes('<ResumeDocument doc={doc} />'));
 });
 
 test('the published PDF is two pages with clickable contact and build evidence', async () => {

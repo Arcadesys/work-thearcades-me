@@ -58,6 +58,8 @@ const role = z.strictObject({
   /** Source wording of the dates, kept verbatim for display parity. */
   sourceDates: text,
   tier: z.enum(['primary', 'earlier']).default('primary'),
+  /** Optional public evidence for the role as a whole, such as a case study. */
+  evidence: z.strictObject({ href: safeLink, label: text }).optional(),
   achievementIds: z.array(id),
   provenance,
 });
@@ -113,6 +115,8 @@ export const profileSchema = z.strictObject({
   status: z.enum(['draft', 'approved']),
   headlineId: id,
   summaryId: id,
+  /** Edition-specific page copy: meta description and the contact call to action. */
+  page: z.strictObject({ description: text.max(200), cta: text.max(60), pitch: text }),
   sections: z.array(z.discriminatedUnion('kind', [
     z.strictObject({
       kind: z.literal('experience'),

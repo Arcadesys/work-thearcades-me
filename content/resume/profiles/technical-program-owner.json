@@ -4,6 +4,7 @@
   "status": "draft",
   "headlineId": "headline.ai-builder",
   "summaryId": "summary.ai-builder",
+  "page": {"description": "Draft edition for review: technical program ownership across engineering dependencies, risk, measurement, and cross-team delivery.", "cta": "Discuss a technical program role", "pitch": "Draft for review: owning technically complicated delivery, from dependencies and risk to measurement and handoff."},
   "sections": [
     {
       "kind": "highlights",

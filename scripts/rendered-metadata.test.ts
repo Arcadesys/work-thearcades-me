@@ -94,6 +94,22 @@ test('links recommending a copy lead to its thearcades.me original (#290)', () =
   assert(html('/work/bunch').includes('href="/blog/bunch-part-two"'));
 });
 
+test('the résumé page renders the published edition that matches its downloads (#50)', () => {
+  const manifest = JSON.parse(readFileSync(join(process.cwd(), 'public', 'resume', 'manifest.json'), 'utf8'));
+  const source = html('/resume');
+  const edition = manifest.editions.find((item: { profileId: string }) => item.profileId === 'ai-builder');
+  assert.deepEqual(all(source, /data-resume-profile="([^"]*)"/g), ['ai-builder']);
+  assert.deepEqual(all(source, /data-resume-digest="([^"]*)"/g), [edition.contentDigest], 'page and export manifest share one content digest');
+  assert.match(source, new RegExp(`href="/resume.pdf" download="" data-funnel-event="resume_click" data-funnel-placement="resume_pdf">Download résumé PDF \\(<!-- -->${edition.pdf.pages}`));
+  assert(source.includes('href="/resume/Austen-Tucker-Crowder-AI-Builder.txt"'));
+  assert(source.includes('href="/work/ai-enablement"'), 'role evidence link');
+  // One published edition: no edition switcher, and no draft edition pages.
+  assert(!source.includes('aria-label="Résumé editions"'));
+  for (const draft of ['technical-program-owner', 'program-owner', 'cv', 'ai-builder']) {
+    assert(!existsSync(join(APP_DIR, 'resume', `${draft}.html`)), `${draft} prerendered`);
+  }
+});
+
 test('noindex utility pages emit no canonical at all', () => {
   for (const route of ['/newsletter/verify', '/newsletter/unsubscribe']) {
     const source = html(route);
