@@ -15,7 +15,7 @@ export type Issue = { level: 'error' | 'warning'; code: string; path: string; me
 export type ResolvedItem = { id: string; text: string };
 export type ResolvedRole = {
   id: string; employer: string; location?: string; title: string; scope?: string;
-  start: string; end: string; dates: string; items: ResolvedItem[];
+  start: string; end: string; dates: string; evidence?: { href: string; label: string }; items: ResolvedItem[];
 };
 export type ResolvedListing = { id: string; title: string; venue?: string; date?: string; url?: string };
 type Section<K extends string, Body> = { kind: K; title: string } & Body;
@@ -54,6 +54,8 @@ export type ResolvedResume = {
   identity: Career['identity'];
   headline: string;
   summary: string;
+  /** Meta description and contact call to action for this edition. */
+  page: { description: string; cta: string; pitch: string };
   sections: ResolvedSection[];
   warnings: Issue[];
   errors: Issue[];
@@ -199,7 +201,7 @@ export function composeResume(career: Career, profile: Profile, options: { sourc
   const resolveRole = (role: CareerRole, items: ResolvedItem[]): ResolvedRole => ({
     id: role.id, employer: role.employer, ...(role.location ? { location: role.location } : {}),
     title: role.title, ...(role.scope ? { scope: role.scope } : {}),
-    start: role.start, end: role.end, dates: role.sourceDates, items,
+    start: role.start, end: role.end, dates: role.sourceDates, ...(role.evidence ? { evidence: { ...role.evidence } } : {}), items,
   });
 
   const sections: ResolvedSection[] = [];
@@ -274,6 +276,7 @@ export function composeResume(career: Career, profile: Profile, options: { sourc
     identity: { ...career.identity },
     headline: headline?.text ?? '',
     summary: summary?.text ?? '',
+    page: { ...profile.page },
     sections: errors.length ? [] : sections,
   };
   return {
@@ -286,6 +289,7 @@ export function composeResume(career: Career, profile: Profile, options: { sourc
     identity: content.identity,
     headline: content.headline,
     summary: content.summary,
+    page: content.page,
     sections: content.sections,
     warnings,
     errors,

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 
 import { BrandMark } from './brand-mark';
@@ -73,7 +74,7 @@ export function SiteHeader({ home = false, current }: SiteHeaderProps) {
         <div className="desktop-theme"><ThemeSwitch /></div>
         <nav className="hiring-shortcuts" aria-label="Hiring shortcuts">
           <a href="/engineering" aria-current={current === '/engineering' ? 'page' : undefined}>Technical tour</a>
-          <a href="/resume" aria-current={current === '/resume' ? 'page' : undefined}>Résumé</a>
+          <Link href="/resume" aria-current={current === '/resume' ? 'page' : undefined}>Résumé</Link>
           <a href={href('/#contact')}>Discuss a role</a>
         </nav>
         <details

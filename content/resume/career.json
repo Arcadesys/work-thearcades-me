@@ -32,6 +32,7 @@
       "start": "2025-06",
       "end": "2026-09",
       "sourceDates": "06/2025–09/2026",
+      "evidence": { "href": "/work/ai-enablement", "label": "Read the AI enablement case study" },
       "achievementIds": [
         "ach.ac.enablement",
         "ach.ac.adoption",
