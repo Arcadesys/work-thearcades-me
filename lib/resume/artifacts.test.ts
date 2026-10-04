@@ -7,7 +7,7 @@ import test from 'node:test';
 
 import {
   COMPAT_PDF_PATH, MANIFEST_PATH, PUBLIC_DIR,
-  absoluteLink, artifactBaseName, checkArtifacts, documentFacts, missingFacts, pdfToText, renderPlainText, sha256,
+  absoluteLink, artifactBaseName, budgetProblem, checkArtifacts, documentFacts, missingFacts, pdfToText, renderPlainText, sha256,
 } from './artifacts';
 import { PROFILE_IDS, resolveResume } from './index';
 
@@ -78,6 +78,12 @@ test('the check catches stale, tampered, and unpublished artifacts', async () =>
     assert.match((await checkArtifacts(root)).problems.join('\n'), /Unexpected file public\/resume\/Austen-Tucker-Crowder-CV\.pdf/);
 
     copy();
+    const swapped = structuredClone(manifest);
+    swapped.editions[0].profileId = 'cv';
+    writeFileSync(join(root, MANIFEST_PATH), JSON.stringify(swapped));
+    assert.match((await checkArtifacts(root)).problems.join('\n'), /Manifest lists \[cv\] but approved editions are \[ai-builder\]/);
+
+    copy();
     manifest.editions[0].contentDigest = '0'.repeat(64);
     writeFileSync(join(root, MANIFEST_PATH), JSON.stringify(manifest));
     assert.match((await checkArtifacts(root)).problems.join('\n'), /content changed since the artifacts were built/);
@@ -132,4 +138,29 @@ test('unsupported profiles are rejected before anything runs', () => {
   const result = spawnSync(process.execPath, ['--import', 'tsx', 'scripts/resume-build.ts', '../secrets'], { encoding: 'utf8' });
   assert.equal(result.status, 2);
   assert.match(result.stderr, /Unknown profile/);
+});
+
+test('page budgets: overflow fails an approved edition and warns on a draft; the CV is uncapped', () => {
+  assert.equal(budgetProblem('ai-builder', 2, true), null);
+  assert.deepEqual(budgetProblem('ai-builder', 3, true)?.level, 'error');
+  assert.match(budgetProblem('ai-builder', 3, true)!.message, /3 pages, over the 2-page budget.*never shrunk/);
+  assert.deepEqual(budgetProblem('program-owner', 3, false)?.level, 'warning');
+  assert.equal(budgetProblem('cv', 12, true), null);
+});
+
+test('a missing renderer dependency fails the build without publishing', () => {
+  const before = sha256(readFileSync(MANIFEST_PATH));
+  const result = spawnSync(process.execPath, ['--import', 'tsx', 'scripts/resume-build.ts', 'ai-builder'], {
+    encoding: 'utf8', env: { ...process.env, PYTHON: '/nonexistent/python3' },
+  });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /PDF generation failed[\s\S]*Nothing was published/);
+  assert.equal(sha256(readFileSync(MANIFEST_PATH)), before);
+});
+
+test('the deployment build refuses stale résumé artifacts before next build runs', () => {
+  const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
+  assert.match(pkg.scripts.build, /^npm run resume:check && next build$/);
+  // resume:check needs no Python, so it runs in Vercel's build image.
+  for (const file of ['scripts/resume-check.ts', 'lib/resume/artifacts.ts']) assert.doesNotMatch(readFileSync(file, 'utf8'), /python3|generate-resume-pdf/, file);
 });

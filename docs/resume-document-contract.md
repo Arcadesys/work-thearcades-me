@@ -212,6 +212,56 @@ light, 320px dark and 320px with 200% root text, with reduced motion: no
 horizontal overflow, zero axe WCAG 2.1 A/AA violations, keyboard reached the
 edition switcher and PDF download with a 3px focus ring, targets ≥ 48px.
 
+## Release gates (#52)
+
+**Chosen flow:** artifacts are generated locally (or by an agent) with
+`npm run resume:build` and committed. CI enforces regeneration parity, and the
+deployment build enforces freshness. Vercel never needs Python, and there is
+no second deployment trigger: the existing Git integration deploys as before.
+
+```
+edit content/resume/**  ─►  npm run resume:build  ─►  commit + PR
+                                                        │
+GitHub Actions `checks` (pull_request, contents: read, no secrets)
+  ├─ npm test                     schema, composer, renderer (real PDFs), routes, metadata
+  ├─ resume:check --require-pdf-text   digests, hashes, text, budgets, /resume.pdf, no drafts
+  ├─ resume:build + git diff --exit-code   committed bytes == fresh build (renderer/layout drift)
+  ├─ job summary                  editions, status, pages, digests, content diff vs base
+  └─ artifact resume-editions-<sha>   all four PDFs + text, 14 days
+GitHub Actions `rendered`: next build (incl. resume:check) + rendered HTML tests
+                                                        │
+Vercel Git integration ─► `npm run build` = resume:check && next build
+                          stale or missing artifact ⇒ build fails ⇒ previous deployment keeps serving
+```
+
+| Change | What invalidates it |
+| --- | --- |
+| Shared fact or profile edit | Content digest changes → `resume:check` fails until rebuilt |
+| Renderer, layout, font or ReportLab change | Digest unchanged, but bytes differ → CI regeneration-parity step fails |
+| Hand-edited or missing artifact | Hash mismatch → `resume:check` fails in CI **and in the Vercel build** |
+| Unrelated site edit | Nothing. The manifest has no git SHA or timestamp, so there are no generated-commit loops |
+
+**Revision binding:** the job summary and artifact are tied to the exact tested
+commit (`github.sha`). Every push re-runs CI. Merging is gated on green checks
+by practice. **Not enabled (needs owner authorization):** a GitHub branch-
+protection rule requiring `checks` and `rendered` on `main`, and Vercel's
+"wait for checks before promoting" setting. Until those are on, the Vercel
+build-time `resume:check` is the enforced gate for artifact freshness.
+
+**Public reads stay independent:** `/resume`, edition pages and downloads are
+static files from the build. They don't call MCP, the jobs API, the database
+or any credentials, so turning admin integrations off has no effect on them.
+
+**CI credentials:** workflows use `pull_request` (never `pull_request_target`),
+`permissions: contents: read`, and no secrets. Artifacts contain only
+committed public content.
+
+**Rollback:** `git revert <merge sha>` on `main` restores pages and artifacts
+together, because they ship in the same commit. Alternatively, promote the
+previous production deployment in Vercel (instant, no rebuild). After either,
+verify `https://work.thearcades.me/resume` and `/resume.pdf` match the expected
+manifest digest (`data-resume-digest` on the page).
+
 ## Rollback
 
 Revert the #48 commit. `lib/resume.ts` returns to its literal constants. No
