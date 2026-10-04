@@ -13,6 +13,7 @@
     "resume:build": "tsx scripts/resume-build.ts",
     "resume:check": "tsx scripts/resume-check.ts",
     "resume:report": "tsx scripts/resume-report.ts",
+    "resume:impact": "tsx scripts/resume-impact.ts",
     "test:browser": "playwright test",
     "test:truths": "playwright test --config=playwright.truths.config.ts",
     "jobs:start": "node --import tsx services/jobdesk/server.ts",

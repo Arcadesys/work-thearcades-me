@@ -42,6 +42,13 @@ applies to imports, syndication, migrations, and republication. Decision record:
   cross-domain canonicals, sitemap exclusions, and distinct pieces retaining
   their own canonicals. Check emitted HTML metadata, not only source config.
 
+## Résumé content
+
+Résumé facts, editions, exports and release gates live under `content/resume/`
+and `lib/resume/`. Follow `docs/resume-editorial-workflow.md` to read, propose,
+preview or publish a change, and `docs/resume-document-contract.md` for the
+data contract.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know
