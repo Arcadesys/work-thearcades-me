@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run resume:check && next build",
     "start": "next start",
     "lint": "eslint .",
     "test": "tsx --test lib/*.test.ts lib/resume/*.test.ts",
@@ -12,6 +12,7 @@
     "resume:compile": "tsx scripts/resume-compile.ts",
     "resume:build": "tsx scripts/resume-build.ts",
     "resume:check": "tsx scripts/resume-check.ts",
+    "resume:report": "tsx scripts/resume-report.ts",
     "test:browser": "playwright test",
     "test:truths": "playwright test --config=playwright.truths.config.ts",
     "jobs:start": "node --import tsx services/jobdesk/server.ts",

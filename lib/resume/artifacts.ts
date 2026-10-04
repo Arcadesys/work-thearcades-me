@@ -27,6 +27,16 @@ export const PAGE_BUDGETS: Record<ProfileId, number | null> = {
   cv: null,
 };
 
+/** Over budget is an error for an approved edition and a warning for a draft. */
+export function budgetProblem(profileId: ProfileId, pages: number, approved: boolean): { level: 'error' | 'warning'; message: string } | null {
+  const budget = PAGE_BUDGETS[profileId];
+  if (budget === null || pages <= budget) return null;
+  return {
+    level: approved ? 'error' : 'warning',
+    message: `${profileId}: ${pages} pages, over the ${budget}-page budget. Edit the profile's selections; fonts are never shrunk and text is never dropped.`,
+  };
+}
+
 const EDITION_SLUGS: Record<ProfileId, string> = {
   'ai-builder': 'AI-Builder',
   'technical-program-owner': 'Technical-Program-Owner',

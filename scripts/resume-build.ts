@@ -17,7 +17,7 @@ import { dirname, join } from 'node:path';
 
 import {
   COMPAT_PDF_PATH, COMPAT_PROFILE, DRAFT_DIR, MANIFEST_PATH, PAGE_BUDGETS, PUBLIC_DIR,
-  artifactBaseName, checkArtifacts, missingFacts, pdfPageCount, pdfToText, renderPlainText, sha256,
+  artifactBaseName, budgetProblem, checkArtifacts, missingFacts, pdfPageCount, pdfToText, renderPlainText, sha256,
   type Manifest, type ManifestEdition,
 } from '../lib/resume/artifacts';
 import { PROFILE_IDS, PROFILES, resolveResume, type ProfileId } from '../lib/resume/index';
@@ -53,10 +53,8 @@ async function buildOne(profileId: ProfileId, staging: string, problems: string[
   const pdf = readFileSync(pdfPath);
   const pages = await pdfPageCount(pdf);
   const budget = PAGE_BUDGETS[profileId];
-  if (budget !== null && pages > budget) {
-    const message = `${profileId}: ${pages} pages, over the ${budget}-page budget. Edit the profile's selections; fonts are never shrunk and text is never dropped.`;
-    (approved ? problems : warnings).push(message);
-  }
+  const overflow = budgetProblem(profileId, pages, approved);
+  if (overflow) (overflow.level === 'error' ? problems : warnings).push(overflow.message);
   const extracted = pdfToText(pdfPath);
   if (extracted === null) problems.push('pdftotext is required to verify PDF text (install poppler-utils)');
   else for (const fact of missingFacts(doc, extracted)) problems.push(`${profileId}: PDF is missing text: "${fact.slice(0, 80)}"`);
