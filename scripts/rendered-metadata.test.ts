@@ -49,10 +49,13 @@ test('article and case-study JSON-LD images point at the same card as og:image',
     const source = html(route);
     const [ogImage] = all(source, /<meta property="og:image" content="([^"]*)"/g);
     const images = all(source, /"image":"([^"]*)"/g);
-    assert.deepEqual(images, [`${SITE_URL}${route}/opengraph-image`], `${route} JSON-LD image`);
+    assert.deepEqual(images, [`${SITE_URL}${route}/opengraph-image/card`], `${route} JSON-LD image`);
     assert.equal(ogImage.split('?')[0], images[0], `${route} og:image`);
   }
   assert.deepEqual(all(html('/resume'), /<meta property="og:title" content="([^"]*)"/g), ['Résumé — Austen Tucker-Crowder']);
+  // Card alt text names the piece rather than the site.
+  assert.deepEqual(all(html('/blog/when-in-crisis-make-tea'), /<meta property="og:image:alt" content="([^"]*)"/g), ['Blog post: When in crisis, make tea. — Austen Tucker-Crowder']);
+  assert.deepEqual(all(html('/work/bunch'), /<meta property="og:image:alt" content="([^"]*)"/g), ['Case study: Bunch: a context system for continuity across memory gaps — Austen Tucker-Crowder']);
 });
 
 test('copies of thearcades.me originals point there and leave the work sitemap', () => {
