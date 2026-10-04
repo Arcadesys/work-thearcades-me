@@ -1,0 +1,24 @@
+{
+  "id": "ai-builder",
+  "label": "AI Builder",
+  "status": "approved",
+  "headlineId": "headline.ai-builder",
+  "summaryId": "summary.ai-builder",
+  "sections": [
+    {
+      "kind": "experience",
+      "roles": [
+        { "roleId": "role.activecampaign", "achievements": ["ach.ac.adoption", "ach.ac.devin", "ach.ac.roadshow", "ach.ac.wavelength", "ach.ac.cross-pillar", "ach.ac.skills-evals"] },
+        { "roleId": "role.allstate", "achievements": ["ach.allstate.initiatives", "ach.allstate.curriculum"] },
+        { "roleId": "role.arity", "achievements": ["ach.arity.planning", "ach.arity.mentoring"] },
+        { "roleId": "role.worktango", "achievements": ["ach.worktango.throughput", "ach.worktango.mentorship"] },
+        { "roleId": "role.guaranteed-rate", "achievements": ["ach.gr.mvp", "ach.gr.loan-tool"] }
+      ]
+    },
+    { "kind": "earlier", "ids": ["role.cha", "role.tpg"] },
+    { "kind": "projects", "ids": ["project.bunch", "project.job-search-cockpit"] },
+    { "kind": "skills", "ids": ["skills.ai", "skills.development", "skills.facilitation", "skills.communication"] },
+    { "kind": "education", "ids": ["edu.wabash", "cert.csm"] },
+    { "kind": "community", "ids": ["community.mff"] }
+  ]
+}

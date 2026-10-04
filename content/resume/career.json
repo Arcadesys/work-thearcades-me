@@ -1,0 +1,325 @@
+{
+  "schemaVersion": 1,
+  "identity": {
+    "name": "Austen Tucker-Crowder",
+    "location": "Chicago, IL",
+    "email": "austen@thearcades.me",
+    "site": "work.thearcades.me",
+    "siteUrl": "https://work.thearcades.me",
+    "github": "github.com/Arcadesys",
+    "githubUrl": "https://github.com/Arcadesys"
+  },
+  "headlines": [
+    {
+      "id": "headline.ai-builder",
+      "text": "Hands-On AI Builder | Product & Program Leadership",
+      "provenance": { "source": "work-site-resume", "review": "reviewed", "note": "Approved positioning lane for the live hiring edition." }
+    }
+  ],
+  "summaries": [
+    {
+      "id": "summary.ai-builder",
+      "text": "I build useful AI systems, backed by 16+ years delivering customer-focused software through program ownership, agile coaching, and hands-on building. AI lets me take more of the work directly from prototype to working system. I bring product judgment, measurable goals, evaluation, and handoff discipline to the things I build.",
+      "provenance": { "source": "work-site-resume", "review": "reviewed" }
+    }
+  ],
+  "roles": [
+    {
+      "id": "role.activecampaign",
+      "employer": "ActiveCampaign",
+      "location": "Chicago, IL",
+      "title": "Senior Program Owner | AI Enablement & Transformation",
+      "start": "2025-06",
+      "end": "2026-09",
+      "sourceDates": "06/2025–09/2026",
+      "achievementIds": [
+        "ach.ac.enablement",
+        "ach.ac.adoption",
+        "ach.ac.devin",
+        "ach.ac.roadshow",
+        "ach.ac.wavelength",
+        "ach.ac.cross-pillar",
+        "ach.ac.skills-evals",
+        "ach.ac.learning",
+        "ach.ac.onsite",
+        "ach.ac.worksites"
+      ],
+      "provenance": {
+        "source": "arcades-lab-resume",
+        "review": "flagged",
+        "note": "The title combines a role name with a scope label. The formal employment title is not confirmed; do not guess it."
+      }
+    },
+    {
+      "id": "role.allstate",
+      "employer": "Allstate",
+      "location": "Chicago, IL",
+      "title": "Senior Program Manager",
+      "start": "2023-08",
+      "end": "2025-02",
+      "sourceDates": "08/2023 – 02/2025",
+      "achievementIds": ["ach.allstate.initiatives", "ach.allstate.metrics", "ach.allstate.curriculum"],
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "role.arity",
+      "employer": "Arity",
+      "location": "Chicago, IL",
+      "title": "Senior Scrum Master & Agile Coach",
+      "start": "2020-06",
+      "end": "2023-08",
+      "sourceDates": "06/2020 – 08/2023",
+      "achievementIds": ["ach.arity.planning", "ach.arity.mentoring"],
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "role.worktango",
+      "employer": "WorkTango",
+      "location": "Chicago, IL",
+      "title": "Senior Scrum Master & Head of Agile PMO",
+      "start": "2019-01",
+      "end": "2020-06",
+      "sourceDates": "01/2019 – 06/2020",
+      "achievementIds": ["ach.worktango.throughput", "ach.worktango.velocity", "ach.worktango.mentorship"],
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "role.guaranteed-rate",
+      "employer": "Guaranteed Rate",
+      "location": "Chicago, IL",
+      "title": "Scrum Master & Project Lead",
+      "start": "2015-11",
+      "end": "2018-12",
+      "sourceDates": "11/2015 – 12/2018",
+      "achievementIds": ["ach.gr.mvp", "ach.gr.loan-tool", "ach.gr.measurement"],
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "role.cha",
+      "employer": "Chicago Housing Authority",
+      "title": "Business Analyst & Scrum Master",
+      "start": "2012",
+      "end": "2015",
+      "sourceDates": "2012–2015",
+      "tier": "earlier",
+      "achievementIds": [],
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "role.tpg",
+      "employer": "Technology Partnership Group",
+      "title": "Business Analyst",
+      "start": "2009",
+      "end": "2012",
+      "sourceDates": "2009–2012",
+      "tier": "earlier",
+      "achievementIds": [],
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    }
+  ],
+  "achievements": [
+    {
+      "id": "ach.ac.enablement",
+      "text": "Led AI enablement and transformation across engineering, product, and leadership, turning adoption goals into measurable, repeatable practice",
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "ach.ac.adoption",
+      "text": "Helped raise agentic-coding adoption from roughly 2% to 43% of merge requests; adoption was still climbing at departure",
+      "variants": { "highlight": "Helped raise agentic-coding adoption from roughly 2% to 43% of merge requests; it was still climbing at departure" },
+      "metric": {
+        "from": "2%",
+        "to": "43%",
+        "denominator": "merge requests",
+        "approximate": true,
+        "attribution": "contributed",
+        "qualifiers": ["still climbing at departure"],
+        "phrases": ["Helped raise", "roughly 2% to 43% of merge requests", "still climbing at departure"]
+      },
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "ach.ac.devin",
+      "text": "Led Devin adoption with goals and KPIs, using a game to communicate the operating model",
+      "variants": { "highlight": "Led Devin adoption with goals and KPIs, including a game used to communicate the operating model" },
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "ach.ac.roadshow",
+      "text": "Led a March 2026 roadshow for product managers across three continents, introducing Cursor and agentic AI; attendees began producing prototypes afterward",
+      "variants": { "highlight": "Led a March 2026 roadshow for product managers across three continents, introducing Cursor and agentic AI; attendees began producing prototypes afterward" },
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "ach.ac.wavelength",
+      "text": "Built Wavelength, an MCP-enabled operating artifact containing tasks, RAID-log items, and program state",
+      "variants": { "highlight": "Built Wavelength, an MCP-enabled operating artifact for tasks, RAID-log items, and program state" },
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "ach.ac.cross-pillar",
+      "text": "Coordinated cross-pillar AI transformation work, including outcomes and north-star metrics that supported ePMO governance and executive review",
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "ach.ac.skills-evals",
+      "text": "Built Claude skills and Langfuse evaluation prompts that supported daily operations and assessment of AI-agent response quality",
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "ach.ac.learning",
+      "text": "Designed accessibility-first Cursor and agentic-AI learning experiences that gave participants room to build working prototypes",
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "ach.ac.onsite",
+      "text": "Within four days of arrival, facilitated an onsite that multiple attendees called one of their best",
+      "variants": { "highlight": "Within four days of arrival, facilitated an onsite that multiple attendees called one of their best" },
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "ach.ac.worksites",
+      "text": "Created Worksites, intensive problem-solving sessions using board-game prototyping principles, and built operational tools for shared decisions and program visibility",
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "ach.allstate.initiatives",
+      "text": "Led cross-functional teams to deliver key initiatives across the Allstate Family of Companies",
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "ach.allstate.metrics",
+      "text": "Enhanced decision-making through robust metrics and streamlined project management tools",
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "ach.allstate.curriculum",
+      "text": "Championed agile practices and AI adoption by co-designing an AI training curriculum for the product department",
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "ach.arity.planning",
+      "text": "Slashed planning time by 50% for quarterly planning for 50+ engineers",
+      "variants": { "highlight": "Reduced planning time by 50% at Arity via data-driven prioritization for 50+ engineers" },
+      "metric": {
+        "to": "50%",
+        "denominator": "planning time",
+        "approximate": false,
+        "attribution": "led",
+        "qualifiers": [],
+        "phrases": ["planning time by 50%", "50+ engineers"]
+      },
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "ach.arity.mentoring",
+      "text": "Mentored Scrum Masters, enabling three promotions and strengthening agile alignment within the org",
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "ach.worktango.throughput",
+      "text": "Spearheaded agile transformation during a merger, boosting feature delivery throughput by 400%",
+      "variants": { "highlight": "Increased feature throughput by 400% at WorkTango during merger-driven agile transformation" },
+      "metric": {
+        "to": "400%",
+        "denominator": "feature throughput",
+        "approximate": false,
+        "attribution": "led",
+        "qualifiers": [],
+        "phrases": ["throughput by 400%"]
+      },
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "ach.worktango.velocity",
+      "text": "Redesigned workflows to double team velocity",
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "ach.worktango.mentorship",
+      "text": "Built a mentorship program within the technology organization to nurture future leaders",
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "ach.gr.mvp",
+      "text": "Rescoped a delayed initiative to deliver an MVP in two months, cutting production time by 75%",
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "ach.gr.loan-tool",
+      "text": "Acted as product owner for a data-mining tool associated with $1.5B in locked loan volume",
+      "variants": { "highlight": "Served as product owner for a Guaranteed Rate data-mining tool associated with $1.5B in locked loan volume" },
+      "metric": {
+        "to": "$1.5B",
+        "denominator": "locked loan volume",
+        "approximate": false,
+        "attribution": "associated",
+        "qualifiers": ["associated with the tool, not personally generated revenue"],
+        "phrases": ["associated with $1.5B in locked loan volume"]
+      },
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    },
+    {
+      "id": "ach.gr.measurement",
+      "text": "Developed a measurement plan that streamlined app functionality and elevated user engagement",
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    }
+  ],
+  "projects": [
+    {
+      "id": "project.bunch",
+      "name": "Bunch",
+      "description": "Built a continuity tool with web and MCP interfaces sharing typed contracts and transactional rules. Added owner-scoped records, version checks, retry safety, audit events, and AI spend controls. Source and a fictional-data demo are publicly inspectable.",
+      "proofHref": "/engineering",
+      "proofLabel": "Read the technical tour",
+      "provenance": { "source": "work-site-engineering", "review": "reviewed", "url": "https://work.thearcades.me/engineering" }
+    },
+    {
+      "id": "project.job-search-cockpit",
+      "name": "Job-search cockpit",
+      "description": "Built a private workspace that assembles application drafts from exact, reviewed claims. Added verified-posting requirements, version history, bounded AI spend, and submission receipts; the MCP API has no employer-submit endpoint.",
+      "proofHref": "/work/job-search-cockpit",
+      "proofLabel": "Read the case study",
+      "provenance": { "source": "work-site-case-study", "review": "reviewed", "url": "https://work.thearcades.me/work/job-search-cockpit" }
+    }
+  ],
+  "skills": [
+    { "id": "skills.ai", "label": "AI & Automation", "skills": "Claude Code, Cursor.ai, Langfuse, Glean, Agentic Development, LLM Evaluation, MCP Development, Claude Skills Development" },
+    { "id": "skills.facilitation", "label": "Facilitation & PM", "skills": "Jira, Digital.ai, Confluence, Airtable, Trello, Mural, Remote/Hybrid Facilitation, Offshore Coordination" },
+    { "id": "skills.development", "label": "Development", "skills": "Next.js, React, Node.js, Python, Express, Bootstrap, Postgres, Amazon Lambdas" },
+    { "id": "skills.analysis", "label": "Tracking & Analysis", "skills": "Google Analytics, Hotjar, Datadog, Grafana, Tableau" },
+    { "id": "skills.communication", "label": "Communication", "skills": "Video, Audio, and Graphic Production, Training Production, Professional Writing, Accessibility-First Design" },
+    { "id": "skills.methodologies", "label": "Methodologies", "skills": "Paper Prototyping, Constructivism, Kolb's Experiential Learning, Think-Pair-Share, MoSCoW, Rose/Thorn/Bud, Spotify Squad Health Check" }
+  ],
+  "education": [
+    {
+      "id": "edu.wabash",
+      "text": "Wabash College — B.A. in English, Rhetoric, and Teacher Education, 2007",
+      "institution": "Wabash College",
+      "end": "2007",
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    }
+  ],
+  "certifications": [
+    {
+      "id": "cert.csm",
+      "text": "Certified Scrum Master (CSM) — 2011–Present",
+      "name": "Certified Scrum Master (CSM)",
+      "start": "2011",
+      "end": "ongoing",
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed", "note": "Ongoing status is as stated in the source; confirm the certification is current." }
+    }
+  ],
+  "publications": [],
+  "talks": [],
+  "community": [
+    {
+      "id": "community.mff",
+      "organization": "Midwest FurFest",
+      "title": "Operations Volunteer",
+      "location": "Chicago, IL",
+      "description": "Staff role at a registered 501(c)(3) running a 15,000-attendee annual conference. Volunteer coordination, on-site operations, and logistics at scale under a hard, immovable deadline.",
+      "provenance": { "source": "arcades-lab-resume", "review": "unreviewed" }
+    }
+  ]
+}

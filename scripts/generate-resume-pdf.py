@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render the two-page hiring edition from canonical lib/resume.ts content.
+"""Render the two-page hiring edition from lib/resume.ts (content/resume/career.json).
 
 The complete employment claim arrays stay available to private truth review.
 The website and PDF use the same selected bullets; this renderer only owns layout.
@@ -30,11 +30,13 @@ def load_resume() -> dict:
 import {
   RESUME_BUILDS, RESUME_COMMUNITY, RESUME_EARLIER, RESUME_EDUCATION,
   RESUME_HIRING_EXPERIENCE, RESUME_HIRING_SKILLS, RESUME_PROFILE, RESUME_SUMMARY,
-} from './lib/resume.ts';
+} from './lib/resume';
 console.log(JSON.stringify({ RESUME_BUILDS, RESUME_COMMUNITY, RESUME_EARLIER, RESUME_EDUCATION, RESUME_HIRING_EXPERIENCE, RESUME_HIRING_SKILLS, RESUME_PROFILE, RESUME_SUMMARY }));
 """
     result = subprocess.run(
-        ["node", "--import", "tsx", "--input-type=module", "--eval", program],
+        # The tsx CLI resolves lib/resume.ts and its JSON career record; Node's
+        # ESM loader cannot see the named exports of a transpiled module.
+        [str(ROOT / "node_modules" / ".bin" / "tsx"), "--eval", program],
         cwd=ROOT,
         text=True,
         capture_output=True,

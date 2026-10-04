@@ -1,0 +1,238 @@
+{
+  "profileId": "ai-builder",
+  "profileLabel": "AI Builder",
+  "profileStatus": "approved",
+  "schemaVersion": 1,
+  "sourceRevision": "example",
+  "digest": "920a2e4dd350023acd92553b26bdd3216c30cf157788e194900eea6d5a1f39ca",
+  "identity": {
+    "name": "Austen Tucker-Crowder",
+    "location": "Chicago, IL",
+    "email": "austen@thearcades.me",
+    "site": "work.thearcades.me",
+    "siteUrl": "https://work.thearcades.me",
+    "github": "github.com/Arcadesys",
+    "githubUrl": "https://github.com/Arcadesys"
+  },
+  "headline": "Hands-On AI Builder | Product & Program Leadership",
+  "summary": "I build useful AI systems, backed by 16+ years delivering customer-focused software through program ownership, agile coaching, and hands-on building. AI lets me take more of the work directly from prototype to working system. I bring product judgment, measurable goals, evaluation, and handoff discipline to the things I build.",
+  "sections": [
+    {
+      "kind": "experience",
+      "roles": [
+        {
+          "id": "role.activecampaign",
+          "employer": "ActiveCampaign",
+          "location": "Chicago, IL",
+          "title": "Senior Program Owner | AI Enablement & Transformation",
+          "start": "2025-06",
+          "end": "2026-09",
+          "dates": "06/2025–09/2026",
+          "items": [
+            {
+              "id": "ach.ac.adoption",
+              "text": "Helped raise agentic-coding adoption from roughly 2% to 43% of merge requests; adoption was still climbing at departure"
+            },
+            {
+              "id": "ach.ac.devin",
+              "text": "Led Devin adoption with goals and KPIs, using a game to communicate the operating model"
+            },
+            {
+              "id": "ach.ac.roadshow",
+              "text": "Led a March 2026 roadshow for product managers across three continents, introducing Cursor and agentic AI; attendees began producing prototypes afterward"
+            },
+            {
+              "id": "ach.ac.wavelength",
+              "text": "Built Wavelength, an MCP-enabled operating artifact containing tasks, RAID-log items, and program state"
+            },
+            {
+              "id": "ach.ac.cross-pillar",
+              "text": "Coordinated cross-pillar AI transformation work, including outcomes and north-star metrics that supported ePMO governance and executive review"
+            },
+            {
+              "id": "ach.ac.skills-evals",
+              "text": "Built Claude skills and Langfuse evaluation prompts that supported daily operations and assessment of AI-agent response quality"
+            }
+          ]
+        },
+        {
+          "id": "role.allstate",
+          "employer": "Allstate",
+          "location": "Chicago, IL",
+          "title": "Senior Program Manager",
+          "start": "2023-08",
+          "end": "2025-02",
+          "dates": "08/2023 – 02/2025",
+          "items": [
+            {
+              "id": "ach.allstate.initiatives",
+              "text": "Led cross-functional teams to deliver key initiatives across the Allstate Family of Companies"
+            },
+            {
+              "id": "ach.allstate.curriculum",
+              "text": "Championed agile practices and AI adoption by co-designing an AI training curriculum for the product department"
+            }
+          ]
+        },
+        {
+          "id": "role.arity",
+          "employer": "Arity",
+          "location": "Chicago, IL",
+          "title": "Senior Scrum Master & Agile Coach",
+          "start": "2020-06",
+          "end": "2023-08",
+          "dates": "06/2020 – 08/2023",
+          "items": [
+            {
+              "id": "ach.arity.planning",
+              "text": "Slashed planning time by 50% for quarterly planning for 50+ engineers"
+            },
+            {
+              "id": "ach.arity.mentoring",
+              "text": "Mentored Scrum Masters, enabling three promotions and strengthening agile alignment within the org"
+            }
+          ]
+        },
+        {
+          "id": "role.worktango",
+          "employer": "WorkTango",
+          "location": "Chicago, IL",
+          "title": "Senior Scrum Master & Head of Agile PMO",
+          "start": "2019-01",
+          "end": "2020-06",
+          "dates": "01/2019 – 06/2020",
+          "items": [
+            {
+              "id": "ach.worktango.throughput",
+              "text": "Spearheaded agile transformation during a merger, boosting feature delivery throughput by 400%"
+            },
+            {
+              "id": "ach.worktango.mentorship",
+              "text": "Built a mentorship program within the technology organization to nurture future leaders"
+            }
+          ]
+        },
+        {
+          "id": "role.guaranteed-rate",
+          "employer": "Guaranteed Rate",
+          "location": "Chicago, IL",
+          "title": "Scrum Master & Project Lead",
+          "start": "2015-11",
+          "end": "2018-12",
+          "dates": "11/2015 – 12/2018",
+          "items": [
+            {
+              "id": "ach.gr.mvp",
+              "text": "Rescoped a delayed initiative to deliver an MVP in two months, cutting production time by 75%"
+            },
+            {
+              "id": "ach.gr.loan-tool",
+              "text": "Acted as product owner for a data-mining tool associated with $1.5B in locked loan volume"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "earlier",
+      "roles": [
+        {
+          "id": "role.cha",
+          "employer": "Chicago Housing Authority",
+          "title": "Business Analyst & Scrum Master",
+          "start": "2012",
+          "end": "2015",
+          "dates": "2012–2015",
+          "items": []
+        },
+        {
+          "id": "role.tpg",
+          "employer": "Technology Partnership Group",
+          "title": "Business Analyst",
+          "start": "2009",
+          "end": "2012",
+          "dates": "2009–2012",
+          "items": []
+        }
+      ]
+    },
+    {
+      "kind": "projects",
+      "items": [
+        {
+          "id": "project.bunch",
+          "name": "Bunch",
+          "description": "Built a continuity tool with web and MCP interfaces sharing typed contracts and transactional rules. Added owner-scoped records, version checks, retry safety, audit events, and AI spend controls. Source and a fictional-data demo are publicly inspectable.",
+          "proofHref": "/engineering",
+          "proofLabel": "Read the technical tour"
+        },
+        {
+          "id": "project.job-search-cockpit",
+          "name": "Job-search cockpit",
+          "description": "Built a private workspace that assembles application drafts from exact, reviewed claims. Added verified-posting requirements, version history, bounded AI spend, and submission receipts; the MCP API has no employer-submit endpoint.",
+          "proofHref": "/work/job-search-cockpit",
+          "proofLabel": "Read the case study"
+        }
+      ]
+    },
+    {
+      "kind": "skills",
+      "groups": [
+        {
+          "id": "skills.ai",
+          "label": "AI & Automation",
+          "skills": "Claude Code, Cursor.ai, Langfuse, Glean, Agentic Development, LLM Evaluation, MCP Development, Claude Skills Development"
+        },
+        {
+          "id": "skills.development",
+          "label": "Development",
+          "skills": "Next.js, React, Node.js, Python, Express, Bootstrap, Postgres, Amazon Lambdas"
+        },
+        {
+          "id": "skills.facilitation",
+          "label": "Facilitation & PM",
+          "skills": "Jira, Digital.ai, Confluence, Airtable, Trello, Mural, Remote/Hybrid Facilitation, Offshore Coordination"
+        },
+        {
+          "id": "skills.communication",
+          "label": "Communication",
+          "skills": "Video, Audio, and Graphic Production, Training Production, Professional Writing, Accessibility-First Design"
+        }
+      ]
+    },
+    {
+      "kind": "education",
+      "items": [
+        {
+          "id": "edu.wabash",
+          "text": "Wabash College — B.A. in English, Rhetoric, and Teacher Education, 2007"
+        },
+        {
+          "id": "cert.csm",
+          "text": "Certified Scrum Master (CSM) — 2011–Present"
+        }
+      ]
+    },
+    {
+      "kind": "community",
+      "items": [
+        {
+          "id": "community.mff",
+          "organization": "Midwest FurFest",
+          "title": "Operations Volunteer",
+          "location": "Chicago, IL",
+          "description": "Staff role at a registered 501(c)(3) running a 15,000-attendee annual conference. Volunteer coordination, on-site operations, and logistics at scale under a hard, immovable deadline."
+        }
+      ]
+    }
+  ],
+  "warnings": [
+    {
+      "level": "warning",
+      "code": "flagged-for-review",
+      "path": "profile.sections.0.roles.0",
+      "message": "role.activecampaign is flagged for review: The title combines a role name with a scope label. The formal employment title is not confirmed; do not guess it."
+    }
+  ],
+  "errors": []
+}
