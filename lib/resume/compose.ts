@@ -18,16 +18,30 @@ export type ResolvedRole = {
   start: string; end: string; dates: string; items: ResolvedItem[];
 };
 export type ResolvedListing = { id: string; title: string; venue?: string; date?: string; url?: string };
+type Section<K extends string, Body> = { kind: K; title: string } & Body;
 export type ResolvedSection =
-  | { kind: 'experience'; roles: ResolvedRole[] }
-  | { kind: 'earlier'; roles: ResolvedRole[] }
-  | { kind: 'highlights'; items: Array<ResolvedItem & { achievementId: string }> }
-  | { kind: 'projects'; items: Array<{ id: string; name: string; description: string; proofHref: string; proofLabel: string }> }
-  | { kind: 'skills'; groups: Array<{ id: string; label: string; skills: string }> }
-  | { kind: 'education'; items: ResolvedItem[] }
-  | { kind: 'publications'; items: ResolvedListing[] }
-  | { kind: 'talks'; items: ResolvedListing[] }
-  | { kind: 'community'; items: Array<{ id: string; organization: string; title: string; location?: string; description: string }> };
+  | Section<'experience', { roles: ResolvedRole[] }>
+  | Section<'earlier', { roles: ResolvedRole[] }>
+  | Section<'highlights', { items: Array<ResolvedItem & { achievementId: string }> }>
+  | Section<'projects', { items: Array<{ id: string; name: string; description: string; proofHref: string; proofLabel: string }> }>
+  | Section<'skills', { groups: Array<{ id: string; label: string; skills: string }> }>
+  | Section<'education', { items: ResolvedItem[] }>
+  | Section<'publications', { items: ResolvedListing[] }>
+  | Section<'talks', { items: ResolvedListing[] }>
+  | Section<'community', { items: Array<{ id: string; organization: string; title: string; location?: string; description: string }> }>;
+
+/** Headings used when a profile does not override them. */
+export const DEFAULT_SECTION_TITLES: Record<ResolvedSection['kind'], string> = {
+  experience: 'Experience',
+  earlier: 'Earlier Experience',
+  highlights: 'Highlights',
+  projects: 'Selected Projects',
+  skills: 'Skills',
+  education: 'Education & Certifications',
+  publications: 'Publications',
+  talks: 'Talks & Training',
+  community: 'Community & Volunteer Work',
+};
 
 export type ResolvedResume = {
   profileId: ProfileId;
@@ -192,6 +206,7 @@ export function composeResume(career: Career, profile: Profile, options: { sourc
   const kinds = new Set<string>();
   for (const [index, section] of profile.sections.entries()) {
     const path = `profile.sections.${index}`;
+    const title = section.title ?? DEFAULT_SECTION_TITLES[section.kind];
     if (kinds.has(section.kind)) errors.push(error('duplicate-section', path, `Section ${section.kind} appears twice`));
     kinds.add(section.kind);
 
@@ -218,12 +233,12 @@ export function composeResume(career: Career, profile: Profile, options: { sourc
       }
       // Employment is always reverse chronological, whatever order the profile lists.
       resolved.sort(([a], [b]) => compareRolesNewestFirst(a, b));
-      sections.push({ kind: 'experience', roles: resolved.map(([role, items]) => resolveRole(role, items)) });
+      sections.push({ kind: 'experience', title, roles: resolved.map(([role, items]) => resolveRole(role, items)) });
     } else if (section.kind === 'highlights') {
       const items = section.items
         .map((ref, itemIndex) => resolveAchievement(ref, `${path}.items.${itemIndex}`))
         .filter((item): item is ResolvedItem & { achievementId: string } => Boolean(item));
-      sections.push({ kind: 'highlights', items });
+      sections.push({ kind: 'highlights', title, items });
     } else {
       const seenIds = new Set<string>();
       const picked: Array<{ id: string }> = [];
@@ -238,17 +253,17 @@ export function composeResume(career: Career, profile: Profile, options: { sourc
       }
       if (section.kind === 'earlier') {
         const earlier = (picked as CareerRole[]).slice().sort(compareRolesNewestFirst).map((role) => resolveRole(role, []));
-        sections.push({ kind: 'earlier', roles: earlier });
+        sections.push({ kind: 'earlier', title, roles: earlier });
       } else if (section.kind === 'projects') {
-        sections.push({ kind: 'projects', items: (picked as Career['projects']).map(({ id, name, description, proofHref, proofLabel }) => ({ id, name, description, proofHref, proofLabel })) });
+        sections.push({ kind: 'projects', title, items: (picked as Career['projects']).map(({ id, name, description, proofHref, proofLabel }) => ({ id, name, description, proofHref, proofLabel })) });
       } else if (section.kind === 'skills') {
-        sections.push({ kind: 'skills', groups: (picked as Career['skills']).map(({ id, label, skills }) => ({ id, label, skills })) });
+        sections.push({ kind: 'skills', title, groups: (picked as Career['skills']).map(({ id, label, skills }) => ({ id, label, skills })) });
       } else if (section.kind === 'education') {
-        sections.push({ kind: 'education', items: (picked as Array<{ id: string; text: string }>).map(({ id, text }) => ({ id, text })) });
+        sections.push({ kind: 'education', title, items: (picked as Array<{ id: string; text: string }>).map(({ id, text }) => ({ id, text })) });
       } else if (section.kind === 'community') {
-        sections.push({ kind: 'community', items: (picked as Career['community']).map(({ id, organization, title, location, description }) => ({ id, organization, title, ...(location ? { location } : {}), description })) });
+        sections.push({ kind: 'community', title, items: (picked as Career['community']).map(({ id, organization, title, location, description }) => ({ id, organization, title, ...(location ? { location } : {}), description })) });
       } else {
-        sections.push({ kind: section.kind, items: (picked as Career['publications']).map(({ id, title, venue, date, url }) => ({ id, title, ...(venue ? { venue } : {}), ...(date ? { date } : {}), ...(url ? { url } : {}) })) });
+        sections.push({ kind: section.kind, title, items: (picked as Career['publications']).map(({ id, title, venue, date, url }) => ({ id, title, ...(venue ? { venue } : {}), ...(date ? { date } : {}), ...(url ? { url } : {}) })) });
       }
     }
   }

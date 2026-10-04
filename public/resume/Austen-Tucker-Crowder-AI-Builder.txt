@@ -1,0 +1,65 @@
+Austen Tucker-Crowder
+Hands-On AI Builder | Product & Program Leadership
+Chicago, IL | austen@thearcades.me
+https://work.thearcades.me | https://github.com/Arcadesys
+
+Summary
+I build useful AI systems, backed by 16+ years delivering customer-focused software through program ownership, agile coaching, and hands-on building. AI lets me take more of the work directly from prototype to working system. I bring product judgment, measurable goals, evaluation, and handoff discipline to the things I build.
+
+Experience
+ActiveCampaign — Senior Program Owner | AI Enablement & Transformation
+Chicago, IL | 06/2025–09/2026
+- Helped raise agentic-coding adoption from roughly 2% to 43% of merge requests; adoption was still climbing at departure
+- Led Devin adoption with goals and KPIs, using a game to communicate the operating model
+- Led a March 2026 roadshow for product managers across three continents, introducing Cursor and agentic AI; attendees began producing prototypes afterward
+- Built Wavelength, an MCP-enabled operating artifact containing tasks, RAID-log items, and program state
+- Coordinated cross-pillar AI transformation work, including outcomes and north-star metrics that supported ePMO governance and executive review
+- Built Claude skills and Langfuse evaluation prompts that supported daily operations and assessment of AI-agent response quality
+
+Allstate — Senior Program Manager
+Chicago, IL | 08/2023 – 02/2025
+- Led cross-functional teams to deliver key initiatives across the Allstate Family of Companies
+- Championed agile practices and AI adoption by co-designing an AI training curriculum for the product department
+
+Arity — Senior Scrum Master & Agile Coach
+Chicago, IL | 06/2020 – 08/2023
+- Slashed planning time by 50% for quarterly planning for 50+ engineers
+- Mentored Scrum Masters, enabling three promotions and strengthening agile alignment within the org
+
+WorkTango — Senior Scrum Master & Head of Agile PMO
+Chicago, IL | 01/2019 – 06/2020
+- Spearheaded agile transformation during a merger, boosting feature delivery throughput by 400%
+- Built a mentorship program within the technology organization to nurture future leaders
+
+Guaranteed Rate — Scrum Master & Project Lead
+Chicago, IL | 11/2015 – 12/2018
+- Rescoped a delayed initiative to deliver an MVP in two months, cutting production time by 75%
+- Acted as product owner for a data-mining tool associated with $1.5B in locked loan volume
+
+Earlier Experience
+Chicago Housing Authority — Business Analyst & Scrum Master (2012–2015)
+Technology Partnership Group — Business Analyst (2009–2012)
+
+Selected AI Builds
+Bunch
+Built a continuity tool with web and MCP interfaces sharing typed contracts and transactional rules. Added owner-scoped records, version checks, retry safety, audit events, and AI spend controls. Source and a fictional-data demo are publicly inspectable.
+Read the technical tour: https://work.thearcades.me/engineering
+
+Job-search cockpit
+Built a private workspace that assembles application drafts from exact, reviewed claims. Added verified-posting requirements, version history, bounded AI spend, and submission receipts; the MCP API has no employer-submit endpoint.
+Read the case study: https://work.thearcades.me/work/job-search-cockpit
+
+Tools & Skills
+AI & Automation: Claude Code, Cursor.ai, Langfuse, Glean, Agentic Development, LLM Evaluation, MCP Development, Claude Skills Development
+Development: Next.js, React, Node.js, Python, Express, Bootstrap, Postgres, Amazon Lambdas
+Facilitation & PM: Jira, Digital.ai, Confluence, Airtable, Trello, Mural, Remote/Hybrid Facilitation, Offshore Coordination
+Communication: Video, Audio, and Graphic Production, Training Production, Professional Writing, Accessibility-First Design
+
+Education & Certifications
+Wabash College — B.A. in English, Rhetoric, and Teacher Education, 2007
+Certified Scrum Master (CSM) — 2011–Present
+
+Community & Volunteer Work
+Midwest FurFest — Operations Volunteer
+Chicago, IL
+Staff role at a registered 501(c)(3) running a 15,000-attendee annual conference. Volunteer coordination, on-site operations, and logistics at scale under a hard, immovable deadline.

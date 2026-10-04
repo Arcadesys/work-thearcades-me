@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "renderer": "reportlab 5.0.1",
+  "editions": [
+    {
+      "profileId": "ai-builder",
+      "label": "AI Builder",
+      "contentDigest": "813a087032ed6ad98938816826b84ceef2b60627ec555ad06eeb60ba284fa5f4",
+      "pdf": {
+        "path": "public/resume/Austen-Tucker-Crowder-AI-Builder.pdf",
+        "sha256": "974fa8ee8b44f624dbc939e2214297c02dfabe15a5ea0ae2c9f2b2221dbb3fdb",
+        "pages": 2,
+        "pageBudget": 2
+      },
+      "text": {
+        "path": "public/resume/Austen-Tucker-Crowder-AI-Builder.txt",
+        "sha256": "d92373be1525a7bf238f5de6e2583160fe57fc9c1c4919a98f68b1a3a8bce1aa"
+      }
+    }
+  ],
+  "compatibility": {
+    "path": "public/resume.pdf",
+    "profileId": "ai-builder"
+  }
+}

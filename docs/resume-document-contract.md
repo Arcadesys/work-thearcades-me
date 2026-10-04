@@ -16,6 +16,9 @@ web pages, PDFs, plain text, the CLI and a future MCP adapter all consume.
 | `lib/resume.ts` | Compatibility adapter that keeps the old exports for current consumers |
 | `scripts/resume-compile.ts` | `npm run resume:compile -- <profile> [--revision <sha>]` prints the resolved JSON |
 | `docs/resume-document-example.json` | Example output, kept current by a test |
+| `lib/resume/artifacts.ts` | Export names, page budgets, plain-text renderer, freshness check |
+| `scripts/generate-resume-pdf.py` | ReportLab layout of one resolved document (layout only) |
+| `scripts/resume-build.ts`, `scripts/resume-check.ts` | `npm run resume:build` and `npm run resume:check` |
 
 ## Rules the record enforces
 
@@ -119,8 +122,60 @@ owner review during #49: the ActiveCampaign title, and whether the CSM
 certification is still current. Every other record is marked `unreviewed`, as
 before. Migration does not verify claims.
 
+## Exports (#51)
+
+`npm run resume:build [-- <profile>...]` composes each edition, renders its PDF
+with ReportLab, writes UTF-8 plain text, and verifies everything in a staging
+directory before anything is published.
+
+| Edition status | Output |
+| --- | --- |
+| `approved` | `public/resume/Austen-Tucker-Crowder-<Edition>.pdf` and `.txt`, listed in `public/resume/manifest.json` |
+| `approved` AI Builder | also copied byte-for-byte to `public/resume.pdf`, the long-standing default download |
+| `draft` | `.resume-drafts/` (git-ignored) for review; any previously published files for it are removed |
+
+- **Page budgets:** AI Builder, Technical Program Owner and Program Owner must
+  fit 2 pages; the CV is uncapped. Over budget is a build error for approved
+  editions and a warning for drafts. Fonts are never shrunk and text is never
+  dropped; fix it by editing the profile's selections.
+- **Verification during the build:** page count via pdf-lib, and `pdftotext`
+  extraction must contain every fact of the resolved document (footer lines
+  removed, whitespace normalized).
+- **Atomic:** any failure exits non-zero and changes nothing. Files are written
+  via a temporary sibling and renamed.
+- **Deterministic:** ReportLab runs with `invariant=1`; the same inputs rebuild
+  byte-identical PDFs (checked 2026-10-04).
+- **Layout:** single column, real selectable text, embedded Atkinson
+  Hyperlegible (Unicode punctuation kept as written), links limited to
+  `https:` and `mailto:`, empty sections omitted, no forced page breaks,
+  footer `name | site` and `n / total`.
+
+### Manifest and source revision
+
+The manifest records, per published edition, the profile ID, label, content
+digest, PDF path, sha256, page count and budget, and text path and sha256. It
+also records the schema version and the renderer version. It deliberately has
+no git SHA and no timestamp. A SHA of the commit that contains the artifacts
+would be self-referential, and a timestamp would break determinism. The
+relationship is this: **the commit that contains the manifest contains the
+source it was built from.** `npm run resume:check` proves that by recomputing
+each digest and text file from the committed source and comparing hashes.
+
+`npm run resume:check` needs no Python. It runs in CI (with
+`--require-pdf-text`) and as a test, and fails on stale or tampered artifacts,
+a stale `/resume.pdf`, budget overruns, missing PDF text, or any unpublished
+file in `public/resume/`.
+
+**Clean checkout:** `npm ci && pip install -r requirements-resume.txt`, install
+poppler (`pdftotext`), then `npm run resume:build`. Public downloads are static
+files, so no Python or inference runs on a request. Vercel needs neither.
+
+Limitations: no claim of universal ATS compatibility or accessibility
+certification; the PDF is untagged ReportLab output with a simple reading order.
+
 ## Rollback
 
 Revert the #48 commit. `lib/resume.ts` returns to its literal constants. No
 route, PDF, URL or stored data changes, and the truth-review seeds are identical
-either way.
+either way. Reverting #51 restores the previous `public/resume.pdf` layout and
+removes `public/resume/`; nothing links to those files until #50.
