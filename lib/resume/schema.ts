@@ -9,7 +9,7 @@ import { z } from 'zod';
 
 export const SCHEMA_VERSION = 1;
 
-export const PROFILE_IDS = ['ai-builder', 'technical-program-owner', 'program-owner', 'full-cv'] as const;
+export const PROFILE_IDS = ['ai-builder', 'technical-program-owner', 'program-owner', 'cv'] as const;
 export type ProfileId = (typeof PROFILE_IDS)[number];
 
 const id = z.string().regex(/^[a-z][a-z0-9-]*(\.[a-z0-9-]+)+$/, 'IDs are dotted lowercase, e.g. role.arity');

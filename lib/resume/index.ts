@@ -5,7 +5,7 @@
  */
 import careerJson from '../../content/resume/career.json';
 import aiBuilder from '../../content/resume/profiles/ai-builder.json';
-import fullCv from '../../content/resume/profiles/full-cv.json';
+import cv from '../../content/resume/profiles/cv.json';
 import programOwner from '../../content/resume/profiles/program-owner.json';
 import technicalProgramOwner from '../../content/resume/profiles/technical-program-owner.json';
 
@@ -34,7 +34,7 @@ export const PROFILES: Record<ProfileId, Profile> = {
   'ai-builder': loadProfile(aiBuilder, 'ai-builder'),
   'technical-program-owner': loadProfile(technicalProgramOwner, 'technical-program-owner'),
   'program-owner': loadProfile(programOwner, 'program-owner'),
-  'full-cv': loadProfile(fullCv, 'full-cv'),
+  cv: loadProfile(cv, 'cv'),
 };
 
 export const DEFAULT_PROFILE_ID: ProfileId = 'ai-builder';

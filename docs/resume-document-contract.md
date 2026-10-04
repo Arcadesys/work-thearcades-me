@@ -9,7 +9,7 @@ web pages, PDFs, plain text, the CLI and a future MCP adapter all consume.
 | File | Owns |
 | --- | --- |
 | `content/resume/career.json` | Public career facts: identity, headlines, summaries, roles, achievements, projects, skills, education, certifications, publications, talks, community |
-| `content/resume/profiles/<id>.json` | Editorial selections for `ai-builder`, `technical-program-owner`, `program-owner`, `full-cv` |
+| `content/resume/profiles/<id>.json` | Editorial selections for `ai-builder`, `technical-program-owner`, `program-owner`, `cv` |
 | `lib/resume/schema.ts` | Strict zod schemas (unknown keys fail) |
 | `lib/resume/compose.ts` | Validation and the pure composer |
 | `lib/resume/index.ts` | Loads and validates content at import; `resolveResume(profileId)` |
@@ -49,7 +49,7 @@ Validation is structural. Passing it does not mean a claim is verified or curren
 
 ```ts
 type ResolvedResume = {
-  profileId: 'ai-builder' | 'technical-program-owner' | 'program-owner' | 'full-cv';
+  profileId: 'ai-builder' | 'technical-program-owner' | 'program-owner' | 'cv';
   profileLabel: string;
   profileStatus: 'draft' | 'approved';   // only approved editions are published
   schemaVersion: 1;

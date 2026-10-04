@@ -2,7 +2,7 @@
  * Print one resolved résumé edition as JSON (#48).
  *
  *   npm run resume:compile -- ai-builder
- *   npm run resume:compile -- full-cv --revision "$(git rev-parse HEAD)"
+ *   npm run resume:compile -- cv --revision "$(git rev-parse HEAD)"
  */
 import { PROFILE_IDS, resolveResume, type ProfileId } from '../lib/resume/index';
 

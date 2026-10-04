@@ -28,7 +28,7 @@ const section = <K extends ResolvedResume['sections'][number]['kind']>(doc: Reso
   doc.sections.find((item) => item.kind === kind) as Extract<ResolvedResume['sections'][number], { kind: K }>;
 
 test('all four profiles resolve without errors, and only AI Builder is approved', () => {
-  assert.deepEqual([...PROFILE_IDS], ['ai-builder', 'technical-program-owner', 'program-owner', 'full-cv']);
+  assert.deepEqual([...PROFILE_IDS], ['ai-builder', 'technical-program-owner', 'program-owner', 'cv']);
   for (const id of PROFILE_IDS) {
     const doc = resolveResume(id, { sourceRevision: 'test' });
     assert.equal(doc.profileId, id);
@@ -43,7 +43,7 @@ test('all four profiles resolve without errors, and only AI Builder is approved'
 
 test('composition is pure and deterministic', () => {
   const career = deepFreeze(structuredClone(CAREER));
-  const profile = deepFreeze(structuredClone(PROFILES['full-cv']));
+  const profile = deepFreeze(structuredClone(PROFILES['cv']));
   const first = composeResume(career, profile, { sourceRevision: 'abc' });
   const second = composeResume(career, profile, { sourceRevision: 'abc' });
   assert.deepEqual(first, second);
@@ -56,7 +56,7 @@ test('one shared factual edit propagates to every edition that selects it', () =
   const career = structuredClone(CAREER) as Career;
   const edited = career.achievements.find((item) => item.id === 'ach.gr.mvp')!;
   edited.text = 'Rescoped a delayed initiative to deliver an MVP in two months';
-  for (const id of ['ai-builder', 'program-owner', 'full-cv'] as const) {
+  for (const id of ['ai-builder', 'program-owner', 'cv'] as const) {
     const before = resolveResume(id);
     const after = composeResume(career, PROFILES[id]);
     assert.notEqual(after.digest, before.digest, id);
@@ -71,7 +71,7 @@ test('employment stays reverse chronological whatever order a profile lists', ()
   if (experience.kind === 'experience') experience.roles.reverse();
   const doc = composeResume(CAREER, profile);
   assert.deepEqual(section(doc, 'experience').roles.map((role) => role.employer), ['ActiveCampaign', 'Allstate', 'Arity', 'WorkTango', 'Guaranteed Rate']);
-  assert.deepEqual(section(resolveResume('full-cv'), 'experience').roles.slice(-2).map((role) => role.dates), ['2012–2015', '2009–2012']);
+  assert.deepEqual(section(resolveResume('cv'), 'experience').roles.slice(-2).map((role) => role.dates), ['2012–2015', '2009–2012']);
 });
 
 test('partial and overlapping dates follow the published ordering rule', () => {
@@ -187,7 +187,7 @@ test('exact duplicate text is suppressed, while highlight/detail pairs remain', 
 });
 
 test('no content is truncated: the full CV carries every achievement and skill group', () => {
-  const doc = resolveResume('full-cv');
+  const doc = resolveResume('cv');
   const items = section(doc, 'experience').roles.flatMap((role) => role.items.map((item) => item.id));
   assert.deepEqual(items.slice().sort(), CAREER.achievements.map((item) => item.id).sort());
   assert.equal(section(doc, 'skills').groups.length, CAREER.skills.length);
