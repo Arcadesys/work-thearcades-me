@@ -83,6 +83,17 @@ test('blog list thumbnails for posts without a hero use the generated card route
   for (const src of cardThumbs) assert.match(src, /^\/blog\/[a-z0-9-]+\/opengraph-image\/card$/, src);
 });
 
+test('links recommending a copy lead to its thearcades.me original (#290)', () => {
+  const original = 'https://www.thearcades.me/projects/bunch/bunch';
+  for (const route of ['/blog', '/work/bunch']) {
+    const source = html(route);
+    assert(source.includes(`href="${original}"`), `${route} should link the Bunch original`);
+    assert(!/href="\/blog\/bunch"/.test(source), `${route} still links the work copy`);
+  }
+  // Distinct pieces keep their own work links.
+  assert(html('/work/bunch').includes('href="/blog/bunch-part-two"'));
+});
+
 test('noindex utility pages emit no canonical at all', () => {
   for (const route of ['/newsletter/verify', '/newsletter/unsubscribe']) {
     const source = html(route);

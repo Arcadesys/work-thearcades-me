@@ -27,6 +27,15 @@ const originalBySlug = new Map(
     .map(([slug, source]) => [slug, validateOriginalEditionUrl(slug, source.url)]),
 );
 
+/**
+ * Where links recommending a post should lead: the thearcades.me original for
+ * copies (shared AGENTS.md policy), otherwise the work post. Use this for every
+ * post link; keep local paths only for assets such as thumbnails.
+ */
+export function postHref(slug: string): string {
+  return originalEditionUrl(slug) ?? `/blog/${slug}`;
+}
+
 /** The thearcades.me original a work copy points to, or undefined for work-only posts. */
 export function originalEditionUrl(slug: string): string | undefined {
   return originalBySlug.get(slug);

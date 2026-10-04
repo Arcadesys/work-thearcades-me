@@ -6,6 +6,7 @@ import { pictureGuide } from '@/lib/guides';
 import { blogIndexMetadata, breadcrumbJsonLd } from '@/lib/site-metadata';
 import { JsonLd } from '@/lib/json-ld';
 import Link from 'next/link';
+import { postHref } from '@/lib/original-edition';
 export const metadata = blogIndexMetadata;
 export default function BlogPage() {
   const posts = publicPosts();
@@ -22,7 +23,7 @@ export default function BlogPage() {
       <h2 id="blog-start-heading">Start with one of these.</h2>
       <p>Pick a story about what I build, why I build it, or something you can try.</p>
       <ul>
-        <li><Link href="/blog/bunch">Bunch: building for continuity</Link><span>A personal build log about accessibility and context.</span></li>
+        <li><Link href={postHref('bunch')}>Bunch: building for continuity</Link><span>A personal build log about accessibility and context.</span></li>
         <li><Link href="/blog/ai-accessibility-revolution">AI as an accessibility tool</Link><span>What these tools can give back when the world was not built for you.</span></li>
         <li><Link href="/blog/wizwor">WizWor: try a small AI demo</Link><span>An arcade wizard that recommends a game.</span></li>
       </ul>
