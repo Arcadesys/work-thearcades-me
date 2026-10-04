@@ -11,9 +11,17 @@ export function absoluteUrl(path: string): string {
   return new URL(path, SITE_URL).toString();
 }
 
-/** Absolute URL of a route's co-located raster social card (its opengraph-image.tsx). */
+/** The single image id that per-post and per-study cards publish under. */
+export const SOCIAL_CARD_ID = 'card';
+
+/** Absolute URL of a dynamic route's raster social card (opengraph-image.tsx + generateImageMetadata). */
 export function socialCardUrl(pagePath: string): string {
-  return absoluteUrl(`${pagePath}/opengraph-image`);
+  return absoluteUrl(`${pagePath}/opengraph-image/${SOCIAL_CARD_ID}`);
+}
+
+/** Card alt text that names the piece, e.g. "Blog post: When in crisis, make tea. — Austen Tucker-Crowder". */
+export function socialCardAlt(kind: string, title: string): string {
+  return `${kind}: ${title} — ${PERSON_NAME}`;
 }
 
 export function personJsonLd() {
