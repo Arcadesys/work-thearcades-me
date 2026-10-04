@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { BlogPost, RelatedReadingItem, displayDate, postTags, tagHref } from '@/lib/blog';
+import { SOCIAL_CARD_ID } from '@/lib/site-metadata';
 import styles from './blog-post-list.module.css';
 
 export function PostTags({ post }: { post: BlogPost }) {
@@ -26,7 +27,8 @@ export function RelatedReading({ items }: { items: RelatedReadingItem[] }) {
 export function BlogPostList({ posts }: { posts: BlogPost[] }) {
   return <ul className="blog-list">{posts.map(post => {
     const href = `/blog/${post.slug}`;
-    const imageSrc = post.hero?.src ?? `${href}/opengraph-image`;
+    // Posts without a hero show their generated share card (see opengraph-image.tsx).
+    const imageSrc = post.hero?.src ?? `${href}/opengraph-image/${SOCIAL_CARD_ID}`;
     const kindLabel = post.kind === 'demo'
       ? `Demo ${String(post.demoNumber ?? '').padStart(3, '0')}`.trim()
       : 'Essay';

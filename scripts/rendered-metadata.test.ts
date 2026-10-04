@@ -76,6 +76,13 @@ test('copies of thearcades.me originals point there and leave the work sitemap',
   assert(sitemap.includes(`${SITE_URL}/blog/when-in-crisis-make-tea<`), 'work-only posts stay in the sitemap');
 });
 
+test('blog list thumbnails for posts without a hero use the generated card route', () => {
+  const source = html('/blog');
+  const cardThumbs = all(source, /<img[^>]*src="(\/blog\/[a-z0-9-]+\/opengraph-image[^"]*)"/g);
+  assert(cardThumbs.length > 0, 'expected at least one generated-card thumbnail');
+  for (const src of cardThumbs) assert.match(src, /^\/blog\/[a-z0-9-]+\/opengraph-image\/card$/, src);
+});
+
 test('noindex utility pages emit no canonical at all', () => {
   for (const route of ['/newsletter/verify', '/newsletter/unsubscribe']) {
     const source = html(route);
