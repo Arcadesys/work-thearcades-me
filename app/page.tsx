@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { publicPosts, displayDate } from '@/lib/blog';
+import { postHref } from '@/lib/original-edition';
 import Link from 'next/link';
 import type { CaseStudy } from '@/lib/content';
 import { SiteHeader } from '@/components/site-header';
@@ -78,7 +79,7 @@ export default function Home() {
         kind: 'Blog post',
         title: latestPost.title,
         body: latestPost.excerpt,
-        href: `/blog/${latestPost.slug}`,
+        href: postHref(latestPost.slug),
       }
     : null;
 
