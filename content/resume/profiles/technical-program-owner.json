@@ -1,0 +1,31 @@
+{
+  "id": "technical-program-owner",
+  "label": "Technical Program Owner",
+  "status": "draft",
+  "headlineId": "headline.ai-builder",
+  "summaryId": "summary.ai-builder",
+  "sections": [
+    {
+      "kind": "highlights",
+      "items": [
+        { "id": "ach.ac.adoption", "variant": "highlight" },
+        { "id": "ach.arity.planning", "variant": "highlight" },
+        { "id": "ach.worktango.throughput", "variant": "highlight" }
+      ]
+    },
+    {
+      "kind": "experience",
+      "roles": [
+        { "roleId": "role.activecampaign", "achievements": ["ach.ac.cross-pillar", "ach.ac.wavelength", "ach.ac.skills-evals", "ach.ac.devin", "ach.ac.enablement"] },
+        { "roleId": "role.allstate", "achievements": ["ach.allstate.initiatives", "ach.allstate.metrics"] },
+        { "roleId": "role.arity", "achievements": ["ach.arity.mentoring"] },
+        { "roleId": "role.worktango", "achievements": ["ach.worktango.velocity"] },
+        { "roleId": "role.guaranteed-rate", "achievements": ["ach.gr.mvp", "ach.gr.measurement"] }
+      ]
+    },
+    { "kind": "earlier", "ids": ["role.cha", "role.tpg"] },
+    { "kind": "projects", "ids": ["project.bunch", "project.job-search-cockpit"] },
+    { "kind": "skills", "ids": ["skills.ai", "skills.development", "skills.facilitation", "skills.analysis"] },
+    { "kind": "education", "ids": ["edu.wabash", "cert.csm"] }
+  ]
+}
