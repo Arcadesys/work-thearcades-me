@@ -22,6 +22,8 @@ The first-party totals are kept in daily Redis hashes named `work-newsletter:v1:
 
 Compare the 14 complete UTC calendar days before the funnel-path release with the 14 complete UTC calendar days after it. Record release time, query/export time, and any site interruption. Use identical PostHog filters and the same inquiry qualification rule in both periods.
 
+Record each period as an explicit half-open interval, `start_utc <= timestamp < end_utc`. Exclude the release's UTC calendar day when it contains both pre- and post-release traffic; the post period starts at the next UTC midnight. Apply the same bounds to every saved PostHog query and sum only the Redis date keys inside that interval. Check tile queries as well as dashboard controls, following [the report date-window contract](./posthog.md#report-date-window-contract). State whether PostHog counts include raw traffic or only `$virt_traffic_type=Regular`; use the same cohort for both periods and each funnel numerator/denominator.
+
 | Metric | Pre (14 days) | Post (14 days) | Source |
 | --- | ---: | ---: | --- |
 | Creative-site handoff arrivals | — | — | Work `$pageview`, referral domain or fixed campaign |
