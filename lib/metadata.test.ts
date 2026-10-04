@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import type { Metadata } from 'next';
 import { homepageMetadata, siteDefaultMetadata, PERSON_ID, SITE_URL, blogPostMetadata, caseStudyMetadata, blogPostJsonLd, caseStudyJsonLd, blogIndexMetadata, blogTagMetadata, guideJsonLd, personJsonLd, websiteJsonLd } from './site-metadata';
-import { loadPosts } from './blog';
-import { caseStudyBySlug, site, workWithMe } from './content';
+import { loadPosts, publicPosts } from './blog';
+import { caseStudies, caseStudyBySlug, site, workWithMe } from './content';
 import { pictureGuide } from './guides';
 import { RESUME_CANONICAL_PATH } from './resume';
 import { serializeJsonLd } from './json-ld';
@@ -130,4 +130,31 @@ test('builder positioning is consistent across search and social surfaces', () =
   assert.equal(homepageMetadata.openGraph?.title, homepageMetadata.title);
   assert.equal(homepageMetadata.twitter?.title, homepageMetadata.title);
   assert.match(String(homepageMetadata.description), /builds useful AI systems/);
+});
+
+// Local stand-in for a hosted validator (validator.schema.org and Google's Rich
+// Results Test are not reachable from CI). Checks the fields Google's Article
+// guidance lists for every public post and case study; it does not claim
+// rich-result eligibility.
+test('every public article carries the documented Article fields with absolute URLs', () => {
+  const schemas = [
+    ...publicPosts().map((post) => ({ id: `blog/${post.slug}`, schema: blogPostJsonLd(post) as Record<string, unknown> })),
+    ...caseStudies.map((study) => ({ id: `work/${study.slug}`, schema: caseStudyJsonLd(study) as Record<string, unknown> })),
+  ];
+  assert.ok(schemas.length > 10);
+  for (const { id, schema } of schemas) {
+    assert.ok(['BlogPosting', 'Article'].includes(String(schema['@type'])), `${id} @type`);
+    assert.ok(typeof schema.headline === 'string' && schema.headline.length > 0 && schema.headline.length <= 110, `${id} headline`);
+    assert.match(String(schema.image), /^https:\/\//, `${id} image`);
+    assert.match(String(schema.url), /^https:\/\//, `${id} url`);
+    assert.equal(schema.mainEntityOfPage, schema.url, `${id} mainEntityOfPage`);
+    const author = schema.author as Record<string, unknown>;
+    assert.equal(author['@type'], 'Person', `${id} author type`);
+    assert.ok(author.name && String(author.url).startsWith('https://'), `${id} author name/url`);
+    if (id.startsWith('blog/')) {
+      assert.ok(!Number.isNaN(Date.parse(String(schema.datePublished))), `${id} datePublished`);
+      assert.ok(!Number.isNaN(Date.parse(String(schema.dateModified))), `${id} dateModified`);
+      assert.ok(Date.parse(String(schema.dateModified)) >= Date.parse(String(schema.datePublished)), `${id} modified before published`);
+    }
+  }
 });
