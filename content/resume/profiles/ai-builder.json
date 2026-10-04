@@ -16,8 +16,8 @@
       ]
     },
     { "kind": "earlier", "ids": ["role.cha", "role.tpg"] },
-    { "kind": "projects", "ids": ["project.bunch", "project.job-search-cockpit"] },
-    { "kind": "skills", "ids": ["skills.ai", "skills.development", "skills.facilitation", "skills.communication"] },
+    { "kind": "projects", "title": "Selected AI Builds", "ids": ["project.bunch", "project.job-search-cockpit"] },
+    { "kind": "skills", "title": "Tools & Skills", "ids": ["skills.ai", "skills.development", "skills.facilitation", "skills.communication"] },
     { "kind": "education", "ids": ["edu.wabash", "cert.csm"] },
     { "kind": "community", "ids": ["community.mff"] }
   ]

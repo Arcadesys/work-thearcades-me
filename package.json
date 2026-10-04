@@ -10,6 +10,8 @@
     "test": "tsx --test lib/*.test.ts lib/resume/*.test.ts",
     "test:rendered": "tsx --test scripts/rendered-metadata.test.ts",
     "resume:compile": "tsx scripts/resume-compile.ts",
+    "resume:build": "tsx scripts/resume-build.ts",
+    "resume:check": "tsx scripts/resume-check.ts",
     "test:browser": "playwright test",
     "test:truths": "playwright test --config=playwright.truths.config.ts",
     "jobs:start": "node --import tsx services/jobdesk/server.ts",

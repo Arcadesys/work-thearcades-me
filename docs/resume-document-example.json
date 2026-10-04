@@ -4,7 +4,7 @@
   "profileStatus": "approved",
   "schemaVersion": 1,
   "sourceRevision": "example",
-  "digest": "920a2e4dd350023acd92553b26bdd3216c30cf157788e194900eea6d5a1f39ca",
+  "digest": "813a087032ed6ad98938816826b84ceef2b60627ec555ad06eeb60ba284fa5f4",
   "identity": {
     "name": "Austen Tucker-Crowder",
     "location": "Chicago, IL",
@@ -19,6 +19,7 @@
   "sections": [
     {
       "kind": "experience",
+      "title": "Experience",
       "roles": [
         {
           "id": "role.activecampaign",
@@ -135,6 +136,7 @@
     },
     {
       "kind": "earlier",
+      "title": "Earlier Experience",
       "roles": [
         {
           "id": "role.cha",
@@ -158,6 +160,7 @@
     },
     {
       "kind": "projects",
+      "title": "Selected AI Builds",
       "items": [
         {
           "id": "project.bunch",
@@ -177,6 +180,7 @@
     },
     {
       "kind": "skills",
+      "title": "Tools & Skills",
       "groups": [
         {
           "id": "skills.ai",
@@ -202,6 +206,7 @@
     },
     {
       "kind": "education",
+      "title": "Education & Certifications",
       "items": [
         {
           "id": "edu.wabash",
@@ -215,6 +220,7 @@
     },
     {
       "kind": "community",
+      "title": "Community & Volunteer Work",
       "items": [
         {
           "id": "community.mff",

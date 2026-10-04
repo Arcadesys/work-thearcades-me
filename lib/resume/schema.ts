@@ -102,7 +102,9 @@ export type CareerAchievement = Career['achievements'][number];
 /** A selected achievement: a bare ID uses the default wording; an object names an approved variant. */
 const achievementRef = z.union([id, z.strictObject({ id, variant: z.string().regex(/^[a-z][a-z-]*$/) })]);
 
-const idList = <K extends string>(kind: K) => z.strictObject({ kind: z.literal(kind), ids: z.array(id) });
+/** An optional heading override; every renderer uses the resolved heading. */
+const title = text.max(60).optional();
+const idList = <K extends string>(kind: K) => z.strictObject({ kind: z.literal(kind), title, ids: z.array(id) });
 
 export const profileSchema = z.strictObject({
   id: z.enum(PROFILE_IDS),
@@ -114,11 +116,12 @@ export const profileSchema = z.strictObject({
   sections: z.array(z.discriminatedUnion('kind', [
     z.strictObject({
       kind: z.literal('experience'),
+      title,
       // A role reference may only select achievements. Titles, dates, and
       // employers are immutable facts of the career record.
       roles: z.array(z.strictObject({ roleId: id, achievements: z.array(achievementRef) })),
     }),
-    z.strictObject({ kind: z.literal('highlights'), items: z.array(achievementRef) }),
+    z.strictObject({ kind: z.literal('highlights'), title, items: z.array(achievementRef) }),
     idList('earlier'),
     idList('projects'),
     idList('skills'),
