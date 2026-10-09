@@ -45,6 +45,39 @@ npm run build
 
 ## Iteration log
 
+### 2026-09-30 — Builder origin story, following #85
+
+- The author's latest direction supersedes the September 25 enablement-led framing: program ownership was a route toward making things; AI now lets them carry more of the work directly from prototype to working system. The approved introduction lands on “I’m hooked.”
+- Lead with hands-on AI building across hero, contact, résumé, search/social metadata, services-role copy, and `llms.txt`. Put Bunch and the cockpit before the ActiveCampaign case while retaining its attributed adoption result and all employment evidence.
+- Keep the distinction between AI expanding building capacity and starting from no coding experience: the Guaranteed Rate JavaScript story remains intact. Do not invent production-scale numbers or tailor to an unconfirmed employer role.
+- Regenerate the two-page résumé from the same factual record. This is a narrative revision, not a rewritten employment history or a production-release request.
+
+### 2026-09-30 — Hiring path and evidence clarity
+
+- Kept the approved “AI enablement leader who builds” lane and made it the visible hero headline. Adoption proof, selected work, the technical tour, and résumé are grouped at the top; collapsed navigation keeps hiring shortcuts available.
+- Promoted Bunch's existing demo and technical tour, clarified public source rights without changing a licence, and added role/context/system summaries across the case studies.
+- Restored the author-confirmed Senior Program Owner title at ActiveCampaign, expanded concrete responsibilities from the author's career account, and preserved the limits on shared outcomes and personal observations.
+- Reworked the public résumé into a two-page PDF with recent experience on page 1 and linked AI builds. Full underlying résumé-claim arrays stay ordered to protect private claim identities.
+- Moved role contact before writing/newsletter material and curated the enablement case study's related reading. Private routes, analytics boundaries, and subscription behavior are unchanged.
+- Rationale, source boundaries, and remaining evidence gaps: [`docs/hiring-portfolio-review.md`](docs/hiring-portfolio-review.md). Exact checks and browser QA limits are recorded in the draft PR; publication remains separate.
+
+### 2026-09-25 — Job-search cockpit case study; blog dates audited
+
+- **Metric and budget:** (1) blog posts show their real original publication dates, with nothing invented; (2) one new case study at `/work/job-search-cockpit`, every claim traceable to code, tests, or docs in this repo; no private data. One PR.
+- **Blog dates — no change, by evidence:** the nine posts sharing `2026-09-12T16:55:26.466Z` were unpublished drafts in `Arcadesys/writing-archive` (`sourceStatus: draft` in `content/blog-sources.json`); `content/README.md` records that they received their first publication date on this site. The shared timestamp is their true publication history, and `AGENTS.md` forbids rewriting it.
+- **Case study:** `lib/content.ts` `cockpit-case`, rendered by the existing `/work/[slug]` page. Evidence items are checked against `lib/job-drafting.ts` (the model returns claim IDs only; drafts are assembled from exact reviewed claim text; verified postings required; monthly budget closes on unmeasured calls), `docs/jobs-mcp-api.md` (hashed 90-day tokens, no submit endpoint, idempotent receipts), `lib/resume-truth.ts` (append-only claim versions), and the jobs tests. It makes no outcome claims. Linked from the homepage (third card), `llms.txt`, and the sitemap (automatic).
+- **Tests:** `lib/metadata.test.ts` now checks the new study's search title, self-canonical, and heading.
+- **Passed:** lint (3 pre-existing warnings, 0 errors), `npm test` 101/101, production build. Local production server at 1440px and 390px: canonical and `og:url` are `https://work.thearcades.me/work/job-search-cockpit`, 0px overflow, homepage order enablement → Bunch → cockpit → Guaranteed Rate, sitemap and `llms.txt` list the page.
+
+### 2026-09-25 — Lane 1 positioning: AI enablement leader who builds
+
+- **Decision (Austen):** lead with "AI enablement leader who builds" instead of "hands-on AI engineer". The strongest proof (2% → 43% agentic-coding adoption, three-continent roadshow, Devin KPIs) is enablement-leader proof; the builds (Bunch, Wavelength, evals, this site) are the differentiator.
+- **Metric and budget:** every headline surface leads with the new lane, no new factual claims, one PR.
+- **Changed:** homepage H1, hero intro, CTAs, contact copy and work-section heading; homepage and OG metadata; résumé title line, summary, description and CTAs; `/work-with-me` role line, role CTA and search title; `llms.txt` heading. `public/resume.pdf` regenerated from `lib/resume.ts`.
+- **Homepage order:** the ActiveCampaign enablement case now leads, then Bunch, then Guaranteed Rate, each as a full-width row (`.case-wide`) so no card sits alone in a half-width column.
+- **Deliberately unchanged:** blog and newsletter copy still say "AI engineering" as a topic — they are build logs, and they prove the "who builds" half. No bracketed official job title was added to the ActiveCampaign role because the formal title is not in the source record.
+- **Passed:** lint (3 pre-existing warnings, 0 errors), `npm test` 101/101, production build. Local production server at 1440px and 390px: new H1/title rendered, three full-width case cards, 0px horizontal overflow; résumé renders the new title line and description.
+
 ### 2026-09-19 — Builder positioning and practical image guide
 
 - Aligned the homepage, default résumé, consulting page, and search metadata around hands-on AI engineering work and focused consulting while retaining leadership accomplishments as evidence.

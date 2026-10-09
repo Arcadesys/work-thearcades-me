@@ -1,7 +1,9 @@
 import type { MetadataRoute } from 'next';
 import { publicPosts } from '@/lib/blog';
+import { originalEditionUrl } from '@/lib/original-edition';
 import { caseStudies, site } from '@/lib/content';
 import { pictureGuide } from '@/lib/guides';
+import { DEFAULT_EDITION, editionPath, publishedEditions } from '@/lib/resume/editions';
 
 const BASE_URL = 'https://work.thearcades.me';
 
@@ -14,12 +16,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/guides`, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE_URL}/engineering`, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE_URL}${site.resumeUrl}`, changeFrequency: 'monthly', priority: 0.5 },
+    // Other approved résumé editions; drafts are never listed (#50).
+    ...publishedEditions().filter((id) => id !== DEFAULT_EDITION).map((id) => ({ url: `${BASE_URL}${editionPath(id)}`, changeFrequency: 'monthly' as const, priority: 0.5 })),
     { url: `${BASE_URL}/work-with-me`, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${BASE_URL}/layoff-triage`, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE_URL}${pictureGuide.path}`, changeFrequency: 'monthly', priority: 0.7 },
   ];
 
-  const postRoutes: MetadataRoute.Sitemap = posts.map((post) => ({
+  // Copies of thearcades.me originals are listed in that site's sitemap, not here.
+  const postRoutes: MetadataRoute.Sitemap = posts.filter((post) => !originalEditionUrl(post.slug)).map((post) => ({
     url: `${BASE_URL}/blog/${post.slug}`,
     lastModified: new Date(post.updatedDate ?? post.publishDate),
     changeFrequency: 'monthly',

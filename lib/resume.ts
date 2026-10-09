@@ -1,4 +1,12 @@
-// Content copied from the live Arcades Lab resume; see README source record.
+// Compatibility adapter (#48). Career facts now live in content/resume/career.json
+// and editorial selections in content/resume/profiles/*.json, validated and
+// resolved by lib/resume/. These exports keep their previous names and exact
+// values (see lib/resume/legacy-parity.fixture.json) until consumers migrate.
+// The complete claim arrays stay stable: the private truth-review workflow
+// seeds positional IDs from them.
+import { CAREER, DEFAULT_PROFILE_ID, resolveResume } from './resume/index';
+import type { ResolvedSection } from './resume/compose';
+
 export interface ResumeProfile {
   name: string;
   titleLine: string;
@@ -35,128 +43,85 @@ export interface ResumeSkillGroup {
   skills: string;
 }
 
-export const RESUME_PROFILE: ResumeProfile = {
-  name: 'Austen Tucker-Crowder',
-  titleLine: 'AI Builder & Product-Minded Engineer',
-  location: 'Chicago, IL',
-  email: 'austen@thearcades.me',
-  site: 'work.thearcades.me',
-  siteUrl: 'https://work.thearcades.me',
-  github: 'github.com/Arcadesys',
-  githubUrl: 'https://github.com/Arcadesys',
+export interface ResumeBuild {
+  name: string;
+  description: string;
+  proofHref: string;
+  proofLabel: string;
+}
+
+const hiring = resolveResume(DEFAULT_PROFILE_ID);
+const section = <K extends ResolvedSection['kind']>(kind: K) => {
+  const found = hiring.sections.find((item) => item.kind === kind);
+  if (!found) throw new Error(`The ${DEFAULT_PROFILE_ID} profile has no ${kind} section`);
+  return found as Extract<ResolvedSection, { kind: K }>;
 };
 
-export const RESUME_SUMMARY =
-  'AI builder, product-minded engineer, program manager, and agile coach with 16+ years delivering '
-  + 'customer-focused software. I build practical AI systems, prototypes, and workflows, then help teams evaluate, '
-  + 'understand, and own what ships. My leadership work is grounded in hands-on building: MCP-enabled operating '
-  + 'artifacts, AI skills, and accessibility-first learning experiences. Seeking hands-on AI engineering roles and '
-  + 'focused consulting with a concrete outcome.';
+const primaryRoles = CAREER.roles.filter((role) => role.tier === 'primary');
+const achievementsById = new Map(CAREER.achievements.map((item) => [item.id, item]));
 
-export const RESUME_ACCOMPLISHMENTS: ResumeAccomplishment[] = [
-  { text: 'Helped raise agentic-coding adoption from roughly 2% to 43% of merge requests; it was still climbing at departure' },
-  { text: 'Led Devin adoption with goals and KPIs, including a game used to communicate the operating model' },
-  { text: 'Led a March 2026 roadshow for product managers across three continents, introducing Cursor and agentic AI; attendees began producing prototypes afterward' },
-  { text: 'Built Wavelength, an MCP-enabled operating artifact for tasks, RAID-log items, and program state' },
-  { text: 'Within four days of arrival, facilitated an onsite that multiple attendees called one of their best' },
-  { text: 'Reduced planning time by 50% at Arity via data-driven prioritization for 50+ engineers' },
-  { text: 'Increased feature throughput by 400% at WorkTango during merger-driven agile transformation' },
-  { text: 'Served as product owner for a Guaranteed Rate data-mining tool associated with $1.5B in locked loan volume' },
-];
+const { identity } = hiring;
+export const RESUME_PROFILE: ResumeProfile = {
+  name: identity.name,
+  titleLine: hiring.headline,
+  location: identity.location,
+  email: identity.email,
+  site: identity.site,
+  siteUrl: identity.siteUrl,
+  github: identity.github,
+  githubUrl: identity.githubUrl,
+};
 
-export const RESUME_EXPERIENCE: ResumeRole[] = [
-  {
-    company: 'ActiveCampaign',
-    location: 'Chicago, IL',
-    title: 'AI Enablement and Transformation',
-    dates: '06/2025–09/2026',
-    bullets: [
-      'Led AI enablement and transformation across engineering, product, and leadership, turning adoption goals into measurable, repeatable practice',
-      'Helped raise agentic-coding adoption from roughly 2% to 43% of merge requests; adoption was still climbing at departure',
-      'Led Devin adoption with goals and KPIs, using a game to communicate the operating model',
-      'Led a March 2026 roadshow for product managers across three continents, introducing Cursor and agentic AI; attendees began producing prototypes afterward',
-      'Built Wavelength, an MCP-enabled operating artifact containing tasks, RAID-log items, and program state',
-      'Coordinated cross-pillar AI transformation work, including outcomes and north-star metrics that supported ePMO governance and executive review',
-      'Built Claude skills and Langfuse evaluation prompts that supported daily operations and assessment of AI-agent response quality',
-      'Designed accessibility-first Cursor and agentic-AI learning experiences that gave participants room to build working prototypes',
-      'Within four days of arrival, facilitated an onsite that multiple attendees called one of their best',
-      'Created Worksites, intensive problem-solving sessions using board-game prototyping principles, and built operational tools for shared decisions and program visibility',
-    ],
-  },
-  {
-    company: 'Allstate',
-    location: 'Chicago, IL',
-    title: 'Senior Program Manager',
-    dates: '08/2023 – 02/2025',
-    bullets: [
-      'Led cross-functional teams to deliver key initiatives across the Allstate Family of Companies',
-      'Enhanced decision-making through robust metrics and streamlined project management tools',
-      'Championed agile practices and AI adoption by co-designing an AI training curriculum for the product department',
-    ],
-  },
-  {
-    company: 'Arity',
-    location: 'Chicago, IL',
-    title: 'Senior Scrum Master & Agile Coach',
-    dates: '06/2020 – 08/2023',
-    bullets: [
-      'Slashed planning time by 50% for quarterly planning for 50+ engineers',
-      'Mentored Scrum Masters, enabling three promotions and strengthening agile alignment within the org',
-    ],
-  },
-  {
-    company: 'WorkTango',
-    location: 'Chicago, IL',
-    title: 'Senior Scrum Master & Head of Agile PMO',
-    dates: '01/2019 – 06/2020',
-    bullets: [
-      'Spearheaded agile transformation during a merger, boosting feature delivery throughput by 400%',
-      'Redesigned workflows to double team velocity',
-      'Built a mentorship program within the technology organization to nurture future leaders',
-    ],
-  },
-  {
-    company: 'Guaranteed Rate',
-    location: 'Chicago, IL',
-    title: 'Scrum Master & Project Lead',
-    dates: '11/2015 – 12/2018',
-    bullets: [
-      'Rescoped a delayed initiative to deliver an MVP in two months, cutting production time by 75%',
-      'Acted as product owner for a data-mining tool associated with $1.5B in locked loan volume',
-      'Developed a measurement plan that streamlined app functionality and elevated user engagement',
-    ],
-  },
-];
+export const RESUME_SUMMARY = hiring.summary;
 
-export const RESUME_EARLIER: ResumeEarlierRole[] = [
-  { org: 'Chicago Housing Authority', role: 'Business Analyst & Scrum Master', dates: '2012–2015' },
-  { org: 'Technology Partnership Group', role: 'Business Analyst', dates: '2009–2012' },
-];
+/** Every achievement with an approved highlight wording, in career order. */
+export const RESUME_ACCOMPLISHMENTS: ResumeAccomplishment[] = primaryRoles.flatMap((role) => role.achievementIds
+  .map((id) => achievementsById.get(id)?.variants?.highlight)
+  .filter((text): text is string => Boolean(text))
+  .map((text) => ({ text })));
 
-export const RESUME_SKILLS: ResumeSkillGroup[] = [
-  { label: 'AI & Automation', skills: 'Claude Code, Cursor.ai, Langfuse, Glean, Agentic Development, LLM Evaluation, MCP Development, Claude Skills Development' },
-  { label: 'Facilitation & PM', skills: 'Jira, Digital.ai, Confluence, Airtable, Trello, Mural, Remote/Hybrid Facilitation, Offshore Coordination' },
-  { label: 'Development', skills: 'Next.js, React, Node.js, Python, Express, Bootstrap, Postgres, Amazon Lambdas' },
-  { label: 'Tracking & Analysis', skills: 'Google Analytics, Hotjar, Datadog, Grafana, Tableau' },
-  { label: 'Communication', skills: 'Video, Audio, and Graphic Production, Training Production, Professional Writing, Accessibility-First Design' },
-  { label: 'Methodologies', skills: "Paper Prototyping, Constructivism, Kolb's Experiential Learning, Think-Pair-Share, MoSCoW, Rose/Thorn/Bud, Spotify Squad Health Check" },
-];
+export const RESUME_EXPERIENCE: ResumeRole[] = primaryRoles.map((role) => ({
+  company: role.employer,
+  location: role.location ?? '',
+  title: role.title,
+  dates: role.sourceDates,
+  bullets: role.achievementIds.map((id) => achievementsById.get(id)!.text),
+}));
 
-export const RESUME_EDUCATION: string[] = [
-  'Wabash College — B.A. in English, Rhetoric, and Teacher Education, 2007',
-  'Certified Scrum Master (CSM) — 2011–Present',
-];
+export const RESUME_HIRING_EXPERIENCE: ResumeRole[] = section('experience').roles.map((role) => ({
+  company: role.employer,
+  location: role.location ?? '',
+  title: role.title,
+  dates: role.dates,
+  bullets: role.items.map((item) => item.text),
+}));
+
+/** Public implementation evidence from lib/engineering.ts and lib/content.ts. */
+export const RESUME_BUILDS: ResumeBuild[] = section('projects').items.map(({ name, description, proofHref, proofLabel }) => ({ name, description, proofHref, proofLabel }));
+
+export const RESUME_EARLIER: ResumeEarlierRole[] = CAREER.roles
+  .filter((role) => role.tier === 'earlier')
+  .map((role) => ({ org: role.employer, role: role.title, dates: role.sourceDates }));
+
+export const RESUME_SKILLS: ResumeSkillGroup[] = CAREER.skills.map(({ label, skills }) => ({ label, skills }));
+
+/** The hiring edition reuses the same group objects so identity checks keep working. */
+export const RESUME_HIRING_SKILLS: ResumeSkillGroup[] = section('skills').groups
+  .map((group) => RESUME_SKILLS[CAREER.skills.findIndex((item) => item.id === group.id)]);
+
+export const RESUME_EDUCATION: string[] = [...CAREER.education, ...CAREER.certifications].map((item) => item.text);
 
 export const RESUME_CANONICAL_PATH = '/resume';
 export const RESUME_PDF_PATH = '/resume.pdf';
 
 export const RESUME_DESCRIPTION =
-  'AI builder and product-minded engineer with 16+ years delivering customer-focused software, practical AI systems, '
-  + 'and accessibility-first learning experiences.';
+  'Hands-on AI builder with product and program leadership experience: working systems, MCP tools, evaluations, '
+  + 'and 16+ years delivering customer-focused software.';
 
+const community = CAREER.community[0];
 export const RESUME_COMMUNITY = {
-  organization: 'Midwest FurFest',
-  title: 'Operations Volunteer',
-  location: 'Chicago, IL',
-  description: 'Staff role at a registered 501(c)(3) running a 15,000-attendee annual conference. Volunteer coordination, on-site operations, and logistics at scale under a hard, immovable deadline.',
+  organization: community.organization,
+  title: community.title,
+  location: community.location ?? '',
+  description: community.description,
 } as const;

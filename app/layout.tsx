@@ -5,7 +5,7 @@ import { Inter, JetBrains_Mono, Lora } from 'next/font/google';
 import { AnalyticsEvents } from '@/components/analytics-events';
 import { PublicAnalytics } from '@/components/public-analytics';
 import { JsonLd } from '@/lib/json-ld';
-import { homepageMetadata, personJsonLd, websiteJsonLd } from '@/lib/site-metadata';
+import { personJsonLd, siteDefaultMetadata, websiteJsonLd } from '@/lib/site-metadata';
 import './globals.css';
 
 const inter = Inter({
@@ -39,7 +39,7 @@ export const viewport: Viewport = {
   ],
 };
 
-export const metadata: Metadata = homepageMetadata;
+export const metadata: Metadata = siteDefaultMetadata;
 
 /**
  * Resolves the palette before the first paint, so the page never flashes the
@@ -70,6 +70,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       className={`${inter.variable} ${jetbrainsMono.variable} ${lora.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <link rel="describedby" href="/llms.txt" />
+      </head>
       <body>
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
         <script dangerouslySetInnerHTML={{ __html: revealBootstrap }} />

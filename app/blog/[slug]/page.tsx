@@ -80,6 +80,10 @@ export default async function PostPage({ params }: PageProps<'/blog/[slug]'>) {
     {!isWizwor && subscribeBlock}
     {!isWizwor && secondHalf && <div className="blog-prose"><Markdown {...markdownProps}>{secondHalf}</Markdown></div>}
     {isWizwor && subscribeBlock}
+    {post.slug === 'when-in-crisis-make-tea' && <aside className="blog-start" aria-label="Next steps">
+      <p>Interested in my professional work? <Link href="/work/ai-enablement">See my AI enablement case study</Link> or <Link href="/#contact">get in touch about a role</Link>.</p>
+      <p>New to my work? <Link href="https://www.thearcades.me/start">Start here</Link>.</p>
+    </aside>}
     {source?.url && <p className="blog-provenance">Originally published on <a href={source.url}>The Arcades</a> on {displayDate(post.publishDate)}.</p>}
     {source?.kind === 'archive' && <p className="blog-provenance">From my writing archive. Published here on {displayDate(post.publishDate)}.</p>}
     <RelatedReading items={related} />

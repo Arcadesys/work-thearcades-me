@@ -25,6 +25,7 @@ export type SignupRecord = {
   placement: string;
   state: SignupState;
   verifiedAt?: number;
+  kitActiveAt?: number;
   leaseUntil?: number;
   subscriberId?: number;
   queueExpiresAt?: number;
@@ -182,6 +183,8 @@ if status == 'pending' then
     return {'expired', ''}
   end
   record.verifiedAt = now
+  redis.call('HINCRBY', KEYS[3], 'first_party_verified', 1)
+  redis.call('EXPIRE', KEYS[3], 34560000)
 elseif status == 'processing' then
   if tonumber(record.leaseUntil or 0) > now then return {'busy', ''} end
   if now > tonumber(record.verifiedAt or 0) + tonumber(ARGV[5]) then
@@ -263,6 +266,11 @@ local raw = redis.call('GET', KEYS[1])
 if not raw then return 0 end
 local record = cjson.decode(raw)
 if record.state ~= 'processing' and record.state ~= 'waiting_kit_confirmation' then return 0 end
+if ARGV[1] == 'completed' then
+  redis.call('HINCRBY', KEYS[3], 'kit_active_ready', 1)
+  redis.call('EXPIRE', KEYS[3], 34560000)
+  record.kitActiveAt = tonumber(ARGV[3])
+end
 record.state = ARGV[1]
 record.leaseUntil = nil
 record.encryptedEmail = nil
@@ -367,7 +375,8 @@ export class UpstashSignupLedger implements SignupLedger {
     const tokenDigest = digest(token);
     const tokenId = await this.redis.get<string>(tokenKey(tokenDigest));
     if (typeof tokenId !== 'string') return { status: 'missing' };
-    const raw = await this.redis.eval<unknown[]>(claimScript, [tokenKey(tokenDigest), requestKey(tokenId)], [tokenDigest, Date.now(), leaseMs, verificationRetryWindowMs / 1000, verificationRetryWindowMs, `${namespace}:latest:`]);
+    const now = Date.now();
+    const raw = await this.redis.eval<unknown[]>(claimScript, [tokenKey(tokenDigest), requestKey(tokenId), `${namespace}:metrics:${new Date(now).toISOString().slice(0, 10)}`], [tokenDigest, now, leaseMs, verificationRetryWindowMs / 1000, verificationRetryWindowMs, `${namespace}:latest:`]);
     if (!Array.isArray(raw) || typeof raw[0] !== 'string') return { status: 'invalid' };
     if (raw[0] !== 'claimed') return { status: raw[0] };
     const record = parseSignupRecord(raw[1]);
@@ -393,7 +402,8 @@ export class UpstashSignupLedger implements SignupLedger {
   }
 
   async complete(id: string) {
-    await this.redis.eval(finishScript, [requestKey(id), queueKey], ['completed', recordTtlSeconds]);
+    const now = Date.now();
+    await this.redis.eval(finishScript, [requestKey(id), queueKey, `${namespace}:metrics:${new Date(now).toISOString().slice(0, 10)}`], ['completed', recordTtlSeconds, now]);
   }
 
   async suppress(id: string) {

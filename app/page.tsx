@@ -1,5 +1,7 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import { publicPosts, displayDate } from '@/lib/blog';
+import { postHref } from '@/lib/original-edition';
 import Link from 'next/link';
 import type { CaseStudy } from '@/lib/content';
 import { SiteHeader } from '@/components/site-header';
@@ -7,6 +9,7 @@ import { ExternalLink } from '@/components/external-link';
 import { RevealOnScroll } from '@/components/reveal-on-scroll';
 import { SubscribeForm } from '@/components/subscribe-form';
 import styles from './home.module.css';
+import { homepageMetadata } from '@/lib/site-metadata';
 import {
   about,
   beliefs,
@@ -20,6 +23,8 @@ import {
   quote,
   site,
 } from '@/lib/content';
+
+export const metadata: Metadata = homepageMetadata;
 
 function Arrow() {
   return <span aria-hidden="true"> →</span>;
@@ -49,6 +54,11 @@ function CaseSummary({ study }: { study: CaseStudy }) {
         Read the full story<Arrow />
         <span className="visually-hidden"> about {study.title}</span>
       </Link>
+      {study.homeDemoLink && (
+        <ExternalLink className="label case-technical-tour" href={study.homeDemoLink.href}>
+          {study.homeDemoLink.label}<span className="visually-hidden"> (opens in a new tab)</span>
+        </ExternalLink>
+      )}
       {study.homeSupplementaryLink && (
         <Link className="label case-technical-tour" href={study.homeSupplementaryLink.href}>
           {study.homeSupplementaryLink.label}
@@ -69,13 +79,14 @@ export default function Home() {
         kind: 'Blog post',
         title: latestPost.title,
         body: latestPost.excerpt,
-        href: `/blog/${latestPost.slug}`,
+        href: postHref(latestPost.slug),
       }
     : null;
 
   const bunch = caseById['builder-case'];
   const guaranteedRate = caseById['owner-case'];
   const aiEnablement = caseById['evangelist-case'];
+  const cockpit = caseById['cockpit-case'];
 
   return (
     <>
@@ -87,33 +98,25 @@ export default function Home() {
         <section className="shell section-top hero" id="top" aria-labelledby="hero-heading">
           <div className="hero-grid">
             <div>
-              <h1 className="label kicker hero-eyebrow" id="hero-heading" data-reveal="1">
-                <span className="dot" />
-                AI engineering and enablement — Austen Tucker-Crowder
+              <p className="label kicker hero-eyebrow">
+                <span className="dot" />Austen Tucker-Crowder · Hands-on AI builder
+              </p>
+              <h1 className="hero-heading" id="hero-heading">
+                {hero.headingBefore}<span className="glow-accent">{hero.headingAccent}</span>{hero.headingAfter}
               </h1>
-              <p className="hero-heading" data-reveal="2">
-                {hero.headingBefore}
-                <span className="glow-accent">{hero.headingAccent}</span>
-                {hero.headingAfter}
+              <p className="hero-intro">{hero.intro}</p>
+              <p className="hero-proof">
+                <Link href="/engineering">Bunch: web + MCP, one set of tested rules.</Link>
+                <span><Link href="/work/ai-enablement">{hero.evidence}</Link> at ActiveCampaign, as part of the broader transformation effort.</span>
               </p>
-              <p className="hero-intro" data-reveal="3">{hero.intro}</p>
-              <p className="hero-payoff" data-reveal="4">{hero.authorship}</p>
-              <p className="hero-payoff" data-reveal="5">
-                <Link href="/work/ai-enablement">{hero.evidence}</Link>.
-              </p>
-              <div className="btn-row" data-reveal="6">
-                <a className="btn btn-gradient" href="#work">
-                  See what I’ve built<Arrow />
-                </a>
-                <a
-                  className="btn btn-outline"
-                  href={`mailto:${site.email}`}
-                  data-funnel-event="contact_click"
-                  data-funnel-placement="hero"
-                >
-                  Talk about AI engineering work
-                </a>
+              <div className="btn-row">
+                <a className="btn btn-gradient" href="#work">Selected work<Arrow /></a>
+                <Link className="btn btn-outline" href="/engineering">Technical tour</Link>
+                <Link className="btn btn-outline" href={site.resumeUrl} data-funnel-event="resume_click" data-funnel-placement="hero">Résumé</Link>
               </div>
+              <a className="hero-role-link" href={`mailto:${site.email}`} data-funnel-event="contact_click" data-funnel-placement="hero">
+                Discuss a hands-on AI role<Arrow />
+              </a>
             </div>
             <div className={styles.heroPortrait}>
               <Image
@@ -132,7 +135,8 @@ export default function Home() {
 
         <section className="shell section-flush-top" id="work" aria-labelledby="work-heading">
           <Kicker>Selected work</Kicker>
-          <h2 className="h2 case-heading" id="work-heading">Working software first. Organizational leverage second.</h2>
+          <h2 className="h2 case-heading" id="work-heading">Working systems. Evidence you can inspect.</h2>
+          <p className="work-authorship">{hero.authorship}</p>
 
           <article
             className="case case-featured"
@@ -159,10 +163,23 @@ export default function Home() {
           </article>
 
           <article
-            className="case case-split"
+            className="case case-split-top case-wide"
+            id={cockpit.id}
+            data-accent={cockpit.accent}
+            data-reveal="2"
+            aria-labelledby={`${cockpit.id}-title`}
+          >
+            <CaseSummary study={cockpit} />
+            <h4 className="stat">
+              0 <span className="label">résumé facts written by the model</span>
+            </h4>
+          </article>
+
+          <article
+            className="case case-split case-wide"
             id={aiEnablement.id}
             data-accent={aiEnablement.accent}
-            data-reveal="2"
+            data-reveal="3"
             aria-labelledby={`${aiEnablement.id}-title`}
           >
             <CaseSummary study={aiEnablement} />
@@ -172,10 +189,10 @@ export default function Home() {
           </article>
 
           <article
-            className="case case-split-top"
+            className="case case-split-top case-wide"
             id={guaranteedRate.id}
             data-accent={guaranteedRate.accent}
-            data-reveal="3"
+            data-reveal="4"
             aria-labelledby={`${guaranteedRate.id}-title`}
           >
             <CaseSummary study={guaranteedRate} />
@@ -226,6 +243,40 @@ export default function Home() {
             >
               View résumé
             </Link>
+          </div>
+        </section>
+
+        <section className="contact" id="contact" aria-labelledby="contact-heading">
+          <div className="contact-inner">
+            <p className="label">{contact.kicker}</p>
+            <h2 id="contact-heading">{contact.heading}</h2>
+            <p>{contact.body}</p>
+            <div className="btn-row">
+              <a
+                className="btn btn-lg btn-gradient"
+                href={`mailto:${site.email}`}
+                data-funnel-event="contact_click"
+                data-funnel-placement="contact_section"
+                style={{ fontSize: '1.125rem' }}
+              >
+                Talk about a hands-on AI role<Arrow />
+              </a>
+              <ExternalLink
+                className="btn btn-lg btn-outline"
+                href={site.bookingUrl}
+                data-funnel-event="booking_click"
+                data-funnel-placement="contact_section"
+                style={{ fontSize: '1.125rem' }}
+              >
+                Discuss a project<Arrow />
+              </ExternalLink>
+            </div>
+            <nav className="btn-row" aria-label="Contact options">
+              <Link className="contact-services-link" href={site.resumeUrl} data-funnel-event="resume_click" data-funnel-placement="contact_section">View résumé<Arrow /></Link>
+              <Link className="contact-services-link" href="/work-with-me">What I offer<Arrow /></Link>
+              <ExternalLink className="contact-services-link" href={site.linkedinUrl}>LinkedIn<Arrow /></ExternalLink>
+              <ExternalLink className="contact-services-link" href={site.githubUrl}>GitHub<Arrow /></ExternalLink>
+            </nav>
           </div>
         </section>
 
@@ -305,39 +356,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="contact" id="contact" aria-labelledby="contact-heading">
-          <div className="contact-inner">
-            <p className="label">{contact.kicker}</p>
-            <h2 id="contact-heading">{contact.heading}</h2>
-            <p>{contact.body}</p>
-            <div className="btn-row">
-              <a
-                className="btn btn-lg btn-gradient"
-                href={`mailto:${site.email}`}
-                data-funnel-event="contact_click"
-                data-funnel-placement="contact_section"
-                style={{ fontSize: '1.125rem' }}
-              >
-                Talk about AI engineering work<Arrow />
-              </a>
-              <ExternalLink
-                className="btn btn-lg btn-outline"
-                href={site.bookingUrl}
-                data-funnel-event="booking_click"
-                data-funnel-placement="contact_section"
-                style={{ fontSize: '1.125rem' }}
-              >
-                Discuss a project<Arrow />
-              </ExternalLink>
-            </div>
-            <nav className="btn-row" aria-label="Contact options">
-              <Link className="contact-services-link" href={site.resumeUrl} data-funnel-event="resume_click" data-funnel-placement="contact_section">View résumé<Arrow /></Link>
-              <Link className="contact-services-link" href="/work-with-me">What I offer<Arrow /></Link>
-              <ExternalLink className="contact-services-link" href={site.linkedinUrl}>LinkedIn<Arrow /></ExternalLink>
-              <ExternalLink className="contact-services-link" href={site.githubUrl}>GitHub<Arrow /></ExternalLink>
-            </nav>
-          </div>
-        </section>
+
       </main>
 
       <footer className="site-footer">
