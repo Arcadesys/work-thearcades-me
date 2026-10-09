@@ -21,7 +21,9 @@
     "test:jobdesk": "node --import tsx --test services/jobdesk/*.test.ts",
     "jobs:mcp": "node services/jobdesk/mcp-server.mjs",
     "jobs:import": "node --import tsx scripts/import-linkedin-email-leads.ts --local",
-    "test:jobdesk:browser": "playwright test --config=playwright.jobdesk.config.ts"
+    "test:jobdesk:browser": "playwright test --config=playwright.jobdesk.config.ts",
+    "campaign:build": "node scripts/build-campaign.mjs",
+    "prebuild": "npm run campaign:build"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
