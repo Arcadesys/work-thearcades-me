@@ -1,8 +1,10 @@
 # Work funnel scorecard
 
+For newly reviewed organic reports, exclude whole same-site sessions known to contain `utm_campaign=analytics-verification` and preserve the exact existing internal/test-account exclusions on every step. Use the shared qualified-event definition in [engagement and conversions](./engagement-and-conversions.md#whole-session-qa-and-existing-test-account-exclusion); do not overwrite historical saved cohorts.
+
 ## Sources and filters
 
-For PostHog, use production events only with `hostname=work.thearcades.me` and `environment=production`; exclude `utm_campaign=analytics-verification`. Set the report timezone to UTC so its daily buckets match the Redis counters. For events captured after the user-agent classification fix, use `$virt_traffic_type=Regular` when you want human-like browser traffic and report bot/AI traffic separately when useful. The raw browser user agent is retained only for traffic classification; IP capture and location enrichment remain disabled, so IP-only bot signals are intentionally unavailable. Historical events captured before the fix have no usable raw user agent and remain classified as automation. Work-site pages and click events are already instrumented; do not add a cross-site visitor identifier.
+For PostHog, use production events only with `hostname=work.thearcades.me` and `environment=production`; exclude whole same-site sessions known to contain `utm_campaign=analytics-verification` and retain existing internal/test-account exclusions. Set the report timezone to UTC so its daily buckets match the Redis counters. For events captured after the user-agent classification fix, use `$virt_traffic_type=Regular` when you want human-like browser traffic and report bot/AI traffic separately when useful. The raw browser user agent is retained only for traffic classification; IP capture and location enrichment remain disabled, so IP-only bot signals are intentionally unavailable. Historical events captured before the fix have no usable raw user agent and remain classified as automation. Work-site pages and click events are already instrumented; do not add a cross-site visitor identifier.
 
 | Step | Event or source | Definition |
 | --- | --- | --- |

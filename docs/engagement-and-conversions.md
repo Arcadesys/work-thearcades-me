@@ -40,7 +40,35 @@ Request handling sends only placement to analytics, suppresses successful/in-fli
 
 ## New reports, preserving history
 
-Create separate versioned reports after approval and observed new receipts. Leave dashboard `2095308`, the existing scorecard and old events intact. Every event/step must use `hostname=work.thearcades.me`, `environment=production`, exclude `utm_campaign=analytics-verification`, and share one half-open UTC interval and raw/Regular traffic cohort. Older custom events have null `$host`; filtering all events by `$host` would silently drop historical contacts/downloads/newsletter/résumé receipts. `$host` can be used for pageview diagnostics only. The new property stages are not backfilled onto old events.
+Create separate versioned reports after approval and observed new receipts. Leave dashboard `2095308`, the existing scorecard and old events intact. Every event/step must use `hostname=work.thearcades.me`, `environment=production`, exclude whole sessions known to contain `utm_campaign=analytics-verification` while preserving existing internal/test-account exclusions, and share one half-open UTC interval and raw/Regular traffic cohort. Older custom events have null `$host`; filtering all events by `$host` would silently drop historical contacts/downloads/newsletter/résumé receipts. `$host` can be used for pageview diagnostics only. The new property stages are not backfilled onto old events.
+
+### Whole-session QA and existing test-account exclusion
+
+Every denominator, numerator, funnel step and distribution below uses the same qualified event set. Exclude the **whole same-site session** if any retained event in that session is known to have `utm_campaign=analytics-verification`, even when its later SPA events have no campaign property. Build the QA-session set from all retained events through the recorded export time, **before** report-date, route, event-name, engagement-version, traffic-cohort or test-account filters. A marker before the report window or on a discovery page still excludes the session. Do not search only candidate funnel events or individually remove tagged rows.
+
+Preserve the exact existing internal/test-account exclusions and their enabled report/dashboard settings. Apply their existing predicates to every event/step, alongside the QA-session exclusion; adding the QA set must not disable, replace or weaken them. SQL/report definitions must carry the corresponding existing exclusion predicates rather than assume an unrelated UI control will supply them. Record those predicates/settings and the QA-set export time with the reviewed report; do not invent a new test-account property or collect identities to implement this. See PostHog's [internal/test-user filtering](https://posthog.com/docs/data/test-accounts) for the provider's filtering surfaces.
+
+Concrete definition template (report logic, not an executed/saved query):
+
+```text
+scope = existing project + this site's canonical production hostname
+qa_sessions = DISTINCT nonempty $session_id from ALL retained scope events
+              where timestamp < export_utc
+                and utm_campaign = 'analytics-verification'
+
+qualified_events = scope events where start_utc <= timestamp < end_utc
+                   and existing production/surface predicates
+                   and existing internal/test-account exclusions
+                   and the report's reviewed route + raw/Regular cohort
+                   and nonempty $session_id NOT IN qa_sessions
+
+denominator = qualifying denominator keys from qualified_events
+numerator   = matching qualifying outcome keys from qualified_events
+```
+
+For example, session A has a tagged discovery-page receipt before `start_utc`, then an untagged article pageview and untagged intent inside the window. All A receipts are excluded, including its pageview denominator. Untagged session B remains eligible only if it also passes the unchanged test-account, route and traffic predicates. A known internal/test session C stays excluded even if it has no QA campaign. QA-set construction must not depend on whether A has the new engagement property or qualifies as Regular traffic.
+
+Use only existing session IDs within this site/project; do not join visitors/sites or introduce capture to propagate the tag. Missing session IDs are excluded from session-based rates and disclosed as unavailable coverage. Individually tagged missing-session receipts can still be excluded directly, but no other receipt can be assigned to their unknown session. Known untagged test intervals retain their separate exclusions. Retention gaps and late-arriving markers can change the known QA set; record the export snapshot and coverage limits rather than silently rewriting old saved reports.
 
 | Report | Denominator | Numerator / value |
 | --- | --- | --- |
