@@ -29,6 +29,7 @@ const indexable: Array<{ route: string; title: string }> = [
   { route: '/work-with-me', title: 'AI Building &amp; Workflow Consulting — Austen Tucker-Crowder' },
   { route: '/layoff-triage', title: 'Career Coach in a Bottle: The Layoff Triage Skill — Austen Tucker-Crowder' },
   { route: '/blog/when-in-crisis-make-tea', title: 'What I Did After a Layoff: Start With Tea — Austen Tucker-Crowder' },
+  { route: '/blog/the-work-didnt-disappear', title: 'The Work Didn’t Disappear — Austen Tucker-Crowder' },
   { route: '/work/bunch', title: 'Building an MCP Context System: Bunch' },
   { route: '/resume', title: 'Résumé — Austen Tucker-Crowder' },
   { route: '/privacy', title: 'Privacy — Austen Tucker-Crowder' },
@@ -74,6 +75,24 @@ test('copies of thearcades.me originals point there and leave the work sitemap',
   }
   assert(sitemap.includes(`${SITE_URL}/work/bunch<`), 'distinct case study stays in the sitemap');
   assert(sitemap.includes(`${SITE_URL}/blog/when-in-crisis-make-tea<`), 'work-only posts stay in the sitemap');
+});
+
+test('the campaign essay emits its own identity and discoverable download', () => {
+  const route = '/blog/the-work-didnt-disappear';
+  const source = html(route);
+  assert.deepEqual(all(source, /"mainEntityOfPage":"([^"]*)"/g), [`${SITE_URL}${route}`]);
+  assert.match(source, /<meta name="description" content="A tabletop campaign, twenty years in software engineering/);
+  assert.match(source, /href="\/downloads\/message-in-a-bottle-campaign-walkthrough\.pdf"/);
+  assert.match(source, /href="\/campaigns\/message-in-a-bottle\/"/);
+  assert.match(source, /full GM spoilers/);
+  assert.match(source, /href="\/campaigns\/message-in-a-bottle-module\/"/);
+  assert.match(source, /href="\/downloads\/message-in-a-bottle-module\.pdf"/);
+  assert.match(source, /href="\/downloads\/message-in-a-bottle-free-module\.zip"/);
+  for (const image of ['maze', 'portal', 'design']) assert(source.includes(`${image}-pdf-excerpt.png`));
+  assert(html('/blog').includes(`href="${route}"`));
+  assert(html('/').includes(`href="${route}"`));
+  assert(readFileSync(join(APP_DIR, 'sitemap.xml.body'), 'utf8').includes(`${SITE_URL}${route}<`));
+  assert(!source.includes('Originally published on'));
 });
 
 test('blog list thumbnails for posts without a hero use the generated card route', () => {

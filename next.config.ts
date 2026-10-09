@@ -10,6 +10,12 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [{ source: '/resume/ai-builder', destination: '/resume', permanent: true }];
   },
+  async rewrites() {
+    return ['message-in-a-bottle', 'message-in-a-bottle-module'].map(slug => ({
+      source: `/campaigns/${slug}`,
+      destination: `/campaigns/${slug}/index.html`,
+    }));
+  },
   outputFileTracingIncludes: {
     '/api/jobs/drafting/pdf': ['./assets/fonts/*.ttf'],
   },
