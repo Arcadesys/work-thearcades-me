@@ -24,7 +24,7 @@ test('campaigns discard private fields and unsafe values', () => {
 });
 
 test('the conversion-event allowlist preserves every existing funnel event', () => {
-  assert.deepEqual(eventNames, ['$pageview', 'case_study_view', 'resume_click', 'contact_click', 'booking_click', 'triage_skill_download', 'image_ratchet_skill_download', 'subscribe_submit_intent', 'subscribe_request_accepted', 'campaign_landing']);
+  for (const name of ['$pageview', 'case_study_view', 'resume_click', 'contact_click', 'booking_click', 'triage_skill_download', 'image_ratchet_skill_download', 'subscribe_submit_intent', 'subscribe_request_accepted', 'campaign_landing']) assert.ok((eventNames as readonly string[]).includes(name));
 });
 
 test('outgoing SDK properties fail closed while retaining privacy-safe web analytics fields', () => {
@@ -128,4 +128,21 @@ test('outgoing events retain only the project token plus safe analytics identity
   });
 
   assert.equal(outgoingEvent({ event: '$identify', uuid: 'event-id', timestamp }, 'project-token'), null);
+});
+
+test('engagement and conversion properties are finite, versioned and stage names are derived', () => {
+  const event = (name: string, properties: Record<string, unknown>) => outgoingEvent({ event: name, uuid: 'id', timestamp: new Date(), properties: { hostname: 'work.thearcades.me', environment: 'production', pathname: '/resume', ...properties } }, 'test-token');
+  const reading = event('reading-engagement', { active_seconds: 30, depth_percent: 50, engagement_checkpoint: '30s', email: 'private@example.com', engagement_version: 'forged' });
+  assert.equal(reading?.properties.active_seconds, 30); assert.equal(reading?.properties.content_type, 'resume');
+  assert.equal(reading?.properties.engagement_version, 'visible_active_v1'); assert.equal(reading?.properties.email, undefined);
+  assert.equal(event('reading-engagement', { active_seconds: -10, depth_percent: 50, engagement_checkpoint: 'final' }), null);
+  assert.equal(event('reading-engagement', { pathname: '/newsletter/verify#token', active_seconds: 30, depth_percent: 50, engagement_checkpoint: 'final' }), null);
+  for (const [kind, stage] of [['resume_pdf', 'resume_download_intent'], ['resume_text', 'resume_download_intent'], ['forged', 'resume_navigation_intent']]) {
+    const result = event('resume_click', { interaction_type: kind, conversion_stage: 'confirmed_hire' });
+    assert.equal(result?.properties.conversion_stage, stage);
+  }
+  assert.equal(event('contact_click', { email: 'private', conversion_stage: 'inquiry' })?.properties.conversion_stage, 'contact_intent');
+  assert.equal(event('subscribe_verification_requested', {})?.properties.conversion_stage, 'verification_request_accepted');
+  assert.equal(event('subscribe_request_failed', {})?.properties.conversion_stage, 'request_failed');
+  assert.equal(event('$pageview', { pathname: '/newsletter/verify' }), null);
 });

@@ -2,6 +2,7 @@
 
 import { useId, useState, type FormEvent } from 'react';
 import { track } from '@/lib/analytics-client';
+import { submitNewsletterRequest } from '@/lib/newsletter-request';
 
 const confirmationMessage = 'If this address is eligible, we have requested a verification email. The request will not reach Kit until you confirm the link. If no email arrives, try again after ten minutes.';
 
@@ -12,25 +13,17 @@ export function SubscribeForm({ placement = 'blog_post' }: { placement?: string 
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (status === 'submitting') return;
+    if (status === 'submitting' || status === 'accepted') return;
 
     const form = event.currentTarget;
     const formData = new FormData(form);
     const email = String(formData.get('email') ?? '').trim();
     setStatus('submitting');
-    track('subscribe_submit_intent', { placement });
-
-    try {
-      const response = await fetch('/api/kit/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, placement }),
-      });
-      if (!response.ok) throw new Error('Signup request was not accepted');
-
+    const accepted = await submitNewsletterRequest(email, placement, track);
+    if (accepted) {
       setStatus('accepted');
       form.reset();
-    } catch {
+    } else {
       setStatus('error');
     }
   }

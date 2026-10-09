@@ -55,7 +55,8 @@ export function SiteHeader({ home = false, current }: SiteHeaderProps) {
     return (
       <nav className="site-nav" aria-label={label}>
         {destinations.map(([text, destination]) => (
-          <a key={text} href={href(destination)} className={destination === '/work-with-me' ? 'nav-cta' : undefined} aria-current={current === destination ? 'page' : undefined}>
+          <a key={text} href={href(destination)} className={destination === '/work-with-me' ? 'nav-cta' : undefined} aria-current={current === destination ? 'page' : undefined}
+            data-funnel-event={destination === '/resume' ? 'resume_click' : undefined} data-funnel-placement={destination === '/resume' ? 'navigation' : undefined}>
             {text}
           </a>
         ))}
@@ -74,7 +75,7 @@ export function SiteHeader({ home = false, current }: SiteHeaderProps) {
         <div className="desktop-theme"><ThemeSwitch /></div>
         <nav className="hiring-shortcuts" aria-label="Hiring shortcuts">
           <a href="/engineering" aria-current={current === '/engineering' ? 'page' : undefined}>Technical tour</a>
-          <Link href="/resume" aria-current={current === '/resume' ? 'page' : undefined}>Résumé</Link>
+          <Link href="/resume" aria-current={current === '/resume' ? 'page' : undefined} data-funnel-event="resume_click" data-funnel-placement="hiring_shortcuts">Résumé</Link>
           <a href={href('/#contact')}>Discuss a role</a>
         </nav>
         <details

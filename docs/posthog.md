@@ -1,5 +1,7 @@
 # Work site analytics
 
+The proposed versioned engagement and conversion extension is documented in [engagement and conversions](engagement-and-conversions.md). Existing saved reports remain historical; the new contract requires separately reviewed reports after an approved release.
+
 PostHog replaces Vercel Web Analytics. Hosting remains on Vercel. The existing US project is 608995. No person profiles, identify calls, autocapture, replay, heatmaps, performance/error capture, surveys, feature-flag requests, or persistent analytics cookies/local storage are enabled. Session storage is required; unavailable storage disables analytics.
 
 Vercel configuration: NEXT_PUBLIC_POSTHOG_KEY and NEXT_PUBLIC_POSTHOG_HOST (https://us.i.posthog.com), with system NEXT_PUBLIC_VERCEL_ENV. Only the production environment on work.thearcades.me collects production events. Preview collection requires NEXT_PUBLIC_POSTHOG_PREVIEW_ENABLED=true and a .vercel.app hostname. The verification branch alone enables this switch.

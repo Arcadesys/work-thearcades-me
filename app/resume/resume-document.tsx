@@ -119,7 +119,7 @@ export function ResumeDocument({ doc }: { doc: ResolvedResume }) {
       <a className="skip-link" href="#main">Skip to content</a>
       <SiteHeader current="/resume" />
 
-      <main className={styles.page} id="main" tabIndex={-1} data-resume-profile={doc.profileId} data-resume-digest={doc.digest}>
+      <main className={styles.page} id="main" tabIndex={-1} data-resume-profile={doc.profileId} data-resume-digest={doc.digest} data-reading-body>
 
       {editions.length > 1 ? (
         <nav className={styles.editions} aria-label="Résumé editions">
@@ -141,7 +141,7 @@ export function ResumeDocument({ doc }: { doc: ResolvedResume }) {
         <p className={styles.titleLine}>{doc.headline}</p>
         <p className={styles.location}>{identity.location}</p>
         <div className={styles.contact}>
-          <a href={`mailto:${identity.email}`}>{identity.email}</a>
+          <a href={`mailto:${identity.email}`} data-funnel-event="contact_click" data-funnel-placement="resume_identity">{identity.email}</a>
           <a href={identity.siteUrl}>{identity.site}</a>
           <a href={identity.githubUrl}>{identity.github}</a>
         </div>
@@ -150,7 +150,7 @@ export function ResumeDocument({ doc }: { doc: ResolvedResume }) {
             {doc.page.cta} <span aria-hidden="true">→</span>
           </a>
           <a className={styles.roleSecondary} href={downloads.pdf.href} download data-funnel-event="resume_click" data-funnel-placement="resume_pdf">Download résumé PDF ({downloads.pdf.pages} {downloads.pdf.pages === 1 ? 'page' : 'pages'})</a>
-          <a href={downloads.text.href} download>Plain-text version</a>
+          <a href={downloads.text.href} download data-funnel-event="resume_click" data-funnel-placement="resume_text">Plain-text version</a>
         </div>
       </header>
 

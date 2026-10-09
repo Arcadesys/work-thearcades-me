@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { track } from '@/lib/analytics-client';
 import styles from './newsletter-verification.module.css';
 
 type ViewState = 'loading' | 'ready' | 'submitting' | 'busy' | 'active' | 'kit_confirmation' | 'completed' | 'cancelled' | 'unavailable' | 'invalid' | 'error';
@@ -41,10 +40,8 @@ export function NewsletterVerification() {
 
       if (response.ok && result?.accepted && result.state === 'active') {
         setState('active');
-        track('subscribe_request_accepted');
       } else if (response.ok && result?.accepted && result.state === 'kit_confirmation_required') {
         setState('kit_confirmation');
-        track('subscribe_request_accepted');
       } else if (result?.state === 'completed') {
         setState('completed');
       } else if (result?.state === 'unavailable') {

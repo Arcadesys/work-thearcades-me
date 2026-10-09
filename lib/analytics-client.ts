@@ -1,5 +1,6 @@
 import posthog from 'posthog-js';
-import { campaignProperties, caseStudySlug, collectionEnvironment, isPrivateAnalyticsPath, outgoingEvent, referrerDomain, safePath, sanitizeProperties, type AnalyticsEvent } from './analytics-policy';
+import { campaignProperties, caseStudySlug, collectionEnvironment, isPrivateAnalyticsPath, outgoingEvent, readingContentType, referrerDomain, safePath, sanitizeProperties, type AnalyticsEvent } from './analytics-policy';
+import { sanitizeEngagement, type EngagementSnapshot } from './reading-engagement';
 
 const DEFAULT_POSTHOG_KEY = 'phc_wH8qGy3tzYkfwDCLe9rZuBPxP7kaXWVocAnj6vVJFnaa';
 const DEFAULT_POSTHOG_HOST = 'https://us.i.posthog.com';
@@ -82,7 +83,7 @@ export function initializeAnalytics() {
   }
 }
 
-export function track(name: AnalyticsEvent, properties: Record<string, string> = {}) {
+export function track(name: AnalyticsEvent, properties: Record<string, string | number> = {}) {
   if (typeof location !== 'undefined' && isPrivateAnalyticsPath(location.pathname)) return;
   if (!enabled) return;
 
@@ -101,6 +102,23 @@ export function track(name: AnalyticsEvent, properties: Record<string, string> =
   } catch {
     // Analytics must never interfere with navigation.
   }
+}
+
+/** Capture the original public path and entry attribution before navigation cleanup. */
+export function createEngagementSender(pathname: string) {
+  const environment = collectionEnvironment(location.hostname, process.env.NEXT_PUBLIC_VERCEL_ENV, process.env.NEXT_PUBLIC_POSTHOG_PREVIEW_ENABLED);
+  const permitted = enabled && environment && readingContentType(pathname);
+  // The SDK owns native session/window identity at capture time; do not override it.
+  const context = { ...entry, hostname: location.hostname, pathname: safePath(pathname), environment };
+  return (snapshot: EngagementSnapshot) => {
+    const safe = sanitizeEngagement(snapshot);
+    if (!permitted || !safe) return;
+    try {
+      // Final unload receipts must bypass the batching queue; delivery remains best effort.
+      posthog.capture('reading-engagement', { ...context, ...safe }, safe.engagement_checkpoint === 'final'
+        ? { send_instantly: true, transport: 'sendBeacon' } : undefined);
+    } catch { /* Reading and navigation remain available. */ }
+  };
 }
 
 export function trackNavigation(pathname: string) {
