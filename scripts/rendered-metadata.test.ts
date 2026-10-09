@@ -6,6 +6,8 @@ import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { test } from 'node:test';
+import { publicPosts } from '../lib/blog';
+import { postHref } from '../lib/original-edition';
 
 const SITE_URL = 'https://work.thearcades.me';
 const APP_DIR = join(process.cwd(), '.next', 'server', 'app');
@@ -30,6 +32,7 @@ const indexable: Array<{ route: string; title: string }> = [
   { route: '/layoff-triage', title: 'Career Coach in a Bottle: The Layoff Triage Skill — Austen Tucker-Crowder' },
   { route: '/blog/when-in-crisis-make-tea', title: 'What I Did After a Layoff: Start With Tea — Austen Tucker-Crowder' },
   { route: '/blog/the-work-didnt-disappear', title: 'The Work Didn’t Disappear — Austen Tucker-Crowder' },
+  { route: '/blog/my-resume-is-a-json-blob-ai-does-the-rest', title: 'My Résumé Is a JSON Blob. AI Does the Rest. — Austen Tucker-Crowder' },
   { route: '/work/bunch', title: 'Building an MCP Context System: Bunch' },
   { route: '/resume', title: 'Résumé — Austen Tucker-Crowder' },
   { route: '/privacy', title: 'Privacy — Austen Tucker-Crowder' },
@@ -90,9 +93,24 @@ test('the campaign essay emits its own identity and discoverable download', () =
   assert.match(source, /href="\/downloads\/message-in-a-bottle-free-module\.zip"/);
   for (const image of ['maze', 'portal', 'design']) assert(source.includes(`${image}-pdf-excerpt.png`));
   assert(html('/blog').includes(`href="${route}"`));
-  assert(html('/').includes(`href="${route}"`));
   assert(readFileSync(join(APP_DIR, 'sitemap.xml.body'), 'utf8').includes(`${SITE_URL}${route}<`));
   assert(!source.includes('Originally published on'));
+});
+
+test('the homepage features the newest public post at its canonical reading destination', () => {
+  const latest = publicPosts()[0];
+  assert(latest, 'expected a published post');
+  assert(html('/').includes(`href="${postHref(latest.slug)}"`));
+});
+
+test('the résumé harness essay exposes its approved hero and remains discoverable', () => {
+  const route = '/blog/my-resume-is-a-json-blob-ai-does-the-rest';
+  const source = html(route);
+  assert.deepEqual(all(source, /"mainEntityOfPage":"([^"]*)"/g), [`${SITE_URL}${route}`]);
+  assert.match(source, /src="\/images\/blog\/my-resume-is-a-json-blob-hero-v1\.png"/);
+  assert.match(source, /alt="Paper collage labelled Facts, Review, and Apply:/);
+  assert(html('/blog').includes(`href="${route}"`));
+  assert(readFileSync(join(APP_DIR, 'sitemap.xml.body'), 'utf8').includes(`${SITE_URL}${route}<`));
 });
 
 test('blog list thumbnails for posts without a hero use the generated card route', () => {
