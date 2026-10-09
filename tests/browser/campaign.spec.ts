@@ -21,14 +21,14 @@ test('campaign reading surfaces reflow and expose their downloads', async ({ pag
       return image.complete ? Promise.resolve() : new Promise<void>(resolve => image.addEventListener('load', () => resolve(), { once: true }));
     })));
     await audit(page);
-    await page.evaluate(() => document.documentElement.style.fontSize = '200%');
+    await page.evaluate(() => document.documentElement.style.fontSize = `${parseFloat(getComputedStyle(document.documentElement).fontSize) * 2}px`);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   }
   for (const route of [runner, runner + 'module.html', runner + 'handouts.html', '/campaigns/message-in-a-bottle/']) {
     await page.goto(route);
     if (route === runner) await expect(page.locator('.scene-card')).toHaveCount(3);
     await audit(page);
-    await page.evaluate(() => document.documentElement.style.fontSize = '200%');
+    await page.evaluate(() => document.documentElement.style.fontSize = `${parseFloat(getComputedStyle(document.documentElement).fontSize) * 2}px`);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), route + ' at 200%').toBe(true);
   }
   for (const name of ['message-in-a-bottle-module.pdf', 'message-in-a-bottle-player-handouts.pdf', 'message-in-a-bottle-campaign-walkthrough.pdf', 'message-in-a-bottle-free-module.zip']) {
