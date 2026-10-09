@@ -2,15 +2,25 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { allTags, publicPosts, postTags } from '@/lib/blog';
 import { BlogPostList } from '@/components/blog-post-list';
+import { SubscribeForm } from '@/components/subscribe-form';
+import { newsletter } from '@/lib/content';
+import { blogTagMetadata } from '@/lib/site-metadata';
 export const dynamicParams = false;
 export function generateStaticParams() { return allTags().map(tag => ({ tag })); }
 export async function generateMetadata({ params }: PageProps<'/blog/tag/[tag]'>) {
   const { tag } = await params;
-  return { title: `${tag} — Blog — Austen Tucker-Crowder`, alternates: { canonical: `/blog/tag/${encodeURIComponent(tag)}` } };
+  const postCount = publicPosts().filter(post => postTags(post).includes(tag)).length;
+  return blogTagMetadata(tag, postCount);
 }
 export default async function TagPage({ params }: PageProps<'/blog/tag/[tag]'>) {
   const { tag } = await params;
   const posts = publicPosts().filter(post => postTags(post).includes(tag));
   if (!posts.length) notFound();
-  return <><Link className="back-link" href="/blog">← All posts</Link><h1>Tagged: {tag}</h1><BlogPostList posts={posts} /></>;
+  return <><Link className="back-link" href="/blog">← All posts</Link><h1>Tagged: {tag}</h1><BlogPostList posts={posts} />
+    <div className="subscribe" aria-label="Subscribe">
+      <p className="label kicker"><span className="dot" />{newsletter.kicker}</p>
+      <h3>{newsletter.heading}</h3>
+      <p>{newsletter.body}</p>
+      <SubscribeForm placement="blog_tag" />
+    </div></>;
 }

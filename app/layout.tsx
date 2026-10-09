@@ -1,7 +1,11 @@
 import type { Metadata, Viewport } from 'next';
+import Link from 'next/link';
+import { Suspense } from 'react';
 import { Inter, JetBrains_Mono, Lora } from 'next/font/google';
 import { AnalyticsEvents } from '@/components/analytics-events';
 import { PublicAnalytics } from '@/components/public-analytics';
+import { JsonLd } from '@/lib/json-ld';
+import { personJsonLd, siteDefaultMetadata, websiteJsonLd } from '@/lib/site-metadata';
 import './globals.css';
 
 const inter = Inter({
@@ -35,12 +39,7 @@ export const viewport: Viewport = {
   ],
 };
 
-export const metadata: Metadata = {
-  title: 'Austen Tucker-Crowder — AI Enablement & Engineering Transformation Leader',
-  description: 'AI enablement and engineering transformation leadership for teams adopting AI in their everyday work.',
-  metadataBase: new URL('https://work.thearcades.me'),
-  alternates: { types: { 'application/rss+xml': '/feed.xml' } },
-};
+export const metadata: Metadata = siteDefaultMetadata;
 
 /**
  * Resolves the palette before the first paint, so the page never flashes the
@@ -71,11 +70,17 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       className={`${inter.variable} ${jetbrainsMono.variable} ${lora.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <link rel="describedby" href="/llms.txt" />
+      </head>
       <body>
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
         <script dangerouslySetInnerHTML={{ __html: revealBootstrap }} />
+        <JsonLd data={websiteJsonLd()} />
+        <JsonLd data={personJsonLd()} />
         {children}
-        <PublicAnalytics />
+        <div className="analytics-privacy-link"><Link href="/privacy">Privacy and site analytics</Link></div>
+        <Suspense fallback={null}><PublicAnalytics /></Suspense>
         <AnalyticsEvents />
       </body>
     </html>

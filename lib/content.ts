@@ -20,6 +20,8 @@ export type CaseImage = {
 export type CaseLink = {
   label: string;
   href: string;
+  /** Controls emphasis without making a page component special-case a study. */
+  emphasis?: 'primary' | 'secondary' | 'quiet';
 };
 
 /**
@@ -43,23 +45,43 @@ export type CaseStudy = {
   slug: string;
   lane: string;
   title: string;
+  /** Search-facing title when the visible editorial heading is more expressive. */
+  seoTitle?: string;
   body: string;
   tags: string[];
   /** Public primary-source links, displayed on the full case-study page. */
   links?: CaseLink[];
+  /** A quiet contextual link that sits beneath the home-page case story. */
+  homeSupplementaryLink?: CaseLink;
+  homeDemoLink?: CaseLink;
+  /** Brief, factual hiring context; never infer a delivery date or scale. */
+  snapshot?: Array<{ label: string; value: string }>;
   blogTags?: string[];
+  /** Optional hiring-focused reading order; does not remove posts from the blog. */
+  relatedPostSlugs?: string[];
   accent: Accent;
   image?: CaseImage;
   star?: Star;
   /** The closing lesson the writeup lands on. */
   principle?: string;
+  /** Fast, inspectable proof for skeptical readers. */
+  evidence?: {
+    heading: string;
+    items: Array<{ label: string; value: string }>;
+    note?: string;
+  };
+  /** Technical/product detail that sits outside the narrative story. */
+  buildNotes?: Array<{
+    heading: string;
+    paragraphs: string[];
+  }>;
 };
 
 export const STAR_PARTS = [
-  { key: 'situation', label: 'Situation' },
-  { key: 'task', label: 'Task' },
-  { key: 'action', label: 'Action' },
-  { key: 'result', label: 'Result' },
+  { key: 'situation', label: 'The problem' },
+  { key: 'task', label: 'What I owned' },
+  { key: 'action', label: 'What I did' },
+  { key: 'result', label: 'What changed' },
 ] as const satisfies ReadonlyArray<{ key: keyof Star; label: string }>;
 
 export function hasStar(study: CaseStudy): boolean {
@@ -83,67 +105,104 @@ export type Comment = {
 
 export const site = {
   name: 'Austen Tucker-Crowder',
-  role: 'AI Enablement & Engineering Transformation Leader',
+  role: 'Hands-On AI Builder',
   email: 'austen@thearcades.me',
   bookingUrl: 'https://cal.com/austen-tucker-crowder/30min',
   resumeUrl: '/resume',
   creativeUrl: 'https://www.thearcades.me',
   publishingUrl: 'https://freeplaypublishing.com',
   githubUrl: 'https://github.com/Arcadesys',
+  linkedinUrl: 'https://www.linkedin.com/in/austen-tucker-0968a914',
   blogUrl: 'https://work.thearcades.me/blog',
 } as const;
 
 export const hero = {
-  eyebrow: 'AI Enablement & Engineering Transformation Leader',
-  headingBefore: 'Hi. I make ',
-  headingAccent: 'useful',
-  headingAfter: ' things.',
+  eyebrow: 'Hands-on AI builder · product-minded program owner',
+  headingBefore: 'I turn ideas into ',
+  headingAccent: 'working systems',
+  headingAfter: '.',
+  authorship: 'I use AI heavily as part of my toolchain. On my independent builds, I own the product decisions, architecture, review, iteration, and delivery. The case studies separate my contribution from the wider team’s work.',
   evidence: 'Helped raise agentic-coding adoption from roughly 2% to 43% of merge requests',
   intro:
-    'I’m seeking a leadership role in AI enablement or engineering transformation, helping teams turn AI ambition into measurable, repeatable practice.',
+    'I spent years turning ambitious ideas into products by bringing teams together. AI has given me a way to build those ideas directly, from prototype to working system, and I’m hooked.',
 } as const;
 
 export const workWithMe = {
-  title: 'AI enablement and engineering transformation leadership',
-  description: 'Austen Tucker-Crowder is seeking AI enablement or engineering transformation leadership roles, and also offers limited consulting engagements.',
-  intro: 'I’m looking for a leadership role where I can help engineering and product organizations turn AI ambition into measurable, repeatable practice.',
-  roleLabel: 'Discuss a role',
-  consultingTitle: 'Consulting for teams and small organizations',
-  consultingIntro: 'I also take on select consulting engagements for teams that need practical AI enablement, a useful website or app, or a clear first version of an idea.',
-  bookingLabel: 'Discuss a consulting project',
+  title: 'Build the first useful version',
+  description: 'Hands-on AI building and workflow consulting from Austen Tucker-Crowder: working prototypes, useful systems, and practical handoff for teams with a concrete problem to solve.',
+  intro: 'I take on focused consulting for organizations with a messy workflow, a half-formed product idea, or an AI capability that needs to become real. A first engagement produces a working prototype or workflow, a way to evaluate it with the people who will use it, and clear next-step decisions your team can own.',
+  roleLabel: 'Talk about a hands-on AI role',
+  consultingTitle: 'Focused consulting engagements',
+  consultingIntro: 'For consulting, I scope around a concrete outcome rather than selling a vague bucket of hours.',
+  bookingLabel: 'Discuss a project',
   services: [
     {
-      id: 'ai-enablement',
-      title: 'Give your team AI superpowers',
-      body: 'I help teams put AI to work: finding useful starting points, building practical workflows, and teaching people how to use the tools and check the results.',
-      includes: ['Team workshops', 'Workflow coaching', 'Hands-on prototyping'],
-      detail: 'Bring one recurring task to a workshop and leave with an AI-assisted approach you have tried and know how to check.',
+      id: 'first-useful-version',
+      title: 'Build the first useful version',
+      body: 'Turn an idea, recurring headache, or broken workflow into something real enough to use and learn from.',
+      includes: ['Working prototype or small application', 'Explicit acceptance criteria', 'Handoff notes and next-step decisions'],
+      detail: 'The point is not a polished monument. It is a useful first version that exposes what should happen next.',
+      exampleSlug: 'bunch',
+    },
+    {
+      id: 'ai-workflow',
+      title: 'Put AI to work on a real task',
+      body: 'Take one meaningful workflow and make AI useful inside it without pretending generated output is automatically trustworthy.',
+      includes: ['Workflow design and implementation', 'A way to inspect or check results', 'Practical documentation for the people using it'],
+      detail: 'The deliverable is an approach your team can try, evaluate, and improve rather than a demo that only works while I am in the room.',
       exampleSlug: 'ai-enablement',
     },
     {
-      id: 'websites-and-apps',
-      title: 'Websites and apps',
-      body: 'Business tools, personal projects, creative ideas—or an existing website that needs help. Tell me what you want to make or improve, and we’ll define a useful first version.',
-      includes: ['Website improvements', 'Small custom applications', 'Prototypes'],
-      detail: 'Not every project needs AI. We’ll choose the tools that fit yours.',
-      exampleSlug: 'bunch',
+      id: 'team-ownership',
+      title: 'Help the team take ownership',
+      body: 'When a useful pattern exists, I help turn it into something other people can operate, teach, and extend.',
+      includes: ['Hands-on training', 'Worked examples', 'Ownership and handoff plan'],
+      detail: 'Good systems should survive contact with the people who inherit them.',
+      exampleSlug: 'ai-enablement',
     },
   ],
   firstStep: {
     title: 'How this works',
     steps: [
-      'We have a 30-minute chat about what you need.',
-      'I put together a statement of work and an estimate.',
-      'We talk it through and agree on how to move forward.',
+      'We identify the concrete problem and the person who needs it solved.',
+      'I propose a bounded first outcome, acceptance criteria, and estimate.',
+      'We build, test, and decide what deserves to exist next.',
     ],
   },
   pricing: {
-    title: 'Pricing that fits the project',
-    body: 'Pricing depends on scope. Sliding-scale options are available, especially for individuals, artists, and small community organizations. If money is tight, tell me what you have in mind and we’ll see what we can work out.',
+    title: 'Scope before spectacle',
+    body: 'Pricing depends on scope. Sliding-scale options are available, especially for individuals, artists, and small community organizations. We define what success means before committing to a larger build.',
     welcome: 'Small nonprofits and LGBTQ organizations are especially welcome.',
   },
-  closing: 'Bring an idea, a recurring headache, or a website that needs some attention.',
+  closing: 'Bring an idea, a recurring headache, or a system that needs to become legible.',
 } as const;
+
+export const outcomes = [
+  {
+    number: '01',
+    title: 'Prototype',
+    body: 'Turn an ambiguous opportunity into a working artifact people can react to.',
+    accent: 'pink' as Accent,
+  },
+  {
+    number: '02',
+    title: 'Instrument',
+    body: 'Define what success means and measure the behavior that matters instead of relying on vibes.',
+    accent: 'orange' as Accent,
+  },
+  {
+    number: '03',
+    title: 'Operationalize',
+    body: 'Build the boring-but-essential evaluation, documentation, and handoff around the useful thing.',
+    accent: 'rose' as Accent,
+  },
+  {
+    number: '04',
+    title: 'Enable',
+    body: 'Teach the pattern well enough that the team can keep moving without a permanent wizard in the basement.',
+    accent: 'amber' as Accent,
+  },
+] as const;
 
 export const beliefs = [
   {
@@ -160,6 +219,11 @@ export const beliefs = [
     title: 'Build for handoff.',
     body: 'Good systems should be maintainable, teachable, and bigger than one heroic person.',
     accent: 'rose' as Accent,
+  },
+  {
+    title: 'Build for people, not just problems.',
+    body: 'I look for the thing keeping people from participating, then build a door through it: lower friction, widen access, create connection, and give people new ways to take part.',
+    accent: 'amber' as Accent,
   },
 ] as const;
 
@@ -204,14 +268,48 @@ export const caseStudies: CaseStudy[] = [
     slug: 'bunch',
     blogTags: ['bunch'],
     lane: 'Accessibility · Public interest',
-    title: 'Bunch: free, open software for continuity across memory gaps',
-    body: "I built Bunch to meet a continuity need that the tools I had tried did not address: recovering working context across memory gaps. It's free and open, with the source code and data model published. The engineering problem was preserving context so the right information surfaces at the moment it matters. The accessibility problem turned out to be the same problem in a different hat.",
+    title: 'Bunch: a context system for continuity across memory gaps',
+    seoTitle: 'Building an MCP Context System: Bunch',
+    body: "I built Bunch to meet a continuity need that the tools I had tried did not address: recovering working context across memory gaps. The source code and data model are public to inspect, and a no-sign-in demo uses fictional records. The engineering problem was preserving context so the right information surfaces at the moment it matters. The accessibility problem turned out to be the same problem in a different hat.",
     tags: ['Accessibility', 'Public interest', 'AI systems', 'Rapid prototyping'],
     links: [
-      { label: 'Explore the demo in Codex', href: 'https://github.com/Arcadesys/bunch/blob/main/docs/demo-install.md' },
-      { label: 'View the source code', href: 'https://github.com/Arcadesys/bunch' },
+      { label: 'Try the interactive demo', href: 'https://system.thearcades.me/demo', emphasis: 'primary' },
+      { label: 'How I engineered Bunch →', href: '/engineering', emphasis: 'secondary' },
+      { label: 'View the source code', href: 'https://github.com/Arcadesys/bunch', emphasis: 'quiet' },
+    ],
+    homeSupplementaryLink: { label: 'How I engineered Bunch →', href: '/engineering', emphasis: 'secondary' },
+    homeDemoLink: { label: 'Try Bunch with fictional data →', href: 'https://system.thearcades.me/demo' },
+    snapshot: [
+      { label: 'My role', value: 'Product design, architecture, agent-assisted implementation, testing, and delivery.' },
+      { label: 'System', value: 'Web app + MCP server, shared service rules, PostgreSQL.' },
+      { label: 'Inspect it', value: 'Public source and a fictional-data demo. Source rights are reserved; this is not an open-source licence.' },
     ],
     accent: 'pink',
+    evidence: {
+      heading: 'Proof you can inspect',
+      items: [
+        { label: 'Observed recovery', value: 'About 15 seconds for one real catch-up that had previously taken roughly 20 minutes to reconstruct manually.' },
+        { label: 'Public implementation', value: 'Source code, setup documentation, and the data model are published.' },
+        { label: 'Shared engine', value: 'The web app and MCP server operate on the same explicit records and service rules.' },
+      ],
+      note: 'The 15-second result is one personal observation, not a population-wide performance benchmark.',
+    },
+    buildNotes: [
+      {
+        heading: 'Under the hood',
+        paragraphs: [
+          'Bunch has two front doors onto the same records: a web application for browsing and editing, and an MCP server so an AI assistant can read and write under the same rules.',
+          'The record model is deliberately explicit. A missing entry means nothing was recorded; the system does not infer that nobody was present. That boundary is part of the product, not an implementation footnote.',
+        ],
+      },
+      {
+        heading: 'The product insight',
+        paragraphs: [
+          'I started by thinking I was building identity-tracking software. The more general problem was continuity: preserve enough structured context that the next person, session, or interface can keep going.',
+          'That makes the architecture productizable across different surfaces. The audience-specific language can change while the core job stays the same: maintain canonical context, track changes over time, and hand a harness the smallest useful packet of truth.',
+        ],
+      },
+    ],
     image: {
       src: '/images/bunch-data-model.png',
       width: 1792,
@@ -224,7 +322,7 @@ export const caseStudies: CaseStudy[] = [
         'I have spent years trying to accommodate a practical problem created by dissociative amnesia while maintaining a demanding professional career. Earlier tools helped me track who was fronting, but they were much better at looking inward than helping me recover what had happened in the outside world.',
       ],
       task: [
-        'I needed a way to restore working context quickly enough that memory gaps did not become missed decisions, repeated conversations, or degraded judgment at work.',
+        'I owned the product decisions, record model, web and MCP interfaces, and the rules that keep them consistent. I used AI as an implementation tool and retained responsibility for reviewing, testing, and shipping the result.',
       ],
       action: [
         'I experimented first with community tools like PluralKit and Simply Plural, then began building small applications against their APIs. That process taught me both API integration and the limits of identity tracking alone. Later, while working deeply with AI context management, I reframed the problem: the interface was not the important part. **Continuity of context was.** I began building Bunch as an accessibility harness designed around that idea.',
@@ -244,12 +342,34 @@ export const caseStudies: CaseStudy[] = [
     body: 'At Guaranteed Rate, I acted as product owner for a data-mining tool associated with $1.5B in locked loan volume. The work required turning complexity into priorities, risks, trade-offs, and a path through ambiguity.',
     tags: ['Program ownership', 'Fintech', 'Delivery', 'Executive communication'],
     accent: 'orange',
+    snapshot: [
+      { label: 'My role', value: 'Scrum Master and project lead; later product owner on the data-mining initiative.' },
+      { label: 'Context', value: 'Guaranteed Rate, 2015–2018.' },
+      { label: 'Separate deliverables', value: 'A JavaScript loan-lock display, and product ownership for a separate data-mining tool.' },
+    ],
+    evidence: {
+      heading: 'Scope, separated cleanly',
+      items: [
+        { label: 'Technical credibility', value: 'Learned JavaScript and shipped internal tools, including a real-time lobby display of loan locks.' },
+        { label: 'Program ownership', value: 'Later acted as product owner on a separate data-mining initiative associated with roughly $1.5B in locked loan volume.' },
+        { label: 'Operating lesson', value: 'Small shipped artifacts created feedback and credibility faster than abstract plans.' },
+      ],
+      note: 'The lobby display and the $1.5B data-mining initiative were separate pieces of work. The volume figure describes the initiative’s associated locked loans, not revenue I personally generated.',
+    },
+    buildNotes: [
+      {
+        heading: 'Why this belongs in an engineering portfolio',
+        paragraphs: [
+          'The important part is not that I became a JavaScript expert overnight. I learned enough to cross the boundary from coordinator to builder, put a real tool in front of people, and use that artifact to improve the quality of the product conversation.',
+        ],
+      },
+    ],
     star: {
       situation: [
         'I joined Guaranteed Rate in a high-pressure, engineering-driven culture where credibility came from shipping. I had been hired to help keep teams moving, but early on I was told pretty directly that I was not worth listening to because I could not code.',
       ],
       task: [
-        'I needed to earn enough technical credibility to be effective with engineers, while still doing the coordination and program work I had been hired to do.',
+        'I built the internal loan-lock display while doing the coordination work I had been hired for. On the separate data-mining initiative, I acted as product owner and helped secure the executive sponsorship needed to move blocked work forward.',
       ],
       action: [
         'I learned JavaScript and web development through a very practical apprenticeship with senior engineers. I built internal tools, including a lobby application that visualized loan locks happening in real time, which helped establish that I could build as well as coordinate.',
@@ -265,20 +385,48 @@ export const caseStudies: CaseStudy[] = [
     id: 'evangelist-case',
     slug: 'ai-enablement',
     blogTags: ['ai-enablement'],
-    lane: 'Evangelist',
+    relatedPostSlugs: ['context-engineering-is-a-soda-gun', 'four-stages-nobody-tells-you-about'],
+    lane: 'AI enablement · ActiveCampaign',
     title: 'Turning AI adoption into measurable, repeatable practice',
+    seoTitle: 'AI Adoption Case Study: ActiveCampaign',
     body: 'At ActiveCampaign, I led AI enablement and transformation across engineering, product, and leadership. I paired adoption goals and operating metrics with accessibility-first learning experiences that made practical experimentation possible.',
     tags: ['AI enablement', 'Agentic development', 'Teaching', 'Change leadership'],
     accent: 'rose',
+    snapshot: [
+      { label: 'My role', value: 'Senior Program Owner · AI enablement and transformation.' },
+      { label: 'Context', value: 'ActiveCampaign, June 2025–September 2026. Product-manager roadshow in March 2026.' },
+      { label: 'My deliverables', value: 'Devin goals and KPIs, hands-on Cursor learning, Wavelength, Claude skills, and evaluation prompts.' },
+    ],
+    evidence: {
+      heading: 'Measured transformation',
+      items: [
+        { label: 'Adoption', value: 'Agentic-coding adoption moved from roughly 2% to 43% of merge requests across the broader transformation work.' },
+        { label: 'Enablement surface', value: 'Led a hands-on product-manager roadshow across three continents.' },
+        { label: 'Behavior change', value: 'Product managers began producing prototypes of their own after the roadshow.' },
+      ],
+      note: 'The adoption metric reflects broader organizational work. I contributed to that result; I do not claim the training program alone caused the increase.',
+    },
+    buildNotes: [
+      {
+        heading: 'What I was actually building',
+        paragraphs: [
+          'The product was not a workshop. It was an operating system for adoption: goals and KPIs, practical learning experiences, visible artifacts, decision structures, and enough psychological safety for people to try the tools on real work.',
+          'The repeated pattern was to pair permission to experiment with a way to inspect the result. That is how a novelty starts becoming a practice.',
+        ],
+      },
+    ],
     star: {
       situation: [
         'ActiveCampaign had a strong push toward AI adoption, but little shared structure for how engineering, product, and leadership would learn, measure progress, and act on it.',
       ],
       task: [
-        'I needed to turn that ambition into measurable, repeatable practice while lowering the barrier for product managers to try agentic development before they felt fully qualified.',
+        'As Senior Program Owner, I led the Devin adoption effort: goals, KPI measures, and a game that explained the operating model. I also owned the hands-on product-manager roadshow and built tools for shared program state and AI-response evaluation.',
       ],
       action: [
-        'I led Devin adoption with goals and KPIs, coordinated cross-pillar transformation work around outcomes and north-star metrics, and built operational artifacts for shared decisions and program visibility. I also led a March 2026 roadshow for product managers across three continents, introducing Cursor and agentic AI through accessibility-first, hands-on learning experiences.',
+        'I paired the Devin adoption target with explicit goals and KPI measures, then coordinated cross-pillar work around outcomes and north-star metrics for executive review.',
+        'In March 2026, I led a roadshow for product managers across three continents, introducing Cursor and agentic AI. Product managers began making prototypes afterward.',
+        'My Cursor boot camp gave product people room to be beginners: experiment, build something, and learn from what happened. Participants requested GitLab access so they could keep going.',
+        'I built Wavelength, an MCP-enabled artifact containing tasks, RAID-log items, and program state. I also built Claude skills and Langfuse evaluation prompts for daily operations and assessment of agent-response quality.',
       ],
       result: [
         'I helped raise agentic-coding adoption from roughly **2% to 43% of merge requests** across the broader transformation work; it was still climbing at departure.',
@@ -286,6 +434,72 @@ export const caseStudies: CaseStudy[] = [
       ],
     },
     principle: 'People do not need permission to be experts. They need permission to try.',
+  },
+  {
+    id: 'cockpit-case',
+    slug: 'job-search-cockpit',
+    lane: 'Builder · AI systems',
+    title: 'A job-search cockpit where AI can draft but cannot invent',
+    seoTitle: 'Human-in-the-Loop AI Case Study: Job-Search Cockpit',
+    body: 'I built a private workspace to run my own job search: it finds leads, drafts tailored applications, and hands batches to a local MCP worker. The design problem was trust. An AI that writes applications will happily invent experience, so the model only chooses which of my reviewed résumé claims fit a role. The draft is assembled from those claims’ exact text, and nothing counts as submitted without a saved confirmation.',
+    tags: ['AI systems', 'Human-in-the-loop', 'MCP', 'Privacy by design'],
+    links: [
+      { label: 'Read the MCP API design', href: 'https://github.com/Arcadesys/work-thearcades-me/blob/main/docs/jobs-mcp-api.md', emphasis: 'primary' },
+      { label: 'Read the workspace setup notes', href: 'https://github.com/Arcadesys/work-thearcades-me/blob/main/docs/private-jobs-foundation.md', emphasis: 'secondary' },
+      { label: 'Inspect the drafting guardrail tests', href: 'https://github.com/Arcadesys/work-thearcades-me/blob/main/lib/job-drafting.test.ts', emphasis: 'quiet' },
+      { label: 'View the source code', href: 'https://github.com/Arcadesys/work-thearcades-me', emphasis: 'quiet' },
+    ],
+    accent: 'amber',
+    snapshot: [
+      { label: 'My role', value: 'Product design, workflow architecture, agent-assisted implementation, and guardrail tests.' },
+      { label: 'System', value: 'Next.js, PostgreSQL, a reviewed-claim store, and a scoped MCP worker API.' },
+      { label: 'Status', value: 'Used for my own search. Public design and code; private leads and drafts. No hiring-outcome claim yet.' },
+    ],
+    evidence: {
+      heading: 'Guardrails you can inspect',
+      items: [
+        { label: 'The model selects; it does not write facts', value: 'The model returns claim IDs. Any ID that is not a reviewed claim is dropped, and the résumé variant and outreach are assembled from the exact approved claim text.' },
+        { label: 'Verified postings only', value: 'Drafting requires the original posting text and a source note. Search snippets are rejected, and posting text is passed to the model as untrusted data.' },
+        { label: 'No silent submissions', value: 'The MCP API has no employer submit endpoint. An item becomes submitted only with a saved confirmation receipt, and retries are idempotent.' },
+        { label: 'Audit trail', value: 'Every résumé-claim edit appends an immutable version row in the same database statement that changes the claim.' },
+        { label: 'Bounded spend', value: 'Each request reserves budget against a monthly cap. A failed or unmeasured provider call closes the budget rather than risking unaccounted spend.' },
+        { label: 'Private by default', value: 'GitHub sign-in with an account allowlist, rechecked on every read; the workspace is noindex, excluded from the sitemap, and skipped by analytics.' },
+      ],
+      note: 'This describes how the system is built, not job-search outcomes. The design docs and source code are public; the leads, drafts, and résumé review data are not.',
+    },
+    buildNotes: [
+      {
+        heading: 'Under the hood',
+        paragraphs: [
+          'Leads arrive two ways: a daily job polls Google Alerts RSS feeds under a monthly cap, and LinkedIn alert emails can be imported on demand. Both land as unverified leads, because a feed snippet is a hint, not proof that a posting is live.',
+          'A local MCP client works through batches of pursued jobs using scoped bearer tokens that are stored only as hashes, expire after 90 days, and can be revoked. The worker can move an item through queued, preparing, awaiting approval, blocked, or skipped. It cannot mark anything submitted through the status route.',
+        ],
+      },
+      {
+        heading: 'The product insight',
+        paragraphs: [
+          'Enabling AI in a workflow is mostly deciding where it is not allowed to decide. The model is fast at drafting. The system is built so that speed never outruns what I can stand behind.',
+          'That is the same operating pattern I use for team adoption: permission to experiment, paired with a way to inspect the result.',
+        ],
+      },
+    ],
+    star: {
+      situation: [
+        'I started a job search and wanted AI help with the repetitive parts: finding postings, tailoring a résumé, drafting outreach. The obvious failure mode is an assistant that confidently writes experience I do not have, into documents that go to real employers under my name.',
+      ],
+      task: [
+        'I owned the workflow, the reviewed-claim data model, the drafting constraints, and the MCP queue and receipt boundaries. I built the application and its guardrail tests with AI assistance, and I review the claims and approve what goes out.',
+      ],
+      action: [
+        'I seeded a private **résumé-truth store** from my public résumé, with every claim starting as unreviewed and carrying a source note. Drafting only runs against a verified original posting; the model assesses fit and returns the IDs of reviewed claims that apply, and the draft is built from those claims’ exact text. I added lead discovery from Google Alerts and LinkedIn alert emails, a pipeline with weekly review of kept leads, applications, replies, interviews, and offers, and a narrow MCP API so a local agent can prepare batches while I approve what goes out.',
+        'The guardrails are covered by unit tests alongside the rest of the site: claim filtering, queue transitions, discovery limits, and weekly counts.',
+      ],
+      result: [
+        'The system now runs my own search. Every generated draft is built from claims I have reviewed, with a snapshot of those claims saved alongside it, and the weekly count of applications comes only from saved submission receipts, not from what an agent says it did.',
+        'I am not claiming outcomes yet. The weekly review will say whether it works; the design already says what it is allowed to do.',
+      ],
+    },
+    principle: 'Let the AI move fast. Make it prove every claim.',
   },
 ];
 
@@ -330,7 +544,7 @@ export const about = {
     },
     {
       title: 'Unpaid work that ships.',
-      body: 'Free accessibility software and nonprofit conference operations, because the through-line has always been building for people the tools ignore.',
+      body: 'Accessibility software and nonprofit conference operations, because the through-line has always been building for people the tools ignore.',
     },
   ],
 } as const;
@@ -394,6 +608,6 @@ export const commentBox = {
 
 export const contact = {
   kicker: 'Say hello',
-  heading: 'Let’s talk about your next role or project.',
-  body: 'I’m seeking a leadership role in AI enablement or engineering transformation. I also take on select consulting projects.',
+  heading: 'What do you want to build?',
+  body: 'I’m looking for hands-on AI work: take an ambiguous problem, build the first useful version, and keep going until other people can use and own it. I bring the product judgment, program leadership, and enablement experience to make that happen. I also take on focused consulting projects.',
 } as const;

@@ -1,4 +1,14 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "crons": [
+    {
+      "path": "/api/kit/reconcile-confirmations",
+      "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/jobs/discovery",
+      "schedule": "0 14 * * *"
+    }
+  ]
 }

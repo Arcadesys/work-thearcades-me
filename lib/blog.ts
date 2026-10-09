@@ -11,6 +11,9 @@ const schema = z.object({
   id: text, title: text, slug, group: slug, publishDate: date,
   buildDate: z.string().regex(/^\d{4}(?:-(?:0[1-9]|1[0-2]))?$/).optional(),
   order: z.number().optional(), updatedDate: date.optional(), excerpt: text.optional(),
+  kind: z.enum(['letter', 'demo']).default('letter'),
+  demoNumber: z.number().int().positive().optional(),
+  demoUrl: z.url().optional(),
   tags: z.array(text).default([]),
   hero: z.object({ src: text, alt: text }).strict().optional(),
   seo: z.object({ title: text.optional(), description: text.optional() }).strict().optional(),
@@ -43,7 +46,11 @@ const projectTags: Record<string, string[]> = {
   'claude-design-and-the-novel-t': ['novel-t'],
 };
 export function relatedPosts(study: typeof caseStudies[number]) {
-  return publicPosts().filter(post => study.blogTags?.some(tag => postTags(post).includes(tag)));
+  const posts = publicPosts();
+  if (study.relatedPostSlugs) {
+    return study.relatedPostSlugs.flatMap(slug => posts.filter(post => post.slug === slug));
+  }
+  return posts.filter(post => study.blogTags?.some(tag => postTags(post).includes(tag)));
 }
 export function relatedWork(post: BlogPost) {
   return caseStudies.filter(study => study.blogTags?.some(tag => postTags(post).includes(tag)));

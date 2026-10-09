@@ -4,10 +4,23 @@ import { SiteHeader } from '@/components/site-header';
 import { ExternalLink } from '@/components/external-link';
 import { caseStudyBySlug, site, workWithMe } from '@/lib/content';
 
+const SEARCH_TITLE = `AI Building & Workflow Consulting — ${site.name}`;
+
 export const metadata: Metadata = {
-  title: `${workWithMe.title} — ${site.name}`,
+  title: SEARCH_TITLE,
   description: workWithMe.description,
   alternates: { canonical: '/work-with-me' },
+  openGraph: {
+    type: 'website',
+    url: '/work-with-me',
+    title: SEARCH_TITLE,
+    description: workWithMe.description,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: SEARCH_TITLE,
+    description: workWithMe.description,
+  },
 };
 
 export default function WorkWithMePage() {
@@ -20,6 +33,7 @@ export default function WorkWithMePage() {
         <div className="services-intro">
           <h1>{workWithMe.title}</h1>
           <p>{workWithMe.intro}</p>
+          <p>I&rsquo;m also looking for the right full-time role: hands-on AI building, rapid prototyping, and turning useful experiments into systems a team can own.</p>
           <a className="btn btn-gradient" href={`mailto:${site.email}`} data-funnel-event="contact_click" data-funnel-placement="work_with_me_intro">{workWithMe.roleLabel}<span aria-hidden="true"> →</span></a>
         </div>
         <section className="services-intro" aria-labelledby="consulting-heading">

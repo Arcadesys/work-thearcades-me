@@ -1,0 +1,160 @@
+import assert from 'node:assert/strict';
+import { test } from 'node:test';
+import type { Metadata } from 'next';
+import { homepageMetadata, siteDefaultMetadata, PERSON_ID, SITE_URL, blogPostMetadata, caseStudyMetadata, blogPostJsonLd, caseStudyJsonLd, blogIndexMetadata, blogTagMetadata, guideJsonLd, personJsonLd, websiteJsonLd } from './site-metadata';
+import { loadPosts, publicPosts } from './blog';
+import { caseStudies, caseStudyBySlug, site, workWithMe } from './content';
+import { pictureGuide } from './guides';
+import { RESUME_CANONICAL_PATH } from './resume';
+import { serializeJsonLd } from './json-ld';
+
+const absolute = (path: string) => new URL(path, SITE_URL).href;
+
+function canonical(metadata: Metadata) {
+  return metadata.alternates?.canonical?.toString();
+}
+
+// Page-level routes (/work-with-me, /layoff-triage, /privacy, /resume) are checked
+// against emitted HTML in scripts/rendered-metadata.test.ts.
+test('public entry points keep their explicit, absolute canonical contracts', async () => {
+  const tea = blogPostMetadata(loadPosts().find((post) => post.slug === 'when-in-crisis-make-tea')!);
+  const bunch = caseStudyMetadata(caseStudyBySlug('bunch')!, site.name);
+
+  assert.equal(absolute(canonical(homepageMetadata)!), `${SITE_URL}/`);
+  assert.equal(absolute(canonical(tea)!), `${SITE_URL}/blog/when-in-crisis-make-tea`);
+  assert.equal(absolute(canonical(bunch)!), `${SITE_URL}/work/bunch`);
+  assert.equal(bunch.alternates?.types?.['text/markdown'], '/work/bunch.md');
+  assert.equal(absolute(RESUME_CANONICAL_PATH), `${SITE_URL}/resume`);
+});
+
+test('root-layout defaults never name a page, so routes cannot inherit the homepage canonical', () => {
+  assert.equal(siteDefaultMetadata.alternates?.canonical, undefined);
+  assert.deepEqual(siteDefaultMetadata.alternates?.types, { 'application/rss+xml': '/feed.xml' });
+  assert(siteDefaultMetadata.openGraph);
+  assert.equal(siteDefaultMetadata.openGraph.url, undefined);
+  assert.equal(String(siteDefaultMetadata.metadataBase), `${SITE_URL}/`);
+});
+
+test('social metadata stays route-specific and requests raster large-image cards', async () => {
+  const tea = blogPostMetadata(loadPosts().find((post) => post.slug === 'when-in-crisis-make-tea')!);
+  const bunch = caseStudyMetadata(caseStudyBySlug('bunch')!, site.name);
+
+  assert.equal(homepageMetadata.openGraph?.url, '/');
+  assert.equal(workWithMe.title, 'Build the first useful version');
+  assert.equal(tea.openGraph?.url, '/blog/when-in-crisis-make-tea');
+  assert.equal(bunch.openGraph?.url, '/work/bunch');
+  for (const metadata of [homepageMetadata, tea, bunch]) {
+    assert(metadata.twitter && 'card' in metadata.twitter);
+    assert.equal(metadata.twitter.card, 'summary_large_image');
+  }
+  assert.equal(tea.openGraph?.title, 'What I Did After a Layoff: Start With Tea — Austen Tucker-Crowder');
+  assert.equal(bunch.openGraph?.title, 'Bunch: a context system for continuity across memory gaps — Austen Tucker-Crowder');
+});
+
+test('case studies use exact search titles without changing their visible editorial headings', () => {
+  const bunch = caseStudyBySlug('bunch')!;
+  const enablement = caseStudyBySlug('ai-enablement')!;
+
+  assert.equal(caseStudyMetadata(bunch, site.name).title, 'Building an MCP Context System: Bunch');
+  assert.equal(caseStudyMetadata(enablement, site.name).title, 'AI Adoption Case Study: ActiveCampaign');
+  const cockpit = caseStudyBySlug('job-search-cockpit')!;
+  assert.equal(caseStudyMetadata(cockpit, site.name).title, 'Human-in-the-Loop AI Case Study: Job-Search Cockpit');
+  assert.equal(absolute(canonical(caseStudyMetadata(cockpit, site.name))!), `${SITE_URL}/work/job-search-cockpit`);
+  assert.equal(cockpit.title, 'A job-search cockpit where AI can draft but cannot invent');
+  assert.equal(bunch.title, 'Bunch: a context system for continuity across memory gaps');
+  assert.equal(enablement.title, 'Turning AI adoption into measurable, repeatable practice');
+  assert.equal(blogIndexMetadata.title, 'AI Engineering Build Logs & Essays');
+  assert.equal(blogIndexMetadata.openGraph?.url, '/blog');
+  assert.equal(blogIndexMetadata.openGraph?.title, 'AI Engineering Build Logs & Essays');
+  assert(blogIndexMetadata.twitter && 'card' in blogIndexMetadata.twitter);
+  assert.equal(blogIndexMetadata.twitter.card, 'summary_large_image');
+});
+
+test('structured data is canonical, source-bounded, and safe to embed in HTML', () => {
+  const post = loadPosts().find((candidate) => candidate.slug === 'when-in-crisis-make-tea')!;
+  const study = caseStudyBySlug('bunch')!;
+  const postSchema = blogPostJsonLd(post);
+  const studySchema = caseStudyJsonLd(study);
+
+  assert.equal(postSchema['@type'], 'BlogPosting');
+  assert.equal(postSchema.url, `${SITE_URL}/blog/when-in-crisis-make-tea`);
+  assert.equal(postSchema.datePublished, post.publishDate);
+  assert.equal(postSchema.dateModified, post.updatedDate ?? post.publishDate);
+  // Structured-data images are the same raster cards as og:image, never an SVG hero.
+  assert.equal(postSchema.image, `${SITE_URL}/blog/when-in-crisis-make-tea/opengraph-image/card`);
+  assert.match(post.hero?.src ?? '', /\.svg$/);
+  assert.equal(studySchema.image, `${SITE_URL}/work/bunch/opengraph-image/card`);
+  const heroless = loadPosts().find((candidate) => !candidate.hero);
+  assert(heroless, "expected at least one post without a hero");
+  assert.equal(blogPostJsonLd(heroless).image, `${SITE_URL}/blog/${heroless.slug}/opengraph-image/card`);
+  assert.equal(studySchema['@type'], 'Article');
+  assert.equal(studySchema.url, `${SITE_URL}/work/bunch`);
+  assert.equal(studySchema.author.name, 'Austen Tucker-Crowder');
+  assert.deepEqual(websiteJsonLd(), { '@context': 'https://schema.org', '@type': 'WebSite', '@id': `${SITE_URL}/#website`, name: 'Austen Tucker-Crowder', url: SITE_URL, publisher: { '@id': PERSON_ID } });
+  assert.equal(guideJsonLd(pictureGuide).url, `${SITE_URL}${pictureGuide.path}`);
+  assert.equal(serializeJsonLd({ headline: '</script><script>alert(1)</script>' }).includes('</script>'), false);
+  assert.match(serializeJsonLd({ headline: '</script>' }), /\\u003c\/script>/);
+});
+
+test('Person describes Austen’s role, expertise, and established public identities', () => {
+  const person = personJsonLd();
+  assert.equal(person.jobTitle, 'Hands-On AI Builder');
+  assert.match(person.description, /product-minded program owner/);
+  assert.deepEqual(person.knowsAbout, [
+    'AI engineering',
+    'Agentic AI',
+    'AI enablement',
+    'Human-in-the-loop systems',
+    'Accessibility',
+    'Product development',
+    'Program leadership',
+    'Rapid prototyping',
+  ]);
+  assert.deepEqual(person.sameAs, [
+    'https://www.linkedin.com/in/austen-tucker-0968a914',
+    'https://github.com/Arcadesys',
+    'https://www.thearcades.me',
+    'https://freeplaypublishing.com',
+  ]);
+});
+
+test('thin tag archives are noindex while established tags remain indexable', () => {
+  const thinTag = blogTagMetadata('career', 1);
+  const establishedTag = blogTagMetadata('bunch', 3);
+  assert.deepEqual(thinTag.robots, { index: false, follow: true });
+  assert.deepEqual(establishedTag.robots, { index: true, follow: true });
+});
+
+test('builder positioning is consistent across search and social surfaces', () => {
+  assert.equal(homepageMetadata.title, 'Hands-On AI Builder | Austen Tucker-Crowder');
+  assert.equal(homepageMetadata.openGraph?.title, homepageMetadata.title);
+  assert.equal(homepageMetadata.twitter?.title, homepageMetadata.title);
+  assert.match(String(homepageMetadata.description), /builds useful AI systems/);
+});
+
+// Local stand-in for a hosted validator (validator.schema.org and Google's Rich
+// Results Test are not reachable from CI). Checks the fields Google's Article
+// guidance lists for every public post and case study; it does not claim
+// rich-result eligibility.
+test('every public article carries the documented Article fields with absolute URLs', () => {
+  const schemas = [
+    ...publicPosts().map((post) => ({ id: `blog/${post.slug}`, schema: blogPostJsonLd(post) as Record<string, unknown> })),
+    ...caseStudies.map((study) => ({ id: `work/${study.slug}`, schema: caseStudyJsonLd(study) as Record<string, unknown> })),
+  ];
+  assert.ok(schemas.length > 10);
+  for (const { id, schema } of schemas) {
+    assert.ok(['BlogPosting', 'Article'].includes(String(schema['@type'])), `${id} @type`);
+    assert.ok(typeof schema.headline === 'string' && schema.headline.length > 0 && schema.headline.length <= 110, `${id} headline`);
+    assert.match(String(schema.image), /^https:\/\//, `${id} image`);
+    assert.match(String(schema.url), /^https:\/\//, `${id} url`);
+    assert.equal(schema.mainEntityOfPage, schema.url, `${id} mainEntityOfPage`);
+    const author = schema.author as Record<string, unknown>;
+    assert.equal(author['@type'], 'Person', `${id} author type`);
+    assert.ok(author.name && String(author.url).startsWith('https://'), `${id} author name/url`);
+    if (id.startsWith('blog/')) {
+      assert.ok(!Number.isNaN(Date.parse(String(schema.datePublished))), `${id} datePublished`);
+      assert.ok(!Number.isNaN(Date.parse(String(schema.dateModified))), `${id} dateModified`);
+      assert.ok(Date.parse(String(schema.dateModified)) >= Date.parse(String(schema.datePublished)), `${id} modified before published`);
+    }
+  }
+});

@@ -55,7 +55,7 @@
 
 .contentGrid {
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.75fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(24px, 4vw, 40px);
   align-items: start;
 }
@@ -145,6 +145,45 @@
 
 .originCard a {
   color: var(--pink);
+}
+
+.originSection {
+  max-width: 58rem;
+}
+
+.originCopy a {
+  color: var(--pink);
+}
+
+.exampleCard {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+}
+
+.exampleCard h2,
+.exampleCard p,
+.exampleCard blockquote {
+  margin: 0;
+}
+
+.exampleLabel {
+  color: var(--text) !important;
+  font-weight: 700;
+}
+
+.exampleQuote {
+  padding: 18px 20px;
+  border-left: 4px solid var(--pink);
+  background: var(--surface-raised);
+  color: var(--text);
+  font-size: 1.05em;
+  line-height: 1.6;
+}
+
+.exampleNote {
+  font-size: 0.9em;
+  line-height: 1.55;
 }
 
 .subscribeWrap {

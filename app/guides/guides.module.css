@@ -1,0 +1,81 @@
+.page {
+  overflow: clip;
+}
+
+.main {
+  padding-block: clamp(52px, 8vw, 104px);
+}
+
+.intro {
+  max-width: 68rem;
+  padding-bottom: clamp(36px, 6vw, 72px);
+}
+
+.intro h1 {
+  max-width: 16ch;
+  margin-bottom: 22px;
+  font-size: clamp(2.7rem, 7vw, 5.6rem);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+.list {
+  display: grid;
+  gap: 20px;
+  max-width: 68rem;
+}
+
+.card {
+  display: grid;
+  gap: 14px;
+  padding: clamp(24px, 4vw, 40px);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--pink);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.card h3 {
+  font-size: clamp(1.65rem, 3.5vw, 2.5rem);
+  line-height: 1.13;
+}
+
+.card h3 a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--pink);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.card > p:not(.label) {
+  max-width: 62ch;
+  color: var(--text-muted);
+  font-size: 1.125rem;
+  line-height: 1.65;
+}
+
+.card > a {
+  width: fit-content;
+  min-height: 48px;
+  align-content: center;
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--pink);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 640px) {
+  .main {
+    padding-top: 42px;
+  }
+
+  .intro h1 {
+    font-size: clamp(2.5rem, 12vw, 3.9rem);
+  }
+
+  .card {
+    padding: 22px;
+  }
+}

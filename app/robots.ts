@@ -2,12 +2,16 @@ import type { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-      // Working brief with unresolved status notes, not a public page. Also noindex'd in app/journeys/page.tsx.
-      disallow: '/journeys',
-    },
+    rules: [
+      {
+        // Public work is intentionally open to search engines, AI search,
+        // answer engines, and other standards-respecting crawlers. Keep the
+        // small private working surfaces out of discovery.
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/journeys', '/jobs'],
+      },
+    ],
     sitemap: 'https://work.thearcades.me/sitemap.xml',
   };
 }

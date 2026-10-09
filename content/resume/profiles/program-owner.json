@@ -1,0 +1,24 @@
+{
+  "id": "program-owner",
+  "label": "Program Owner",
+  "status": "draft",
+  "headlineId": "headline.ai-builder",
+  "summaryId": "summary.ai-builder",
+  "page": {"description": "Draft edition for review: program ownership, facilitation, prioritization, and organizational change around measurable outcomes.", "cta": "Discuss a program role", "pitch": "Draft for review: organizing people and decisions around an outcome, with facilitation, prioritization, and measurable results."},
+  "sections": [
+    {
+      "kind": "experience",
+      "roles": [
+        { "roleId": "role.activecampaign", "achievements": ["ach.ac.enablement", "ach.ac.cross-pillar", "ach.ac.roadshow", "ach.ac.onsite", "ach.ac.worksites"] },
+        { "roleId": "role.allstate", "achievements": ["ach.allstate.initiatives", "ach.allstate.metrics", "ach.allstate.curriculum"] },
+        { "roleId": "role.arity", "achievements": ["ach.arity.planning", "ach.arity.mentoring"] },
+        { "roleId": "role.worktango", "achievements": ["ach.worktango.throughput", "ach.worktango.mentorship"] },
+        { "roleId": "role.guaranteed-rate", "achievements": ["ach.gr.mvp", "ach.gr.loan-tool"] }
+      ]
+    },
+    { "kind": "earlier", "ids": ["role.cha", "role.tpg"] },
+    { "kind": "skills", "ids": ["skills.facilitation", "skills.methodologies", "skills.analysis", "skills.communication"] },
+    { "kind": "education", "ids": ["edu.wabash", "cert.csm"] },
+    { "kind": "community", "ids": ["community.mff"] }
+  ]
+}

@@ -1,6 +1,22 @@
-# Portfolio funnel analytics audit
+# Portfolio funnel analytics audit (historical design)
 
-## Metric and boundary
+
+## Current implementation supersedes the original proposal
+
+The source inventory and proposed names below describe the historical pre-instrumentation revisions, not today's implementation. The current contract is [Work site analytics](./posthog.md), with its event allowlist in `lib/analytics-policy.ts` and explicit client capture in `lib/analytics-client.ts`. PostHog is now the work site's provider. Do not build new reports around the retired proposal names.
+
+| Historical proposal | Implemented event / meaning |
+| --- | --- |
+| `hiring_contact_click` | `contact_click`, segmented by public `placement`; contact intent only |
+| `consulting_calendar_click` | `booking_click`, segmented by `placement`; booking intent only |
+| `resume_pdf_download_initiated` | `resume_click` with `placement=resume_pdf`; PDF-link activation only |
+| `service_page_view` | `$pageview` with `pathname=/work-with-me` |
+
+Other `resume_click` placements mean résumé navigation, not PDF activation. Main-site `resume-click` is a separate reader event meaning resume reading; it must not be combined with the work event. Main MFF and sitewide capture overlap and must not be added together. Newsletter `subscribe_submit_intent` and `subscribe_request_accepted` measure different request stages, not confirmed active subscriptions. Qualified contact/booking outcomes remain separately reviewed private records.
+
+Work uses PostHog's SDK-managed UUIDv7 sessions, with session-storage-only identity and no cross-site joining. Main and hack historically sent UUIDv4 session IDs: their raw pageviews and IDs remain valid historical receipts, but their native session, duration and bounce reports lacked coverage. Following the custom-session correction, compare hosts and complete UTC intervals separately and label the collection boundary. No historical event backfill or visitor-identity merge is proposed here.
+
+## Historical metric and boundary
 
 **Done when:** a future implementation can distinguish four visitor actions and qualified inquiries without collecting personal data in analytics, and can calculate rates only when it has a traffic denominator.
 
@@ -33,7 +49,7 @@ The README identifies a Vercel project, and the source links to Cal.com and post
 
 Do not use a provider dashboard as evidence for a metric until its current settings, date range, and event definition have been checked. A provider acknowledgement, a calendar landing-page visit, or a newsletter submission is not a qualified hiring or consulting inquiry.
 
-## Proposed event contract
+## Historical proposed event contract
 
 Implement these only after choosing an approved analytics provider and consent posture. The event contract is limited to its event name, page path, and CTA placement; do not send email addresses, names, free-text messages, calendar details, IP addresses, or user IDs to analytics.
 
@@ -49,17 +65,17 @@ Implement these only after choosing an approved analytics provider and consent p
 
 Record a click before an external navigation where the chosen provider supports it; otherwise label the event as a best-effort click measurement. `resume_pdf_download_initiated` means activation of the download link only. It does not prove a completed file transfer. No click proves that an email was sent or a meeting was booked.
 
-## Blog funnel events (implemented)
+## Newsletter events (implemented)
 
-Unlike the proposed contract above, these two events are implemented in `components/analytics-events.tsx`, gated the same way as the existing `resume_click`/`contact_click`/`booking_click` events behind `NEXT_PUBLIC_VERCEL_CUSTOM_EVENTS_ENABLED`, using the same `data-funnel-event`/`data-funnel-placement` click delegation. Properties are limited to `placement`; no PII.
+Newsletter events are emitted by `components/subscribe-form.tsx`, with event names and properties filtered by `lib/analytics-policy.ts`. PostHog collection follows `docs/posthog.md`: production events require the exact `work.thearcades.me` hostname and production Vercel environment. Only the public `placement` value is retained; email addresses, submitted form values, and full URLs are excluded.
 
 | Event name | Page path | CTA placement |
 | --- | --- | --- |
 | `triage_skill_download` | `/layoff-triage` | `layoff_triage_page` — the main download link |
-| `subscribe_submit` | `/blog/[slug]` | `blog_post` — the inline mid-read subscribe card |
-| `subscribe_submit` | `/layoff-triage` | `layoff_triage_page` — the subscribe card |
+| `subscribe_submit_intent` | signup placements | Records a user-initiated signup submission |
+| `subscribe_request_accepted` | signup placements | The server reports that Kit accepted the double-opt-in form request |
 
-`subscribe_submit` records the click on the form's submit button, not a confirmed subscription — the form does a native POST to ActiveCampaign and subscription still requires the reader to confirm by email. `triage_skill_download` means activation of the download link only, for the same reason `resume_pdf_download_initiated` above does.
+These events represent different stages: intent records the submission attempt, and accepted means Kit accepted the request and initiated its form flow. Neither event establishes that the reader confirmed the email or remains subscribed. `triage_skill_download` means activation of the download link only, for the same reason `resume_pdf_download_initiated` above does.
 
 ## Qualified inquiries are a separate outcome
 

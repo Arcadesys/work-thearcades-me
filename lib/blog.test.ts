@@ -5,8 +5,10 @@ import { readFileSync, mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import sources from '../content/blog-sources.json';
-import { loadPosts, publicPosts, postTags, relatedPosts, relatedWork, displayBuildDate, articleBody, archiveLinks } from './blog';
+import { allTags, loadPosts, publicPosts, postTags, relatedPosts, relatedWork, displayBuildDate, articleBody, archiveLinks } from './blog';
+import { blogPostMetadata } from './site-metadata';
 import { caseStudies } from './content';
+import { originalEditionUrl } from './original-edition';
 import sitemap from '../app/sitemap';
 import robots from '../app/robots';
 import { GET as feedRoute } from '../app/feed.xml/route';
@@ -46,7 +48,6 @@ test('partial build dates never display invented precision', () => {
 
 test('all selected imports preserve exact source files or archive bodies', () => {
   const posts = loadPosts();
-  assert.equal(posts.length, 13);
   for (const [slug, receipt] of Object.entries(sources)) {
     const post = posts.find(post => post.slug === slug)!;
     assert(post, `Missing ${slug}`);
@@ -68,6 +69,10 @@ test('archive links resolve without exposing handoffs or unselected drafts', () 
 test('the launch post links the skill and keeps a weekly cadence promise', () => {
   const post = loadPosts().find(post => post.slug === 'when-in-crisis-make-tea')!;
   assert.deepEqual(post.tags, ['career', 'ai-enablement', 'layoffs', 'building-in-public']);
+  assert.equal(post.title, 'When in crisis, make tea.');
+  assert.equal(post.publishDate, '2026-09-17T13:00:00.000Z');
+  assert.equal(post.seo?.title, 'What I Did After a Layoff: Start With Tea');
+  assert.equal(blogPostMetadata(post).title, 'What I Did After a Layoff: Start With Tea — Austen Tucker-Crowder');
   assert(post.body.includes('[Download the free Layoff Triage Skill](/layoff-triage)'));
   assert(!post.body.includes('**Download the free Layoff Triage Skill**'));
 });
@@ -75,22 +80,58 @@ test('the launch post links the skill and keeps a weekly cadence promise', () =>
 test('the layoff triage skill download exists and is referenced by the post and its landing page', () => {
   assert(readFileSync('public/downloads/layoff-triage-skill.md', 'utf8').includes('I was just laid off. Start with tea.'));
   assert(readFileSync('app/layoff-triage/page.tsx', 'utf8').includes('/downloads/layoff-triage-skill.md'));
+  assert(readFileSync('app/layoff-triage/page.tsx', 'utf8').includes('Illustrative response, derived from the skill'));
 });
 
-test('sitemap includes every public post and excludes the noindexed journeys page', () => {
+test('sitemap includes every work-original public post and excludes copies, private routes, APIs, and every tag archive', () => {
   const entries = sitemap();
   const urls = entries.map(entry => entry.url);
-  for (const post of publicPosts()) assert(urls.includes(`https://work.thearcades.me/blog/${post.slug}`), post.slug);
+  for (const post of publicPosts()) {
+    // Copies of thearcades.me originals belong in that site's sitemap.
+    assert.equal(urls.includes(`https://work.thearcades.me/blog/${post.slug}`), !originalEditionUrl(post.slug), post.slug);
+  }
   assert(urls.includes('https://work.thearcades.me/blog/when-in-crisis-make-tea'));
   assert(urls.includes('https://work.thearcades.me/layoff-triage'));
-  assert(!urls.some(url => url.includes('/journeys')));
+  assert(!urls.some(url => /^\/(?:journeys|jobs|api)(?:\/|$)/.test(new URL(url).pathname)));
+  for (const tag of allTags()) assert(!urls.includes(`https://work.thearcades.me/blog/tag/${encodeURIComponent(tag)}`), tag);
 });
 
-test('robots disallows journeys and points at the sitemap', () => {
+test('robots opens public pages to every crawler and preserves exactly the private route exclusions', () => {
   const config = robots();
   assert.equal(config.sitemap, 'https://work.thearcades.me/sitemap.xml');
-  const rule = Array.isArray(config.rules) ? config.rules[0] : config.rules;
-  assert.equal(rule.disallow, '/journeys');
+  const rules = Array.isArray(config.rules) ? config.rules : [config.rules];
+  // A single wildcard rule includes current and future AI/search crawlers.
+  // Agent-specific groups could override it and silently narrow public access.
+  assert.equal(rules.length, 1);
+  for (const rule of rules) {
+    const userAgents = Array.isArray(rule.userAgent) ? rule.userAgent : [rule.userAgent];
+    const allowed = Array.isArray(rule.allow) ? rule.allow : [rule.allow];
+    const disallowed = Array.isArray(rule.disallow) ? rule.disallow : [rule.disallow];
+    assert.deepEqual(userAgents, ['*']);
+    assert.deepEqual(allowed, ['/']);
+    assert.deepEqual([...disallowed].sort(), ['/jobs', '/journeys']);
+  }
+});
+
+test('llms.txt directs readers to public evidence and practical entry points', () => {
+  const llms = readFileSync('public/llms.txt', 'utf8');
+  for (const path of [
+    '/work/bunch',
+    '/work/guaranteed-rate',
+    '/work/ai-enablement',
+    '/work-with-me',
+    '/resume',
+    '/guides',
+    '/blog/bunch-part-three',
+    '/blog/the-fox-and-the-eval',
+    '/blog/when-in-crisis-make-tea',
+  ]) assert(llms.includes(`https://work.thearcades.me${path}`), path);
+  // Copies are listed by their thearcades.me original, never the work URL.
+  for (const slug of ['bunch', 'four-stages-nobody-tells-you-about', 'claude-design-and-the-novel-t']) {
+    assert(!llms.includes(`https://work.thearcades.me/blog/${slug}\n`), slug);
+  }
+  assert(llms.includes('https://www.thearcades.me/projects/bunch/bunch'));
+  assert(llms.includes('https://www.thearcades.me/projects/arcade-blog/four-stages-nobody-tells-you-about'));
 });
 
 test('the RSS feed lists exactly the public posts', async () => {

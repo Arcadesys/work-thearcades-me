@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Markdown, { defaultUrlTransform } from 'react-markdown';
@@ -6,15 +7,15 @@ import { PostTags, RelatedReading } from '@/components/blog-post-list';
 import { SubscribeForm } from '@/components/subscribe-form';
 import { publicPosts, postBySlug, displayDate, displayBuildDate, relatedWork, relatedReading, splitAtReadingPeak, articleBody, archiveLinks } from '@/lib/blog';
 import { newsletter } from '@/lib/content';
+import { blogPostMetadata, blogPostJsonLd, breadcrumbJsonLd } from '@/lib/site-metadata';
+import { JsonLd } from '@/lib/json-ld';
 import sources from '@/content/blog-sources.json';
 export const dynamicParams = false;
 export function generateStaticParams() { return publicPosts().map(post => ({ slug: post.slug })); }
-export async function generateMetadata({ params }: PageProps<'/blog/[slug]'>) {
+export async function generateMetadata({ params }: PageProps<'/blog/[slug]'>): Promise<Metadata> {
   const post = postBySlug((await params).slug);
   if (!post) return {};
-  // Omitting `images` entirely (rather than an empty array) when there's no hero lets
-  // the co-located opengraph-image.tsx file convention supply the card instead.
-  return { title: `${post.seo?.title ?? post.title} — Austen Tucker-Crowder`, description: post.seo?.description ?? post.excerpt, alternates: { canonical: `/blog/${post.slug}`, types: { 'application/rss+xml': '/feed.xml' } }, openGraph: { type: 'article', publishedTime: post.publishDate, ...(post.hero ? { images: [{ url: post.hero.src, alt: post.hero.alt }] } : {}) } };
+  return blogPostMetadata(post);
 }
 export default async function PostPage({ params }: PageProps<'/blog/[slug]'>) {
   const post = postBySlug((await params).slug);
@@ -29,7 +30,10 @@ export default async function PostPage({ params }: PageProps<'/blog/[slug]'>) {
     urlTransform: (url: string) => defaultUrlTransform(archiveLinks[post.slug]?.[url] ?? url),
     components: { a: ({ href, children }: { href?: string; children?: React.ReactNode }) => (href ? <a href={href}>{children}</a> : <span>{children}</span>) },
   };
-  return <article><Link className="back-link" href="/blog">← All posts</Link>
+  return <article>
+    <JsonLd data={blogPostJsonLd(post)} />
+    <JsonLd data={breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'Blog', path: '/blog' }, { name: post.title, path: `/blog/${post.slug}` }])} />
+    <Link className="back-link" href="/blog">← All posts</Link>
     <h1>{post.title}</h1><time dateTime={post.publishDate}>{displayDate(post.publishDate)}</time>
     {post.buildDate && <p>Build date: <time dateTime={post.buildDate}>{displayBuildDate(post.buildDate)}</time></p>}
     <PostTags post={post} />
@@ -41,8 +45,13 @@ export default async function PostPage({ params }: PageProps<'/blog/[slug]'>) {
       <h3>{newsletter.heading}</h3>
       <p>{newsletter.body}</p>
       <SubscribeForm />
+      <p><a href="https://www.thearcades.me/subscribe">Choose from all email topics →</a></p>
     </div>
     {secondHalf && <div className="blog-prose"><Markdown {...markdownProps}>{secondHalf}</Markdown></div>}
+    {post.slug === 'when-in-crisis-make-tea' && <aside className="blog-start" aria-label="Next steps">
+      <p>Interested in my professional work? <Link href="/work/ai-enablement">See my AI enablement case study</Link> or <Link href="/#contact">get in touch about a role</Link>.</p>
+      <p>New to my work? <Link href="https://www.thearcades.me/start">Start here</Link>.</p>
+    </aside>}
     {source?.url && <p className="blog-provenance">Originally published on <a href={source.url}>The Arcades</a> on {displayDate(post.publishDate)}.</p>}
     {source?.kind === 'archive' && <p className="blog-provenance">From my writing archive. Published here on {displayDate(post.publishDate)}.</p>}
     <RelatedReading items={related} />

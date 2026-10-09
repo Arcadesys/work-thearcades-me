@@ -1,70 +1,60 @@
 'use client';
 
-import { FormEvent, useId, useState } from 'react';
-import { newsletter } from '@/lib/content';
+import { useId, useState, type FormEvent } from 'react';
+import { track } from '@/lib/analytics-client';
 
-type State = 'idle' | 'submitting' | 'success' | 'error';
+const confirmationMessage = 'If this address is eligible, we have requested a verification email. The request will not reach Kit until you confirm the link. If no email arrives, try again after ten minutes.';
 
 export function SubscribeForm({ placement = 'blog_post' }: { placement?: string }) {
   const emailId = useId();
-  const [email, setEmail] = useState('');
-  const [state, setState] = useState<State>('idle');
-  const [message, setMessage] = useState(newsletter.idleNote);
+  const statusId = useId();
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'accepted' | 'error'>('idle');
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (state === 'submitting') return;
+    if (status === 'submitting') return;
 
-    setState('submitting');
-    setMessage('Adding you to the build notes…');
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const email = String(formData.get('email') ?? '').trim();
+    setStatus('submitting');
+    track('subscribe_submit_intent', { placement });
 
     try {
-      const response = await fetch('/api/subscribe', {
+      const response = await fetch('/api/kit/subscribe', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, placement }),
       });
-      const payload = (await response.json()) as { ok?: boolean; error?: string };
+      if (!response.ok) throw new Error('Signup request was not accepted');
 
-      if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || 'Could not subscribe right now.');
-      }
-
-      setState('success');
-      setMessage("You're on the list. Welcome aboard.");
-      setEmail('');
-    } catch (error) {
-      setState('error');
-      setMessage(error instanceof Error ? error.message : 'Could not subscribe right now.');
+      setStatus('accepted');
+      form.reset();
+    } catch {
+      setStatus('error');
     }
   }
 
   return (
-    <form onSubmit={submit} noValidate={false}>
+    <form onSubmit={handleSubmit} aria-describedby={statusId}>
       <label htmlFor={emailId}>Email address</label>
       <input
         className="field"
         id={emailId}
-        type="email"
         name="email"
-        required
+        type="email"
         autoComplete="email"
-        placeholder="you@company.com"
-        value={email}
-        onChange={(event) => setEmail(event.target.value)}
-        disabled={state === 'submitting'}
+        inputMode="email"
+        maxLength={254}
+        required
+        disabled={status === 'submitting' || status === 'accepted'}
+        aria-invalid={status === 'error' ? true : undefined}
       />
-      <button
-        className="btn btn-gradient"
-        type="submit"
-        disabled={state === 'submitting'}
-        data-funnel-event="subscribe_submit"
-        data-funnel-placement={placement}
-      >
-        {state === 'submitting' ? 'Adding you…' : 'Get the build notes'}
+      <button className="btn" type="submit" disabled={status === 'submitting' || status === 'accepted'}>
+        {status === 'submitting' ? 'Sending…' : 'Get the build notes'}
       </button>
-      <p className="form-note" role={state === 'error' ? 'alert' : 'status'} aria-live="polite">
-        {message}
+      <p className="form-note" id={statusId} role="status" aria-live="polite">
+      {status === 'accepted' ? confirmationMessage : status === 'error' ? 'We could not submit your request. Please try again.' : 'One email a week. Unsubscribe whenever.'}
       </p>
     </form>
   );

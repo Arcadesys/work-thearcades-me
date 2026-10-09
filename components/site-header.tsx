@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 
 import { BrandMark } from './brand-mark';
@@ -7,11 +8,12 @@ import { ThemeSwitch } from './theme-switch';
 
 const links = [
   ['Work', '/#work'],
-  ['What I offer', '/work-with-me'],
+  ['Technical tour', '/engineering'],
+  ['Consulting', '/work-with-me'],
   ['About', '/#about'],
   ['Blog', '/blog'],
+  ['Guides', '/guides'],
   ['Contact', '/#contact'],
-  ['Build notes', '/#subscribe'],
   ['Résumé', '/resume'],
 ] as const;
 
@@ -45,8 +47,8 @@ export function SiteHeader({ home = false, current }: SiteHeaderProps) {
     return home && destination.startsWith('/#') ? destination.slice(1) : destination;
   }
 
-  function navigation(label: string) {
-    const destinations = links.map(([text, destination]) =>
+  function navigation(label: string, compact = false) {
+    const destinations = links.filter(([text]) => !compact || (text !== 'About' && text !== 'Guides')).map(([text, destination]) =>
       current === '/work-with-me' && text === 'Blog' ? ['Notes', '/#notes'] : [text, destination],
     );
 
@@ -68,8 +70,13 @@ export function SiteHeader({ home = false, current }: SiteHeaderProps) {
           <BrandMark />
           <span className="visually-hidden">Austen Tucker-Crowder — {home ? 'back to top' : 'home'}</span>
         </a>
-        <div className="desktop-navigation">{navigation('Main')}</div>
+        <div className="desktop-navigation">{navigation('Main', true)}</div>
         <div className="desktop-theme"><ThemeSwitch /></div>
+        <nav className="hiring-shortcuts" aria-label="Hiring shortcuts">
+          <a href="/engineering" aria-current={current === '/engineering' ? 'page' : undefined}>Technical tour</a>
+          <Link href="/resume" aria-current={current === '/resume' ? 'page' : undefined}>Résumé</Link>
+          <a href={href('/#contact')}>Discuss a role</a>
+        </nav>
         <details
           className="mobile-navigation"
           ref={disclosure}

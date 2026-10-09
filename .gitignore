@@ -3,3 +3,6 @@ node_modules/
 .vercel/
 *.tsbuildinfo
 .env*.local
+
+# Draft résumé editions build here for review; they are never published.
+.resume-drafts/

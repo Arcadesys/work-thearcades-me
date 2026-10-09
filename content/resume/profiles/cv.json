@@ -1,0 +1,28 @@
+{
+  "id": "cv",
+  "label": "Full CV",
+  "status": "draft",
+  "headlineId": "headline.ai-builder",
+  "summaryId": "summary.ai-builder",
+  "page": {"description": "Draft edition for review: the complete approved public professional record.", "cta": "Get in touch", "pitch": "Draft for review: the full chronology, projects, education, and community work."},
+  "sections": [
+    {
+      "kind": "experience",
+      "roles": [
+        { "roleId": "role.activecampaign", "achievements": ["ach.ac.enablement", "ach.ac.adoption", "ach.ac.devin", "ach.ac.roadshow", "ach.ac.wavelength", "ach.ac.cross-pillar", "ach.ac.skills-evals", "ach.ac.learning", "ach.ac.onsite", "ach.ac.worksites"] },
+        { "roleId": "role.allstate", "achievements": ["ach.allstate.initiatives", "ach.allstate.metrics", "ach.allstate.curriculum"] },
+        { "roleId": "role.arity", "achievements": ["ach.arity.planning", "ach.arity.mentoring"] },
+        { "roleId": "role.worktango", "achievements": ["ach.worktango.throughput", "ach.worktango.velocity", "ach.worktango.mentorship"] },
+        { "roleId": "role.guaranteed-rate", "achievements": ["ach.gr.mvp", "ach.gr.loan-tool", "ach.gr.measurement"] },
+        { "roleId": "role.cha", "achievements": [] },
+        { "roleId": "role.tpg", "achievements": [] }
+      ]
+    },
+    { "kind": "projects", "ids": ["project.bunch", "project.job-search-cockpit"] },
+    { "kind": "skills", "ids": ["skills.ai", "skills.facilitation", "skills.development", "skills.analysis", "skills.communication", "skills.methodologies"] },
+    { "kind": "education", "ids": ["edu.wabash", "cert.csm"] },
+    { "kind": "publications", "ids": [] },
+    { "kind": "talks", "ids": [] },
+    { "kind": "community", "ids": ["community.mff"] }
+  ]
+}
