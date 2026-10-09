@@ -1,4 +1,6 @@
-export const eventNames = ['$pageview', 'case_study_view', 'resume_click', 'contact_click', 'booking_click', 'triage_skill_download', 'image_ratchet_skill_download', 'subscribe_submit_intent', 'subscribe_request_accepted', 'campaign_landing'] as const;
+import { sanitizeEngagement } from './reading-engagement';
+
+export const eventNames = ['$pageview', 'case_study_view', 'resume_click', 'contact_click', 'booking_click', 'triage_skill_download', 'image_ratchet_skill_download', 'subscribe_submit_intent', 'subscribe_request_accepted', 'campaign_landing', 'subscribe_verification_requested', 'subscribe_request_failed', 'reading-engagement'] as const;
 export type AnalyticsEvent = typeof eventNames[number];
 
 type CapturedEvent = {
@@ -40,7 +42,15 @@ export function caseStudySlug(path: string) {
 
 export function isPrivateAnalyticsPath(path: string) {
   return path === '/jobs' || path.startsWith('/jobs/')
-    || path === '/api/jobs' || path.startsWith('/api/jobs/');
+    || path === '/api/jobs' || path.startsWith('/api/jobs/')
+    || path === '/newsletter/verify' || path === '/newsletter/unsubscribe';
+}
+
+export function readingContentType(path: string): 'article' | 'case_study' | 'resume' | null {
+  if (path === '/resume') return 'resume';
+  if (caseStudySlug(path)) return 'case_study';
+  if (/^\/blog\/[a-z0-9-]+$/.test(path)) return 'article';
+  return null;
 }
 
 export function referrerDomain(referrer: string) {
@@ -111,11 +121,33 @@ export function outgoingEvent(event: CapturedEvent | null, token: string) {
   const routeValues = [event.properties?.pathname, event.properties?.landing_page];
   if (routeValues.some(value => typeof value === 'string' && isPrivateAnalyticsPath(value))) return null;
 
+  const properties = sanitizeProperties(event.properties ?? {});
+  if (event.event === 'reading-engagement') {
+    const contentType = readingContentType(String(properties.pathname));
+    const metrics = sanitizeEngagement(event.properties ?? {});
+    if (!contentType || !metrics) return null;
+    Object.assign(properties, metrics, { content_type: contentType });
+  }
+  if (event.event === 'resume_click') {
+    const value = event.properties?.interaction_type;
+    const kind = typeof value === 'string' ? value : undefined;
+    properties.interaction_type = ['resume_pdf', 'resume_text'].includes(String(kind)) ? kind : 'resume_navigation';
+    properties.conversion_stage = kind === 'resume_pdf' || kind === 'resume_text' ? 'resume_download_intent' : 'resume_navigation_intent';
+  }
+  if (event.event === 'contact_click') properties.conversion_stage = 'contact_intent';
+  if (event.event === 'booking_click') properties.conversion_stage = 'booking_intent';
+  if (event.event === 'subscribe_submit_intent') properties.conversion_stage = 'request_intent';
+  if (event.event === 'subscribe_verification_requested') properties.conversion_stage = 'verification_request_accepted';
+  if (event.event === 'subscribe_request_failed') properties.conversion_stage = 'request_failed';
+  // Historical verification-page name is retained for old callers, never called active signup.
+  if (event.event === 'subscribe_request_accepted') properties.conversion_stage = 'first_party_verification_accepted';
+  const outgoingProperties: Record<string, unknown> & { token: string } = { ...properties, token };
+
   return {
     event: event.event,
     uuid: event.uuid,
     timestamp: event.timestamp,
     // Reconstruct the SDK payload so top-level $set/$set_once cannot update people.
-    properties: { ...sanitizeProperties(event.properties ?? {}), token },
+    properties: outgoingProperties,
   };
 }

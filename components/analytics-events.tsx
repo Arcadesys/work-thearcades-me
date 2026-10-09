@@ -22,7 +22,9 @@ export function AnalyticsEvents() {
       const control = target?.closest<HTMLElement>('[data-funnel-event]');
       const name = control?.dataset.funnelEvent as AnalyticsEvent | undefined;
       if (control && name && funnelEvents.has(name)) {
-        track(name, { placement: control.dataset.funnelPlacement ?? 'unspecified' });
+        const interaction = name === 'resume_click' ? control.dataset.funnelPlacement === 'resume_pdf' ? 'resume_pdf'
+          : control.dataset.funnelPlacement === 'resume_text' ? 'resume_text' : 'resume_navigation' : undefined;
+        track(name, { placement: control.dataset.funnelPlacement ?? 'unspecified', ...(interaction ? { interaction_type: interaction } : {}) });
       }
     };
 

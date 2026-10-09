@@ -40,7 +40,7 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
       <SiteHeader />
 
       <main id="main" tabIndex={-1}>
-        <article className="shell case-page" data-accent={study.accent}>
+        <article className="shell case-page" data-accent={study.accent} data-reading-body>
           <Link className="label back-link" href="/#work">
             <span aria-hidden="true">← </span>All work
           </Link>

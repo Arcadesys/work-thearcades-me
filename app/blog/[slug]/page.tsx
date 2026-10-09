@@ -43,7 +43,7 @@ export default async function PostPage({ params }: PageProps<'/blog/[slug]'>) {
     <SubscribeForm />
     <p><a href="https://www.thearcades.me/subscribe">Choose from all email topics →</a></p>
   </div>;
-  return <article>
+  return <article data-reading-body>
     <JsonLd data={blogPostJsonLd(post)} />
     <JsonLd data={breadcrumbJsonLd([{ name: 'Home', path: '/' }, { name: 'Blog', path: '/blog' }, { name: post.title, path: `/blog/${post.slug}` }])} />
     <Link className="back-link" href="/blog">← All posts</Link>
