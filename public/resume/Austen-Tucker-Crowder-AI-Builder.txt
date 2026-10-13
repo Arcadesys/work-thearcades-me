@@ -6,6 +6,15 @@ https://work.thearcades.me | https://github.com/Arcadesys
 Summary
 I build useful AI systems, backed by 16+ years delivering customer-focused software through program ownership, agile coaching, and hands-on building. AI lets me take more of the work directly from prototype to working system. I bring product judgment, measurable goals, evaluation, and handoff discipline to the things I build.
 
+Selected AI Builds
+Bunch
+Built a continuity tool with web and MCP interfaces sharing typed contracts and transactional rules. Added owner-scoped records, version checks, retry safety, audit events, and AI spend controls. Source and a fictional-data demo are publicly inspectable.
+Read the technical tour: https://work.thearcades.me/engineering
+
+Job-search cockpit
+Built a private workspace that assembles application drafts from exact, reviewed claims. Added verified-posting requirements, version history, bounded AI spend, and submission receipts; the MCP API has no employer-submit endpoint.
+Read the case study: https://work.thearcades.me/work/job-search-cockpit
+
 Experience
 ActiveCampaign — Senior Program Owner | AI Enablement & Transformation
 Chicago, IL | 06/2025–09/2026
@@ -39,15 +48,6 @@ Chicago, IL | 11/2015 – 12/2018
 Earlier Experience
 Chicago Housing Authority — Business Analyst & Scrum Master (2012–2015)
 Technology Partnership Group — Business Analyst (2009–2012)
-
-Selected AI Builds
-Bunch
-Built a continuity tool with web and MCP interfaces sharing typed contracts and transactional rules. Added owner-scoped records, version checks, retry safety, audit events, and AI spend controls. Source and a fictional-data demo are publicly inspectable.
-Read the technical tour: https://work.thearcades.me/engineering
-
-Job-search cockpit
-Built a private workspace that assembles application drafts from exact, reviewed claims. Added verified-posting requirements, version history, bounded AI spend, and submission receipts; the MCP API has no employer-submit endpoint.
-Read the case study: https://work.thearcades.me/work/job-search-cockpit
 
 Tools & Skills
 AI & Automation: Claude Code, Cursor.ai, Langfuse, Glean, Agentic Development, LLM Evaluation, MCP Development, Claude Skills Development

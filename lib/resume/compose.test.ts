@@ -144,10 +144,11 @@ test('career cross-references are checked', () => {
 
 test('profiles cannot override employment facts or reference what does not exist', () => {
   const profile = rawProfile('ai-builder');
-  profile.sections[0].roles[0].title = 'VP of AI';
+  const experience = (p: Record<string, any>) => p.sections.find((s: { kind: string }) => s.kind === 'experience');
+  experience(profile).roles[0].title = 'VP of AI';
   assert.deepEqual(codes(validateProfile(profile).issues), ['schema']);
   const withText = rawProfile('ai-builder');
-  withText.sections[0].roles[0].achievements[0] = { id: 'ach.ac.adoption', text: 'Single-handedly drove adoption to 43%' };
+  experience(withText).roles[0].achievements[0] = { id: 'ach.ac.adoption', text: 'Single-handedly drove adoption to 43%' };
   assert.deepEqual(codes(validateProfile(withText).issues), ['schema']);
   assert.deepEqual(codes(validateProfile({ ...rawProfile('ai-builder'), id: 'cto' }).issues), ['schema']);
 
@@ -156,11 +157,11 @@ test('profiles cannot override employment facts or reference what does not exist
     edit(raw);
     return codes(composeResume(CAREER, validateProfile(raw).profile!).errors);
   };
-  assert.deepEqual(compose((p) => { p.sections[0].roles[0].achievements.push('ach.missing'); }), ['unknown-reference']);
-  assert.deepEqual(compose((p) => { p.sections[0].roles[0].achievements.push('ach.arity.planning'); }), ['wrong-role']);
-  assert.deepEqual(compose((p) => { p.sections[0].roles[0].achievements.push({ id: 'ach.ac.enablement', variant: 'highlight' }); }), ['unknown-variant']);
-  assert.deepEqual(compose((p) => { p.sections[0].roles[0].achievements.push('ach.ac.devin'); }), ['duplicate-reference']);
-  assert.deepEqual(compose((p) => { p.sections[0].roles.push({ roleId: 'role.arity', achievements: [] }); }), ['duplicate-reference']);
+  assert.deepEqual(compose((p) => { experience(p).roles[0].achievements.push('ach.missing'); }), ['unknown-reference']);
+  assert.deepEqual(compose((p) => { experience(p).roles[0].achievements.push('ach.arity.planning'); }), ['wrong-role']);
+  assert.deepEqual(compose((p) => { experience(p).roles[0].achievements.push({ id: 'ach.ac.enablement', variant: 'highlight' }); }), ['unknown-variant']);
+  assert.deepEqual(compose((p) => { experience(p).roles[0].achievements.push('ach.ac.devin'); }), ['duplicate-reference']);
+  assert.deepEqual(compose((p) => { experience(p).roles.push({ roleId: 'role.arity', achievements: [] }); }), ['duplicate-reference']);
   assert.deepEqual(compose((p) => { p.sections[3].ids.push('skills.missing'); }), ['unknown-reference']);
   assert.deepEqual(compose((p) => { p.sections.push({ kind: 'skills', ids: [] }); }), ['duplicate-section']);
   assert.deepEqual(compose((p) => { p.headlineId = 'headline.missing'; }), ['unknown-reference']);

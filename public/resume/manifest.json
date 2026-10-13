@@ -5,16 +5,16 @@
     {
       "profileId": "ai-builder",
       "label": "AI Builder",
-      "contentDigest": "0716ef0e45d87d28d6f081d0000361363028f0482741af39589d6db314aaeb36",
+      "contentDigest": "79ab187b7d879fefcfb587acd347eb8a72e0a671c43dd609b894f209bea885d1",
       "pdf": {
         "path": "public/resume/Austen-Tucker-Crowder-AI-Builder.pdf",
-        "sha256": "974fa8ee8b44f624dbc939e2214297c02dfabe15a5ea0ae2c9f2b2221dbb3fdb",
+        "sha256": "06abadfc19ab3576e4811812d7001843e0d51b6f7829f253095c6a4f84a28c0c",
         "pages": 2,
         "pageBudget": 2
       },
       "text": {
         "path": "public/resume/Austen-Tucker-Crowder-AI-Builder.txt",
-        "sha256": "d92373be1525a7bf238f5de6e2583160fe57fc9c1c4919a98f68b1a3a8bce1aa"
+        "sha256": "81ac03327e3399bbc8a55b9bf43dc4fcedfcc99e2586eecbb60c4877ebb058af"
       }
     }
   ],
