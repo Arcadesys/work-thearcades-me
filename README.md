@@ -47,7 +47,7 @@ npm run build
 
 ### 2026-10-13 — Private jobs cockpit moved to job-search-harness
 
-- The private jobs cockpit, its APIs, GitHub sign-in, local jobdesk, migrations, PDF fonts, and jobs tests now live in [Arcadesys/job-search-harness](https://github.com/Arcadesys/job-search-harness), split with filtered history. The local jobdesk already runs from that repo; this site no longer serves `/jobs` or `/api/jobs`.
+- The private jobs cockpit, its APIs, GitHub sign-in, local jobdesk, migrations, and jobs tests now live in [Arcadesys/job-search-harness](https://github.com/Arcadesys/job-search-harness), split with filtered history. The local jobdesk already runs from that repo; this site no longer serves `/jobs` or `/api/jobs`.
 - Removed the discovery cron, the jobs-only dependencies and scripts, the CI jobdesk step, and the truth-seed parity check (the harness keeps those seeds as a frozen snapshot).
 - Kept the `/jobs` robots disallow and the analytics rules that drop jobs paths, so old URLs stay unindexed and untracked.
 - The cockpit case study and its markdown edition now link to the harness repository.
