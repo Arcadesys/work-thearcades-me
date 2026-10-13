@@ -71,7 +71,8 @@ test('the guide uses the Bunch style clash and Colette model sheet as continuity
   assert(source.includes('How we made Colette together.'));
   assert(source.includes('Continuity reference'));
   assert(source.includes('Scene result'));
-  assert(source.includes('not a record of a real event'));
+  assert(source.includes('retrieved through MCP or the API'));
+  assert(source.includes('photographic composite'));
 });
 
 test('each ratchet step includes a concrete sample prompt', () => {
