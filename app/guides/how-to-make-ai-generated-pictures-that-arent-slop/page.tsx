@@ -155,7 +155,7 @@ export default function PictureGuidePage() {
           <section aria-labelledby="references-heading">
             <p className="label">Continuity before composition</p>
             <h2 id="references-heading">How did I get all these styles to clash? Here’s how.</h2>
-            <p>I brought four recognizable characters into one beach picture, but their references were built in different visual languages. One has softer face geometry. Another has sharper anime features. Fur, hands, eyes, line weight, and shading all follow slightly different rules. Each character reads. The group does not quite agree with itself.</p>
+            <p>Each character already had a model sheet in my Bunch app. I pulled those sheets through MCP or the API and used them as identity references while compositing the characters into a photograph. The identities survived—but the sheets had been built in different visual languages. Face geometry, fur, hands, eyes, line weight, and shading all follow slightly different rules. Each character reads. The group does not quite agree with itself.</p>
 
             <figure className={`${styles.figureCard} ${styles.heroFigure}`}>
               <p className={styles.status}>Useful failure: identity survived, style did not</p>
@@ -168,7 +168,7 @@ export default function PictureGuidePage() {
                   alt="Generated beach group-photo candidate in which four recognizable characters share a scene but use visibly different face geometry, fur rendering, and shading styles."
                 />
               </a>
-              <figcaption>This is a generated Bunch group-photo experiment, not a record of a real event. The observation is that the characters remain distinct; the judgment is that they do not yet feel drawn by the same production.</figcaption>
+              <figcaption>Four Bunch model sheets, retrieved through MCP or the API, supplied the character identities for this photographic composite. The observation is that those identities remain distinct; the judgment is that they do not yet feel drawn by the same production.</figcaption>
             </figure>
 
             <div className={styles.continuityGrid}>
