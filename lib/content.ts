@@ -445,10 +445,10 @@ export const caseStudies: CaseStudy[] = [
     body: 'I built a private workspace to run my own job search: it finds leads, drafts tailored applications, and hands batches to a local MCP worker. The design problem was trust. An AI that writes applications will happily invent experience, so the model only chooses which of my reviewed résumé claims fit a role. The draft is assembled from those claims’ exact text, and nothing counts as submitted without a saved confirmation.',
     tags: ['AI systems', 'Human-in-the-loop', 'MCP', 'Privacy by design'],
     links: [
-      { label: 'Read the MCP API design', href: 'https://github.com/Arcadesys/work-thearcades-me/blob/main/docs/jobs-mcp-api.md', emphasis: 'primary' },
-      { label: 'Read the workspace setup notes', href: 'https://github.com/Arcadesys/work-thearcades-me/blob/main/docs/private-jobs-foundation.md', emphasis: 'secondary' },
-      { label: 'Inspect the drafting guardrail tests', href: 'https://github.com/Arcadesys/work-thearcades-me/blob/main/lib/job-drafting.test.ts', emphasis: 'quiet' },
-      { label: 'View the source code', href: 'https://github.com/Arcadesys/work-thearcades-me', emphasis: 'quiet' },
+      { label: 'Read the MCP API design', href: 'https://github.com/Arcadesys/job-search-harness/blob/main/docs/jobs-mcp-api.md', emphasis: 'primary' },
+      { label: 'Read the workspace setup notes', href: 'https://github.com/Arcadesys/job-search-harness/blob/main/docs/private-jobs-foundation.md', emphasis: 'secondary' },
+      { label: 'Inspect the drafting guardrail tests', href: 'https://github.com/Arcadesys/job-search-harness/blob/main/lib/job-drafting.test.ts', emphasis: 'quiet' },
+      { label: 'View the source code', href: 'https://github.com/Arcadesys/job-search-harness', emphasis: 'quiet' },
     ],
     accent: 'amber',
     snapshot: [

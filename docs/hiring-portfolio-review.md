@@ -17,7 +17,7 @@ This records the initial hiring-clarity pass, merged in [PR #85](https://github.
 - Existing published [ActiveCampaign case study](https://work.thearcades.me/work/ai-enablement), [résumé](https://work.thearcades.me/resume), and author-confirmed career history supplied for this revision support responsibilities, employment dates, and the formal Senior Program Owner title.
 - [Bunch engineering tour](https://work.thearcades.me/engineering), [source README](https://github.com/Arcadesys/bunch#status-and-licence), and [fictional-data demo](https://system.thearcades.me/demo) support implementation and public access descriptions. The README explicitly reserves source rights.
 - [Guaranteed Rate case study](https://work.thearcades.me/work/guaranteed-rate) and author-confirmed account distinguish the two initiatives.
-- [Cockpit case study](https://work.thearcades.me/work/job-search-cockpit), `lib/job-drafting.ts`, its tests, and `docs/jobs-mcp-api.md` support the claim-selection, guarded queue, and receipt design. Private application records are not included.
+- [Cockpit case study](https://work.thearcades.me/work/job-search-cockpit), and [job-search-harness](https://github.com/Arcadesys/job-search-harness) (`lib/job-drafting.ts`, its tests, and `docs/jobs-mcp-api.md`) support the claim-selection, guarded queue, and receipt design. Private application records are not included.
 - Existing site tokens, semantic navigation, skip links, focus styles, text equivalents, and theme controls are retained. No new runtime dependency was introduced.
 
 ## Deliberately unresolved

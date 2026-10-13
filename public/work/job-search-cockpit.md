@@ -46,7 +46,7 @@ Let the AI move fast. Make it prove every claim.
 
 ## Inspect it
 
-- MCP API design: https://github.com/Arcadesys/work-thearcades-me/blob/main/docs/jobs-mcp-api.md
-- Workspace setup notes: https://github.com/Arcadesys/work-thearcades-me/blob/main/docs/private-jobs-foundation.md
-- Drafting guardrail tests: https://github.com/Arcadesys/work-thearcades-me/blob/main/lib/job-drafting.test.ts
-- Source: https://github.com/Arcadesys/work-thearcades-me
+- MCP API design: https://github.com/Arcadesys/job-search-harness/blob/main/docs/jobs-mcp-api.md
+- Workspace setup notes: https://github.com/Arcadesys/job-search-harness/blob/main/docs/private-jobs-foundation.md
+- Drafting guardrail tests: https://github.com/Arcadesys/job-search-harness/blob/main/lib/job-drafting.test.ts
+- Source: https://github.com/Arcadesys/job-search-harness
