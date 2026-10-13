@@ -42,6 +42,7 @@ const projectTags: Record<string, string[]> = {
   bunch: ['bunch'],
   'bunch-part-two': ['bunch'],
   'bunch-part-three': ['bunch'],
+  'bunch-chatgpt-oauth-failure-analysis': ['bunch'],
   'four-stages-nobody-tells-you-about': ['ai-enablement'],
   'claude-design-and-the-novel-t': ['novel-t'],
 };

@@ -100,7 +100,7 @@ export default async function CaseStudyPage(props: PageProps<'/work/[slug]'>) {
                 {study.evidence.items.map((item) => (
                   <div key={item.label}>
                     <dt>{item.label}</dt>
-                    <dd>{item.value}</dd>
+                    <dd>{item.value}{item.href && <> <Link href={item.href}>Read it</Link></>}</dd>
                   </div>
                 ))}
               </dl>

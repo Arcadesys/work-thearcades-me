@@ -123,6 +123,7 @@ test('llms.txt directs readers to public evidence and practical entry points', (
     '/resume',
     '/guides',
     '/blog/bunch-part-three',
+    '/blog/bunch-chatgpt-oauth-failure-analysis',
     '/blog/the-fox-and-the-eval',
     '/blog/when-in-crisis-make-tea',
   ]) assert(llms.includes(`https://work.thearcades.me${path}`), path);
@@ -142,4 +143,19 @@ test('the RSS feed lists exactly the public posts', async () => {
   assert.equal(itemCount, posts.length);
   assert(body.includes('When in crisis, make tea.'));
   assert.equal(response.headers.get('Content-Type'), 'application/rss+xml; charset=utf-8');
+});
+
+test('the Bunch OAuth failure analysis is a self-canonical work original tied to Bunch', () => {
+  const slug = 'bunch-chatgpt-oauth-failure-analysis';
+  const post = publicPosts().find(candidate => candidate.slug === slug)!;
+  assert(post, 'failure analysis must be public');
+  assert(!(slug in sources), 'a work original carries no creative-site source receipt');
+  const metadata = blogPostMetadata(post);
+  assert.equal(metadata.alternates?.canonical, `/blog/${slug}`);
+  assert.equal((metadata.openGraph as { url?: string }).url, `/blog/${slug}`);
+  assert.deepEqual(relatedWork(post).map(work => work.slug), ['bunch']);
+  assert(sitemap().some(entry => entry.url.endsWith(`/blog/${slug}`)));
+  for (const pr of [66, 68, 70, 71, 74, 75, 84, 85, 87, 88]) assert(post.body.includes(`https://github.com/Arcadesys/bunch/pull/${pr}`), `PR #${pr}`);
+  assert(post.body.includes('Not established.'), 'the operating record states its limits');
+  assert(caseStudies.find(study => study.slug === 'bunch')!.evidence!.items.some(item => item.href === `/blog/${slug}`));
 });
