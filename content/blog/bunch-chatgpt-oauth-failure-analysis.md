@@ -1,23 +1,23 @@
 ---
 id: work-bunch-chatgpt-oauth-failure-analysis
-title: 'Eight Pull Requests to Connect One Account: A Bunch OAuth Failure Analysis'
+title: 'Nine Pull Requests to Connect One Account: A Bunch OAuth Failure Analysis'
 slug: bunch-chatgpt-oauth-failure-analysis
 group: work-notes
 publishDate: '2026-10-13T15:30:00.000Z'
 buildDate: '2026-09'
-excerpt: How connecting Bunch's OAuth-protected MCP server to ChatGPT failed eight different ways, what each failure showed about the client, and the security boundary that stayed fixed throughout.
+excerpt: How connecting Bunch's OAuth-protected MCP server to ChatGPT failed nine different ways, what each failure showed about the client, and the security boundary that stayed fixed throughout.
 tags:
   - mcp
   - oauth
   - failure-analysis
 seo:
   title: 'MCP OAuth with ChatGPT: A Failure Analysis'
-  description: 'Eight production failures connecting an OAuth-protected MCP server to ChatGPT: the evidence, each fix and regression test, and the invariant that never moved.'
+  description: 'Nine production failures connecting an OAuth-protected MCP server to ChatGPT: the evidence, each fix and regression test, and the invariant that never moved.'
 ---
 
-# Eight Pull Requests to Connect One Account: A Bunch OAuth Failure Analysis
+# Nine Pull Requests to Connect One Account: A Bunch OAuth Failure Analysis
 
-On September 19, 2026, I merged the change that put [Bunch](https://github.com/Arcadesys/bunch)'s hosted MCP server behind OAuth so that people could connect their own private records to ChatGPT. Then connecting it to ChatGPT failed. It failed in eight different ways over roughly 25 hours, and each failure needed its own pull request.
+On September 19, 2026, I merged the change that put [Bunch](https://github.com/Arcadesys/bunch)'s hosted MCP server behind OAuth so that people could connect their own private records to ChatGPT. Then connecting it to ChatGPT failed. It failed in nine different ways over roughly 25 hours, and each failure needed its own pull request.
 
 This is the record of that incident: the invariant I held, what each failure showed, how it was fixed and tested, and what I would do differently. Everything here is linked to a public pull request, so you can check the work instead of trusting the summary.
 
@@ -40,6 +40,7 @@ My mental model was simple: the client authenticates, then discovers what the se
 | PR | Symptom | Cause | Fix |
 | --- | --- | --- | --- |
 | [#68](https://github.com/Arcadesys/bunch/pull/68) | Connector validation failed | Anonymous list-only discovery calls got 401 | Allow anonymous list-only discovery; reads, private tools, and mutations stay protected |
+| [#70](https://github.com/Arcadesys/bunch/pull/70) | Modern clients could not fall back to `initialize` | The standard `server/discover` compatibility probe required credentials | Allow that probe anonymously and return the legacy method-not-found response over HTTP 200 |
 | [#71](https://github.com/Arcadesys/bunch/pull/71) | OAuth handoff never started | Anonymous `connect_private_system` returned no tool-level OAuth metadata | Return ChatGPT-compatible OAuth metadata from that call; add metadata checks to the public deployment verifier |
 | [#74](https://github.com/Arcadesys/bunch/pull/74) | "Could not connect the account" after a successful Auth0 exchange | The next request, `GET /mcp`, got a deliberate 405 | Let the anonymous SSE probe reach the stateless Demo transport |
 | [#75](https://github.com/Arcadesys/bunch/pull/75) | Tokens issued for the old hostname would be rejected after the domain move | One accepted audience | Canonical metadata plus an explicit, normalized legacy-audience allow-list |
@@ -79,7 +80,7 @@ The risk in a series like this is that each fix makes the server a little more o
 
 ## What I would do differently
 
-I fixed one symptom per pull request, and that cost eight deploys. Two changes would have shortened the incident:
+I fixed one symptom per pull request, and that cost nine deploys. Two changes would have shortened the incident:
 
 1. **Capture one complete connection attempt before changing anything.** Every failure in this series was visible in the request sequence of a single ChatGPT connection. I found the failures one at a time because each fix let the client reach the next one.
 2. **Write the client's real probe sequence as a conformance test first.** The tests now cover each probe individually. A single test that replays the full anonymous → OAuth → authenticated sequence would have caught most of these failures before production.

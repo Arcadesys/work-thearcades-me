@@ -291,7 +291,7 @@ export const caseStudies: CaseStudy[] = [
         { label: 'Observed recovery', value: 'About 15 seconds for one real catch-up that had previously taken roughly 20 minutes to reconstruct manually.' },
         { label: 'Public implementation', value: 'Source code, setup documentation, and the data model are published.' },
         { label: 'Shared engine', value: 'The web app and MCP server operate on the same explicit records and service rules.' },
-        { label: 'Production failure analysis', value: 'Eight OAuth failures connecting the MCP server to ChatGPT, each fixed with a regression test and without loosening the private-data boundary.', href: '/blog/bunch-chatgpt-oauth-failure-analysis' },
+        { label: 'Production failure analysis', value: 'Nine OAuth failures connecting the MCP server to ChatGPT, each fixed with a regression test and without loosening the private-data boundary.', href: '/blog/bunch-chatgpt-oauth-failure-analysis' },
       ],
       note: 'The 15-second result is one personal observation, not a population-wide performance benchmark.',
     },
