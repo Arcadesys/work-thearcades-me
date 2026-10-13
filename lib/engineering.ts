@@ -121,6 +121,7 @@ export const engineeringTour = {
         { label: 'PR #74: connection probes', href: pullRequest(74) },
         { label: 'PR #75: OAuth audiences', href: pullRequest(75) },
         { label: 'Hosted MCP verification', href: source('docs/verification/hosted-demo.md') },
+        { label: 'Failure analysis: nine PRs to connect one account', href: '/blog/bunch-chatgpt-oauth-failure-analysis' },
       ],
     },
     {

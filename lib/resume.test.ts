@@ -40,7 +40,8 @@ test('the résumé gives builds direct proof paths without a repeated accomplish
   // The page renders the resolved AI Builder document, so its order is the profile's.
   const kinds = resolveResume('ai-builder').sections.map((section) => section.kind);
   assert(!kinds.includes('highlights'));
-  assert(kinds.indexOf('experience') < kinds.indexOf('projects'));
+  // Evidence first: inspectable builds precede the job history.
+  assert(kinds.indexOf('projects') < kinds.indexOf('experience'));
   const page = readFileSync(new URL('../app/resume/page.tsx', import.meta.url), 'utf8');
   assert(page.includes('resolveResume(DEFAULT_EDITION)') && page.includes('<ResumeDocument doc={doc} />'));
 });

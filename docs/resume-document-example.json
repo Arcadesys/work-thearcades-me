@@ -4,7 +4,7 @@
   "profileStatus": "approved",
   "schemaVersion": 1,
   "sourceRevision": "example",
-  "digest": "0716ef0e45d87d28d6f081d0000361363028f0482741af39589d6db314aaeb36",
+  "digest": "79ab187b7d879fefcfb587acd347eb8a72e0a671c43dd609b894f209bea885d1",
   "identity": {
     "name": "Austen Tucker-Crowder",
     "location": "Chicago, IL",
@@ -22,6 +22,26 @@
     "pitch": "Seeking hands-on AI work: rapid prototyping, useful systems, and the judgment to get from experiment to something a team can own."
   },
   "sections": [
+    {
+      "kind": "projects",
+      "title": "Selected AI Builds",
+      "items": [
+        {
+          "id": "project.bunch",
+          "name": "Bunch",
+          "description": "Built a continuity tool with web and MCP interfaces sharing typed contracts and transactional rules. Added owner-scoped records, version checks, retry safety, audit events, and AI spend controls. Source and a fictional-data demo are publicly inspectable.",
+          "proofHref": "/engineering",
+          "proofLabel": "Read the technical tour"
+        },
+        {
+          "id": "project.job-search-cockpit",
+          "name": "Job-search cockpit",
+          "description": "Built a private workspace that assembles application drafts from exact, reviewed claims. Added verified-posting requirements, version history, bounded AI spend, and submission receipts; the MCP API has no employer-submit endpoint.",
+          "proofHref": "/work/job-search-cockpit",
+          "proofLabel": "Read the case study"
+        }
+      ]
+    },
     {
       "kind": "experience",
       "title": "Experience",
@@ -168,26 +188,6 @@
       ]
     },
     {
-      "kind": "projects",
-      "title": "Selected AI Builds",
-      "items": [
-        {
-          "id": "project.bunch",
-          "name": "Bunch",
-          "description": "Built a continuity tool with web and MCP interfaces sharing typed contracts and transactional rules. Added owner-scoped records, version checks, retry safety, audit events, and AI spend controls. Source and a fictional-data demo are publicly inspectable.",
-          "proofHref": "/engineering",
-          "proofLabel": "Read the technical tour"
-        },
-        {
-          "id": "project.job-search-cockpit",
-          "name": "Job-search cockpit",
-          "description": "Built a private workspace that assembles application drafts from exact, reviewed claims. Added verified-posting requirements, version history, bounded AI spend, and submission receipts; the MCP API has no employer-submit endpoint.",
-          "proofHref": "/work/job-search-cockpit",
-          "proofLabel": "Read the case study"
-        }
-      ]
-    },
-    {
       "kind": "skills",
       "title": "Tools & Skills",
       "groups": [
@@ -245,7 +245,7 @@
     {
       "level": "warning",
       "code": "flagged-for-review",
-      "path": "profile.sections.0.roles.0",
+      "path": "profile.sections.1.roles.0",
       "message": "role.activecampaign is flagged for review: The title combines a role name with a scope label. The formal employment title is not confirmed; do not guess it."
     }
   ],
