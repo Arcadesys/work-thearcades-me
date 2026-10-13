@@ -2023,6 +2023,9 @@ main [id] { scroll-margin-top: 16px; }
 .blog-prose ul, .blog-prose ol { padding-left: 1.5rem; }
 .blog-prose blockquote { border-left: 4px solid var(--text-muted); padding-left: 1.25rem; }
 .blog-prose pre { overflow: auto; }
+.blog-prose table { display: block; overflow-x: auto; border-collapse: collapse; font-size: 1rem; line-height: 1.5; overflow-wrap: normal; }
+.blog-prose th, .blog-prose td { padding: .6rem .75rem; border: 1px solid var(--text-muted); text-align: left; vertical-align: top; min-width: 9rem; }
+.blog-prose td:first-child, .blog-prose th:first-child { min-width: 0; white-space: nowrap; }
 .blog-related { margin: 2rem 0; padding: 1.25rem; background: var(--surface); border: 1px solid var(--text-muted); border-radius: 8px; line-height: 1.65; }
 .blog-provenance { margin: 3rem 0 1.5rem; line-height: 1.7; }
 .blog-start { margin: 2.5rem 0 1rem; padding: 1rem 1.25rem; border: 1px solid var(--text-muted); border-radius: 8px; color: var(--text); font-size: 1rem; line-height: 1.65; }
