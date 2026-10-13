@@ -16,9 +16,6 @@ const nextConfig: NextConfig = {
       destination: `/campaigns/${slug}/index.html`,
     }));
   },
-  outputFileTracingIncludes: {
-    '/api/jobs/drafting/pdf': ['./assets/fonts/*.ttf'],
-  },
 };
 
 export default nextConfig;

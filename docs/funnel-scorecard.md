@@ -14,7 +14,7 @@ For PostHog, use production events only with `hostname=work.thearcades.me` and `
 | Booking intent | `booking_click`, `placement` | Activation of a Cal.com link. It does not prove a booking was completed. |
 | First-party verification | Daily Redis aggregate `first_party_verified` | A signed verification link was claimed once through the Work endpoint. |
 | Kit-active ready | Daily Redis aggregate `kit_active_ready` | Kit reported the verified subscriber active, and the Work form/tag updates completed. This is a delivery-eligibility state, not proof that a broadcast or email was delivered. |
-| Actual inquiry/booking | Private evidence-backed entries in `/jobs/review`, reviewed against mailbox and Cal.com | Count an inquiry only when the mailbox contains a real role/project request; count a booking only when Cal.com reports a completed booking. Keep those outcomes separate from click events. An open review week does not establish zero. |
+| Actual inquiry/booking | Private evidence-backed entries in the [job-search-harness](https://github.com/Arcadesys/job-search-harness) weekly review, reviewed against mailbox and Cal.com | Count an inquiry only when the mailbox contains a real role/project request; count a booking only when Cal.com reports a completed booking. Keep those outcomes separate from click events. An open review week does not establish zero. |
 
 For the Work journey, use the existing same-session PostHog funnel from a work-site landing pageview to `case_study_view` to either `contact_click` or `booking_click`. The creative-to-work transition is summarized by source-domain/campaign totals only; do not join visitor identities across the two domains. Report click/request rows as intent.
 

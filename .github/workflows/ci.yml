@@ -59,7 +59,6 @@ jobs:
           include-hidden-files: true
           if-no-files-found: error
           retention-days: 14
-      - run: npm run test:jobdesk
 
   # Built-HTML metadata contract (#294): canonicals, og:url, titles, card alt
   # text, JSON-LD images, sitemap exclusions for copies, noindex pages.
