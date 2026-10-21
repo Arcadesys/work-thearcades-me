@@ -37,7 +37,7 @@ export async function POST(request: Request) {
 
   try {
     const result = await confirmNewsletterVerification(token, runtime.config, runtime.dependencies);
-    if (result === 'active' || result === 'kit_confirmation_required') {
+    if (result === 'active') {
       return json({ accepted: true, state: result }, 200);
     }
     if (result === 'completed') return json({ accepted: false, state: 'completed' }, 200);

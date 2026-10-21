@@ -30,13 +30,13 @@ The sender freezes original public pathname/entry attribution for navigation cle
 | `contact_click` | `contact_intent`; existing mail CTAs plus résumé identity mail link, no address/text |
 | `booking_click` | `booking_intent`; actual Cal.com link activation, not a completed booking |
 | `subscribe_submit_intent` | Existing request intent, per valid submission attempt |
-| `subscribe_verification_requested` | New `verification_request_accepted` only after `/api/kit/subscribe` responds OK |
+| `subscribe_verification_requested` | New `verification_request_accepted` only after `/api/newsletter/subscribe` responds OK |
 | `subscribe_request_failed` | New `request_failed` on rejection/network failure; no error details |
 | `subscribe_request_accepted` | Historical verification-page name retained for compatibility, `first_party_verification_accepted`; never an active-subscription event |
 
 Request handling sends only placement to analytics, suppresses successful/in-flight repeats and keeps reporter failures nonblocking. The token-handling `/newsletter/verify` and `/newsletter/unsubscribe` pages now fail closed for all analytics, matching main/hack. Old verification events remain historical; the client no longer emits them. Future first-party/provider confirmation uses only existing daily Redis aggregates in the scorecard, never a browser token journey.
 
-`work-newsletter:v1:metrics:YYYY-MM-DD` already records atomic `first_party_verified` and `kit_active_ready` transitions. Kit-active readiness also requires form/tag synchronization; it does not prove delivery or a newly acquired subscriber. These are request transitions, not unique addresses. Read totals only and never join email/token/provider records to PostHog identity. Actual hiring inquiries/bookings remain the separate private evidence-backed `/jobs/review` workflow.
+`work-newsletter:v1:metrics:YYYY-MM-DD` already records atomic `first_party_verified` and `confirmed` transitions. Confirmation means the first-party link was used and the configured Resend topic update completed; it does not prove email delivery or a newly acquired subscriber. These are request transitions, not unique addresses. Read totals only and never join email/token/provider records to PostHog identity. Actual hiring inquiries/bookings remain the separate private evidence-backed `/jobs/review` workflow.
 
 ## New reports, preserving history
 

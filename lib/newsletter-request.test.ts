@@ -6,7 +6,7 @@ test('a request has intent then acceptance; analytics contains placement only, n
   const sent: unknown[] = [];
   const report = (event: string, properties: Record<string, string>) => sent.push({ event, properties });
   const accepted = await submitNewsletterRequest('reader@example.com', 'blog_post', report, async (url, init) => {
-    assert.equal(url, '/api/kit/subscribe'); assert.equal(JSON.parse(String(init?.body)).email, 'reader@example.com');
+    assert.equal(url, '/api/newsletter/subscribe'); assert.equal(JSON.parse(String(init?.body)).email, 'reader@example.com');
     assert.deepEqual(sent, [{ event: 'subscribe_submit_intent', properties: { placement: 'blog_post' } }]);
     return Response.json({ accepted: true, confirmationRequired: true });
   });

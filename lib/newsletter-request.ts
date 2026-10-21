@@ -5,7 +5,7 @@ export async function submitNewsletterRequest(email: string, placement: string, 
   const record = (event: Parameters<Reporter>[0]) => { try { report(event, { placement }); } catch { /* Measurement is optional. */ } };
   record('subscribe_submit_intent');
   try {
-    const response = await fetcher('/api/kit/subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, placement }) });
+    const response = await fetcher('/api/newsletter/subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, placement }) });
     if (!response.ok) throw new Error('Request rejected');
     record('subscribe_verification_requested'); return true;
   } catch {

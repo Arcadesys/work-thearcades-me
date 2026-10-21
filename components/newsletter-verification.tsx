@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './newsletter-verification.module.css';
 
-type ViewState = 'loading' | 'ready' | 'submitting' | 'busy' | 'active' | 'kit_confirmation' | 'completed' | 'cancelled' | 'unavailable' | 'invalid' | 'error';
+type ViewState = 'loading' | 'ready' | 'submitting' | 'busy' | 'active' | 'completed' | 'cancelled' | 'unavailable' | 'invalid' | 'error';
 
 export function NewsletterVerification() {
   const [token, setToken] = useState('');
@@ -26,7 +26,7 @@ export function NewsletterVerification() {
     if (!token || state === 'submitting') return;
     setState('submitting');
     try {
-      const response = await fetch(action === 'confirm' ? '/api/kit/verify' : '/api/kit/cancel', {
+      const response = await fetch(action === 'confirm' ? '/api/newsletter/verify' : '/api/newsletter/cancel', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token }),
@@ -40,8 +40,6 @@ export function NewsletterVerification() {
 
       if (response.ok && result?.accepted && result.state === 'active') {
         setState('active');
-      } else if (response.ok && result?.accepted && result.state === 'kit_confirmation_required') {
-        setState('kit_confirmation');
       } else if (result?.state === 'completed') {
         setState('completed');
       } else if (result?.state === 'unavailable') {
@@ -58,16 +56,15 @@ export function NewsletterVerification() {
     }
   }
 
-  const finished = ['active', 'kit_confirmation', 'completed', 'cancelled', 'unavailable', 'invalid'].includes(state);
+  const finished = ['active', 'completed', 'cancelled', 'unavailable', 'invalid'].includes(state);
   const message = state === 'loading' ? 'Reading your confirmation link…'
-    : state === 'ready' ? 'Confirm your email and request for Work build notes. If Kit needs an additional confirmation, it will send a second message before the notes begin.'
+    : state === 'ready' ? 'Confirm your email and request for Work build notes. This confirmation completes your signup.'
       : state === 'submitting' ? 'Processing your request…'
         : state === 'busy' ? 'Your request is still being processed. You can safely try again in a moment.'
         : state === 'active' ? 'Your email is verified and your Work build notes request is active.'
-          : state === 'kit_confirmation' ? 'Your email is verified. Kit needs a separate confirmation before the build notes begin. Check for another message from Kit.'
-            : state === 'completed' ? 'This confirmation link has already been used.'
+          : state === 'completed' ? 'This confirmation link has already been used.'
               : state === 'cancelled' ? 'Your pending request was canceled.'
-                : state === 'unavailable' ? 'Kit cannot add this address right now. Contact me if you need help.'
+                : state === 'unavailable' ? 'We cannot add this address right now. Contact me if you need help.'
                   : state === 'invalid' ? 'This link is invalid, expired, or no longer current. Start a new request from the site.'
                     : 'We could not finish this request. You can retry while this page is open.';
 
