@@ -7,14 +7,14 @@ import { isWorkWelcomeEnabled, type SignupConfig, type SignupDependencies } from
 export type NewsletterRuntime = { config: SignupConfig; dependencies: SignupDependencies };
 
 export function createNewsletterRuntime(env: NodeJS.ProcessEnv = process.env): NewsletterRuntime | null {
-  const { RESEND_API_KEY, RESEND_CONTACTS_API_KEY, RESEND_FROM_EMAIL, RESEND_WORK_AI_TOPIC_ID, SIGNUP_LINK_SECRET } = env;
-  if (!RESEND_API_KEY || !RESEND_CONTACTS_API_KEY || !RESEND_FROM_EMAIL || !RESEND_WORK_AI_TOPIC_ID
-    || !/^[0-9a-f-]{36}$/i.test(RESEND_WORK_AI_TOPIC_ID) || !validLinkSecret(SIGNUP_LINK_SECRET)) return null;
+  const { RESEND_API_KEY, RESEND_CONTACTS_API_KEY, RESEND_FROM_EMAIL, RESEND_TOPIC_WORK_AI_ID, SIGNUP_LINK_SECRET } = env;
+  if (!RESEND_API_KEY || !RESEND_CONTACTS_API_KEY || !RESEND_FROM_EMAIL || !RESEND_TOPIC_WORK_AI_ID
+    || !/^[0-9a-f-]{36}$/i.test(RESEND_TOPIC_WORK_AI_ID) || !validLinkSecret(SIGNUP_LINK_SECRET)) return null;
   const ledger = createSignupLedgerFromEnv(env);
   if (!ledger) return null;
   const config: SignupConfig = {
     apiKey: RESEND_CONTACTS_API_KEY,
-    topicId: RESEND_WORK_AI_TOPIC_ID,
+    topicId: RESEND_TOPIC_WORK_AI_ID,
     tokenSecret: SIGNUP_LINK_SECRET,
     welcomeEnabled: isWorkWelcomeEnabled(env.WORK_WELCOME_ENABLED),
   };
@@ -27,10 +27,10 @@ export function createNewsletterRuntime(env: NodeJS.ProcessEnv = process.env): N
       apiKey: RESEND_API_KEY, fromEmail: RESEND_FROM_EMAIL, environment: env.VERCEL_ENV, vercelUrl: env.VERCEL_URL,
     }),
     resend: {
-      find: email => findResendContact(email, RESEND_CONTACTS_API_KEY, RESEND_WORK_AI_TOPIC_ID),
+      find: email => findResendContact(email, RESEND_CONTACTS_API_KEY, RESEND_TOPIC_WORK_AI_ID),
       subscribe: async email => {
         if (!isValidSignupEmail(email)) return null;
-        return subscribeResendContact(email, RESEND_CONTACTS_API_KEY, RESEND_WORK_AI_TOPIC_ID);
+        return subscribeResendContact(email, RESEND_CONTACTS_API_KEY, RESEND_TOPIC_WORK_AI_ID);
       },
     },
   };

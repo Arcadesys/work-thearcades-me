@@ -17,14 +17,14 @@ test('legacy API route and old visible-link endpoint still unsubscribe with a Ki
     secret: process.env.SIGNUP_LINK_SECRET,
     apiKey: process.env.KIT_LEGACY_UNSUBSCRIBE_API_KEY,
     resendKey: process.env.RESEND_CONTACTS_API_KEY,
-    topic: process.env.RESEND_WORK_AI_TOPIC_ID,
+    topic: process.env.RESEND_TOPIC_WORK_AI_ID,
   };
   const priorFetch = globalThis.fetch;
   const requests: string[] = [];
   process.env.SIGNUP_LINK_SECRET = secret;
   process.env.KIT_LEGACY_UNSUBSCRIBE_API_KEY = 'mock-legacy-key';
   delete process.env.RESEND_CONTACTS_API_KEY;
-  delete process.env.RESEND_WORK_AI_TOPIC_ID;
+  delete process.env.RESEND_TOPIC_WORK_AI_ID;
   globalThis.fetch = (async input => {
     requests.push(String(input));
     return new Response(null, { status: 200 });
@@ -59,7 +59,7 @@ test('legacy API route and old visible-link endpoint still unsubscribe with a Ki
     else process.env.KIT_LEGACY_UNSUBSCRIBE_API_KEY = priorEnv.apiKey;
     if (priorEnv.resendKey === undefined) delete process.env.RESEND_CONTACTS_API_KEY;
     else process.env.RESEND_CONTACTS_API_KEY = priorEnv.resendKey;
-    if (priorEnv.topic === undefined) delete process.env.RESEND_WORK_AI_TOPIC_ID;
-    else process.env.RESEND_WORK_AI_TOPIC_ID = priorEnv.topic;
+    if (priorEnv.topic === undefined) delete process.env.RESEND_TOPIC_WORK_AI_ID;
+    else process.env.RESEND_TOPIC_WORK_AI_ID = priorEnv.topic;
   }
 });

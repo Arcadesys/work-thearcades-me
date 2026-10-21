@@ -18,7 +18,7 @@ export async function GET() {
 export async function POST(request: Request) {
   const secret = process.env.SIGNUP_LINK_SECRET;
   const apiKey = process.env.RESEND_CONTACTS_API_KEY;
-  const topicId = process.env.RESEND_WORK_AI_TOPIC_ID;
+  const topicId = process.env.RESEND_TOPIC_WORK_AI_ID;
   if (!secret) return response({ unsubscribed: false }, 503);
 
   const token = await readWorkUnsubscribeRequestToken(request);
