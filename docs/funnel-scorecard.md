@@ -13,12 +13,12 @@ For PostHog, use production events only with `hostname=work.thearcades.me` and `
 | Contact intent | `contact_click`, `placement` | Activation of a hiring email link. It does not prove an email was sent. |
 | Booking intent | `booking_click`, `placement` | Activation of a Cal.com link. It does not prove a booking was completed. |
 | First-party verification | Daily Redis aggregate `first_party_verified` | A signed verification link was claimed once through the Work endpoint. |
-| Kit-active ready | Daily Redis aggregate `kit_active_ready` | Kit reported the verified subscriber active, and the Work form/tag updates completed. This is a delivery-eligibility state, not proof that a broadcast or email was delivered. |
+| Work notes confirmed | Daily Redis aggregate `confirmed` | The first-party link was used and the configured Resend topic update completed. This is not proof of email delivery or a unique subscriber. |
 | Actual inquiry/booking | Private evidence-backed entries in the [job-search-harness](https://github.com/Arcadesys/job-search-harness) weekly review, reviewed against mailbox and Cal.com | Count an inquiry only when the mailbox contains a real role/project request; count a booking only when Cal.com reports a completed booking. Keep those outcomes separate from click events. An open review week does not establish zero. |
 
 For the Work journey, use the existing same-session PostHog funnel from a work-site landing pageview to `case_study_view` to either `contact_click` or `booking_click`. The creative-to-work transition is summarized by source-domain/campaign totals only; do not join visitor identities across the two domains. Report click/request rows as intent.
 
-The first-party totals are kept in daily Redis hashes named `work-newsletter:v1:metrics:YYYY-MM-DD`, with fields `first_party_verified` and `kit_active_ready`. Each count is incremented atomically with the signup-ledger status transition and expires after 400 days. These are request-transition counts, not unique subscriber counts; one address may make more than one request. Read aggregate hashes only; do not export newsletter records or join the counters to emails, tokens, subscriber IDs, or PostHog visitors.
+The first-party totals are kept in daily Redis hashes named `work-newsletter:v1:metrics:YYYY-MM-DD`, with fields `first_party_verified` and `confirmed`. Each count is incremented atomically with the signup-ledger status transition and expires after 400 days. These are request-transition counts, not unique subscriber counts; one address may make more than one request. Read aggregate hashes only; do not export newsletter records or join the counters to emails, tokens, subscriber IDs, or PostHog visitors.
 
 ## 14-day pre/post template
 
@@ -33,7 +33,7 @@ Record each period as an explicit half-open interval, `start_utc <= timestamp < 
 | Contact clicks (intent) | — | — | `contact_click` |
 | Booking clicks (intent) | — | — | `booking_click` |
 | First-party verification | N/A before aggregate deployment | — | Sum Redis `first_party_verified` |
-| Kit-active ready state | N/A before aggregate deployment | — | Sum Redis `kit_active_ready`; not an email delivery receipt |
+| Work notes confirmed state | N/A before aggregate deployment | — | Sum Redis `confirmed`; not an email delivery receipt |
 | Qualified hiring inquiries | — | — | Manual mailbox review; aggregate count only |
 | Completed bookings | — | — | Manual Cal.com total; aggregate count only |
 

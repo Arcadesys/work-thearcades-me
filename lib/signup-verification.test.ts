@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createSignupChallenge, redisRestCredentials, UpstashSignupLedger } from './signup-verification';
+import { createSignupChallenge, decryptSignupEmail, redisRestCredentials, UpstashSignupLedger } from './signup-verification';
 
 test('Redis config accepts Vercel KV names without duplicating credentials', () => {
   assert.deepEqual(redisRestCredentials({ KV_REST_API_URL: 'https://kv.example', KV_REST_API_TOKEN: 'kv-token' }), {
@@ -35,7 +35,15 @@ test('claim accepts Upstash EVAL replies with an auto-decoded record object', as
   assert.deepEqual(result.record, processing);
 });
 
-test('verification and Kit-active readiness are counted once in atomic ledger transitions', async () => {
+test('signup challenges canonicalize email casing before digesting and encryption', () => {
+  const secret = 'd'.repeat(32);
+  const mixedCase = createSignupChallenge(' Reader@Example.COM ', 'work', secret, 1_800_000_000_000);
+  const lowercase = createSignupChallenge('reader@example.com', 'work', secret, 1_800_000_000_000);
+  assert.equal(mixedCase.record.emailDigest, lowercase.record.emailDigest);
+  assert.equal(decryptSignupEmail(mixedCase.record.encryptedEmail, secret), 'reader@example.com');
+});
+
+test('explicit confirmation is counted once in atomic ledger transitions', async () => {
   const secret = 'c'.repeat(32);
   const { token, record } = createSignupChallenge('reader@example.com', 'work', secret);
   const calls: Array<{ script: string; keys: string[]; args: unknown[] }> = [];
@@ -56,33 +64,13 @@ test('verification and Kit-active readiness are counted once in atomic ledger tr
   assert.equal(calls.length, 2);
   assert.match(calls[0].script, /if status == 'pending' then[\s\S]*HINCRBY/);
   assert.match(calls[0].script, /first_party_verified/);
-  assert.match(calls[1].script, /record\.state ~= 'processing' and record\.state ~= 'waiting_kit_confirmation'/);
-  assert.match(calls[1].script, /kit_active_ready/);
-  assert.match(calls[1].script, /record\.kitActiveAt = tonumber\(ARGV\[3\]\)/);
+  assert.match(calls[1].script, /record\.state ~= 'processing'/);
+  assert.match(calls[1].script, /'confirmed'/);
   assert.match(calls[0].script, /if status == 'pending' then/);
   assert.equal(calls[0].keys[2].startsWith('work-newsletter:v1:metrics:'), true);
-  assert.equal(calls[1].keys[2].startsWith('work-newsletter:v1:metrics:'), true);
+  assert.equal(calls[1].keys[1].startsWith('work-newsletter:v1:metrics:'), true);
   assert.match(calls[0].script, /EXPIRE/);
   assert.match(calls[1].script, /EXPIRE/);
-});
-
-test('queue claim accepts auto-decoded records and records without encrypted email', async () => {
-  const secret = 'b'.repeat(32);
-  const { record } = createSignupChallenge('reader@example.com', 'work', secret);
-  const queued = {
-    ...record,
-    encryptedEmail: undefined,
-    state: 'processing' as const,
-    subscriberId: 1234,
-    verifiedAt: Date.now(),
-    leaseUntil: Date.now() + 60_000,
-  };
-  const redis = {
-    zrange: async () => [record.id],
-    eval: async () => ['claimed', queued],
-  };
-  const claimed = await new UpstashSignupLedger(redis as never).claimDueKitConfirmations(Date.now());
-  assert.deepEqual(claimed, [queued]);
 });
 
 test('welcome address marker claims atomically and keeps sent or uncertain results durable', async () => {
