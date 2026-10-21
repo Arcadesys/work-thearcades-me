@@ -6,8 +6,12 @@ const api = 'https://api.resend.com';
 export type ResendContact = { id: string; email: string; unsubscribed: boolean };
 export type ResendContactResult = { kind: 'found'; contact: ResendContact } | { kind: 'missing' } | { kind: 'blocked' } | { kind: 'failed' };
 
+export function normalizeSignupEmail(value: string) {
+  return value.trim().toLowerCase();
+}
+
 export function isValidSignupEmail(value: unknown): value is string {
-  return typeof value === 'string' && emailSchema.safeParse(value.trim()).success;
+  return typeof value === 'string' && emailSchema.safeParse(normalizeSignupEmail(value)).success;
 }
 
 function headers(apiKey: string, json = false) {
@@ -19,13 +23,13 @@ function parseContact(value: unknown): ResendContact | null {
   if (typeof item.id !== 'string' || !/^[0-9a-f-]{36}$/i.test(item.id)
     || typeof item.email !== 'string' || !isValidSignupEmail(item.email)
     || typeof item.unsubscribed !== 'boolean') return null;
-  return { id: item.id, email: item.email, unsubscribed: item.unsubscribed };
+  return { id: item.id, email: normalizeSignupEmail(item.email), unsubscribed: item.unsubscribed };
 }
 
 /** Exact-address read. Any provider uncertainty fails closed before signup or resubscription. */
 export async function findResendContact(email: string, apiKey: string, topicId: string, fetcher: Fetcher = fetch): Promise<ResendContactResult> {
   if (!isValidSignupEmail(email) || !apiKey || !/^[0-9a-f-]{36}$/i.test(topicId)) return { kind: 'failed' };
-  const address = email.trim();
+  const address = normalizeSignupEmail(email);
   try {
     const [contactResponse, suppressionResponse] = await Promise.all([
       fetcher(`${api}/contacts/${encodeURIComponent(address)}`, { headers: headers(apiKey), signal: AbortSignal.timeout(8000) }),
@@ -36,7 +40,7 @@ export async function findResendContact(email: string, apiKey: string, topicId: 
     if (contactResponse.status === 404) return { kind: 'missing' };
     if (!contactResponse.ok) return { kind: 'failed' };
     const contact = parseContact(await contactResponse.json());
-    if (!contact || contact.email.toLowerCase() !== address.toLowerCase()) return { kind: 'failed' };
+    if (!contact || contact.email !== address) return { kind: 'failed' };
     if (contact.unsubscribed) return { kind: 'blocked' };
     const topicsResponse = await fetcher(`${api}/contacts/${encodeURIComponent(address)}/topics`, { headers: headers(apiKey), signal: AbortSignal.timeout(8000) });
     if (!topicsResponse.ok) return { kind: 'failed' };
@@ -52,7 +56,7 @@ export async function findResendContact(email: string, apiKey: string, topicId: 
 /** Writes only after first-party confirmation. Resend global suppressions and opt-outs are never cleared. */
 export async function subscribeResendContact(email: string, apiKey: string, topicId: string, fetcher: Fetcher = fetch): Promise<ResendContact | null> {
   if (!isValidSignupEmail(email) || !apiKey || !/^[0-9a-f-]{36}$/i.test(topicId)) return null;
-  const address = email.trim();
+  const address = normalizeSignupEmail(email);
   const current = await findResendContact(address, apiKey, topicId, fetcher);
   if (current.kind === 'blocked' || current.kind === 'failed') return null;
   try {

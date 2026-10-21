@@ -52,6 +52,26 @@ test('request sends a private confirmation link and performs no contact writes',
   assert.equal(JSON.stringify(ledger.record).includes('reader@example.com'), false);
 });
 
+test('signup request and confirmation use one canonical email for lookup, challenge, and writes', async () => {
+  const { ledger, deps } = setup('missing');
+  const lookups: string[] = [];
+  const mailed: string[] = [];
+  const subscribed: string[] = [];
+  const welcomed: string[] = [];
+  deps.resend.find = async email => { lookups.push(email); return { kind: 'found', contact }; };
+  deps.resend.subscribe = async email => { subscribed.push(email); return contact; };
+  deps.mail = async (email, token) => { mailed.push(email); ledger.token = token; return 'sent'; };
+  deps.welcome = async email => { welcomed.push(email); return 'sent'; };
+
+  assert.equal(await requestNewsletterVerification(' Reader@Example.COM ', 'blog_post', config, deps), 'sent');
+  assert.equal(ledger.record && decryptSignupEmail(ledger.record.encryptedEmail, secret), 'reader@example.com');
+  assert.equal(await confirmNewsletterVerification(ledger.token, config, deps), 'active');
+  assert.deepEqual(lookups, ['reader@example.com', 'reader@example.com']);
+  assert.deepEqual(mailed, ['reader@example.com']);
+  assert.deepEqual(subscribed, ['reader@example.com']);
+  assert.deepEqual(welcomed, ['reader@example.com']);
+});
+
 test('blocked addresses receive no verification email and read errors fail closed', async () => {
   const blocked = setup('blocked');
   assert.equal(await requestNewsletterVerification('reader@example.com', 'blog_post', config, blocked.deps), 'suppressed');

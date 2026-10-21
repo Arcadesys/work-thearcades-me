@@ -8,8 +8,32 @@ const contact = { object: 'contact', id: contactId, email: 'reader@example.com',
 
 test('signup email validation accepts ordinary addresses and rejects malformed or oversized input', () => {
   assert.equal(isValidSignupEmail(' person@example.com '), true);
+  assert.equal(isValidSignupEmail('Reader@Example.COM'), true);
   assert.equal(isValidSignupEmail('not-an-email'), false);
   assert.equal(isValidSignupEmail(`a${'x'.repeat(250)}@example.com`), false);
+});
+
+test('contact lookup canonicalizes casing before checking contacts and suppressions', async () => {
+  const urls: string[] = [];
+  const fetcher: typeof fetch = async input => {
+    const url = String(input); urls.push(url);
+    if (url.includes('/suppressions/')) return new Response(null, { status: 404 });
+    if (url.endsWith('/topics')) return Response.json({ data: [{ id: topicId, subscription: 'opt_in' }] });
+    return Response.json({ ...contact, email: 'Reader@Example.COM' });
+  };
+  assert.deepEqual(await findResendContact(' Reader@Example.COM ', 'key', topicId, fetcher), {
+    kind: 'found', contact: { id: contactId, email: 'reader@example.com', unsubscribed: false },
+  });
+  assert.deepEqual(urls, [
+    'https://api.resend.com/contacts/reader%40example.com',
+    'https://api.resend.com/suppressions/reader%40example.com',
+    'https://api.resend.com/contacts/reader%40example.com/topics',
+  ]);
+  assert.deepEqual(await findResendContact('Reader@Example.COM', 'key', topicId, async input => {
+    const url = String(input);
+    if (url.includes('/suppressions/')) return new Response(null, { status: 404 });
+    return Response.json({ ...contact, email: 'Reader@Example.COM', unsubscribed: true });
+  }), { kind: 'blocked' });
 });
 
 test('contact lookup checks exact address, topic preference, global unsubscribe, and suppressions', async () => {
@@ -44,7 +68,11 @@ test('confirmed new signup creates a contact then opts into only Work / AI', asy
     if (url.endsWith('/topics')) return Response.json({ data: [] });
     return new Response(null, { status: 404 });
   };
-  assert.deepEqual(await subscribeResendContact('reader@example.com', 'key', topicId, fetcher), { id: contactId, email: 'reader@example.com', unsubscribed: false });
+  assert.deepEqual(await subscribeResendContact(' Reader@Example.COM ', 'key', topicId, fetcher), { id: contactId, email: 'reader@example.com', unsubscribed: false });
+  const create = calls.find(call => call.init?.method === 'POST');
+  assert.equal(create?.url, 'https://api.resend.com/contacts');
+  assert.deepEqual(JSON.parse(String(create?.init?.body)), { email: 'reader@example.com', unsubscribed: false });
+  assert.ok(calls.some(call => call.url === 'https://api.resend.com/contacts/reader%40example.com'));
   const write = calls.find(call => call.init?.method === 'PATCH');
   assert.equal(write?.url, `https://api.resend.com/contacts/${contactId}/topics`);
   assert.deepEqual(JSON.parse(String(write?.init?.body)), [{ id: topicId, subscription: 'opt_in' }]);

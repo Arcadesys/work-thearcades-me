@@ -1,7 +1,7 @@
 import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, randomUUID, timingSafeEqual } from 'node:crypto';
 import { isIP } from 'node:net';
 import { Redis } from '@upstash/redis';
-import { isValidSignupEmail } from './resend-contacts';
+import { isValidSignupEmail, normalizeSignupEmail } from './resend-contacts';
 
 const recordTtlSeconds = 35 * 24 * 60 * 60;
 const challengeTtlSeconds = 25 * 60 * 60;
@@ -39,7 +39,7 @@ function digest(value: string) {
 }
 
 function keyForEmail(email: string, secret: string) {
-  return createHmac('sha256', secret).update(`work-signup-email:${email.trim().toLowerCase()}`).digest('hex');
+  return createHmac('sha256', secret).update(`work-signup-email:${normalizeSignupEmail(email)}`).digest('hex');
 }
 
 export function signupIpFingerprint(ip: string | undefined, secret: string) {
@@ -54,7 +54,7 @@ function encryptionKey(secret: string) {
 function encryptEmail(email: string, secret: string) {
   const iv = randomBytes(12);
   const cipher = createCipheriv('aes-256-gcm', encryptionKey(secret), iv);
-  const encrypted = Buffer.concat([cipher.update(email.trim(), 'utf8'), cipher.final()]);
+  const encrypted = Buffer.concat([cipher.update(normalizeSignupEmail(email), 'utf8'), cipher.final()]);
   return Buffer.concat([iv, cipher.getAuthTag(), encrypted]).toString('base64url');
 }
 
@@ -68,6 +68,7 @@ export function decryptSignupEmail(value: string, secret: string) {
 
 export function createSignupChallenge(email: string, placement: string, secret: string, now = Date.now()): SignupChallenge {
   if (!isValidSignupEmail(email) || !validLinkSecret(secret)) throw new Error('Invalid signup challenge input');
+  const address = normalizeSignupEmail(email);
   const id = randomUUID();
   const expiresAt = now + confirmationWindowMs;
   const nonce = randomBytes(32).toString('base64url');
@@ -78,8 +79,8 @@ export function createSignupChallenge(email: string, placement: string, secret: 
     token,
     record: {
       id,
-      emailDigest: keyForEmail(email, secret),
-      encryptedEmail: encryptEmail(email, secret),
+      emailDigest: keyForEmail(address, secret),
+      encryptedEmail: encryptEmail(address, secret),
       tokenDigest: digest(token),
       expiresAt,
       placement,

@@ -1,4 +1,4 @@
-import { findResendContact, subscribeResendContact, type ResendContact } from './resend-contacts';
+import { findResendContact, normalizeSignupEmail, subscribeResendContact, type ResendContact } from './resend-contacts';
 import { createSignupChallenge, decryptSignupEmail, isValidSignupChallenge, type SignupLedger, type SignupRecord } from './signup-verification';
 import type { WelcomeMailResult } from './resend-work-welcome';
 import { createWorkUnsubscribeToken } from './work-unsubscribe-token';
@@ -19,13 +19,14 @@ export type SignupDependencies = {
 };
 
 export async function requestNewsletterVerification(email: string, placement: string, config: SignupConfig, dependencies: SignupDependencies, ipFingerprint?: string): Promise<'sent' | 'uncertain' | 'suppressed' | 'failed'> {
-  const current = await dependencies.resend.find(email);
+  const address = normalizeSignupEmail(email);
+  const current = await dependencies.resend.find(address);
   if (current.kind === 'blocked') return 'suppressed';
   if (current.kind === 'failed') return 'failed';
-  const challenge = createSignupChallenge(email, placement, config.tokenSecret, dependencies.now?.());
+  const challenge = createSignupChallenge(address, placement, config.tokenSecret, dependencies.now?.());
   if (!await dependencies.ledger.issue(challenge.record, ipFingerprint)) return 'suppressed';
   let mailResult: SignupMailResult;
-  try { mailResult = await dependencies.mail(email, challenge.token); } catch { mailResult = 'uncertain'; }
+  try { mailResult = await dependencies.mail(address, challenge.token); } catch { mailResult = 'uncertain'; }
   if (mailResult === 'uncertain') return 'uncertain';
   if (mailResult === 'rejected') {
     await dependencies.ledger.cancel(challenge.token);
@@ -61,7 +62,7 @@ export async function confirmNewsletterVerification(token: string, config: Signu
   if (claim.status !== 'claimed' || !claim.record?.encryptedEmail) return 'failed';
   const record = claim.record;
   let email: string;
-  try { email = decryptSignupEmail(record.encryptedEmail, config.tokenSecret); }
+  try { email = normalizeSignupEmail(decryptSignupEmail(record.encryptedEmail, config.tokenSecret)); }
   catch { await dependencies.ledger.retry(record.id); return 'failed'; }
   const current = await dependencies.resend.find(email);
   if (current.kind === 'failed') { await dependencies.ledger.retry(record.id); return 'failed'; }

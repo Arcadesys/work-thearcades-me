@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createSignupChallenge, redisRestCredentials, UpstashSignupLedger } from './signup-verification';
+import { createSignupChallenge, decryptSignupEmail, redisRestCredentials, UpstashSignupLedger } from './signup-verification';
 
 test('Redis config accepts Vercel KV names without duplicating credentials', () => {
   assert.deepEqual(redisRestCredentials({ KV_REST_API_URL: 'https://kv.example', KV_REST_API_TOKEN: 'kv-token' }), {
@@ -33,6 +33,14 @@ test('claim accepts Upstash EVAL replies with an auto-decoded record object', as
   const result = await new UpstashSignupLedger(redis as never).claim(token);
   assert.equal(result.status, 'claimed');
   assert.deepEqual(result.record, processing);
+});
+
+test('signup challenges canonicalize email casing before digesting and encryption', () => {
+  const secret = 'd'.repeat(32);
+  const mixedCase = createSignupChallenge(' Reader@Example.COM ', 'work', secret, 1_800_000_000_000);
+  const lowercase = createSignupChallenge('reader@example.com', 'work', secret, 1_800_000_000_000);
+  assert.equal(mixedCase.record.emailDigest, lowercase.record.emailDigest);
+  assert.equal(decryptSignupEmail(mixedCase.record.encryptedEmail, secret), 'reader@example.com');
 });
 
 test('explicit confirmation is counted once in atomic ledger transitions', async () => {
