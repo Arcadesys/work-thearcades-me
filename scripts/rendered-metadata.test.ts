@@ -176,3 +176,17 @@ test('no prerendered page other than the homepage claims the homepage URL', () =
     }
   }
 });
+
+
+test('Little Buddy is featured and the article renders its captioned hero before the prose', () => {
+  const home = html('/');
+  const card = home.slice(home.indexOf('id="little-buddy"'), home.indexOf('id="cockpit-case"'));
+  assert.match(card, /href="https:\/\/buddy\.thearcades\.me\//);
+  assert.match(card, /Little Buddy body design render\./);
+  const article = html('/blog/engineering-with-love');
+  const figure = article.indexOf('class="blog-hero-figure"');
+  const opening = article.indexOf('The first thing I want the kids to do');
+  assert(figure >= 0 && figure < opening);
+  assert.match(article.slice(figure, opening), /Little Buddy body design render\./);
+  assert.equal((article.slice(0, article.indexOf('</article>')).match(/src="\/images\/blog\/little-buddy-body-render\.png"/g) ?? []).length, 1);
+});

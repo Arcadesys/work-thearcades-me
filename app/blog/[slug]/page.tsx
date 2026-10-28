@@ -36,6 +36,7 @@ export default async function PostPage({ params }: PageProps<'/blog/[slug]'>) {
     urlTransform: (url: string) => defaultUrlTransform(archiveLinks[post.slug]?.[url] ?? url),
     components: { a: ({ href, children }: { href?: string; children?: React.ReactNode }) => (href ? <a href={href}>{children}</a> : <span>{children}</span>) },
   };
+  const heroImage = post.hero && <img className="blog-hero" src={post.hero.src} alt={post.hero.alt} {...(post.hero.caption ? {} : { width: 1200, height: 630 })} />;
   const subscribeBlock = <div className="subscribe" aria-label="Subscribe">
     <p className="label kicker"><span className="dot" />{newsletter.kicker}</p>
     <h3>{newsletter.heading}</h3>
@@ -50,7 +51,7 @@ export default async function PostPage({ params }: PageProps<'/blog/[slug]'>) {
     <h1>{post.title}</h1><time dateTime={post.publishDate}>{displayDate(post.publishDate)}</time>
     {post.buildDate && <p>Build date: <time dateTime={post.buildDate}>{displayBuildDate(post.buildDate)}</time></p>}
     <PostTags post={post} />
-    {post.hero && <img className="blog-hero" src={post.hero.src} alt={post.hero.alt} width={1200} height={630} />}
+    {post.hero?.caption ? <figure className="blog-hero-figure">{heroImage}<figcaption>{post.hero.caption}</figcaption></figure> : heroImage}
     {work.length > 0 && <aside className="blog-related" aria-label="Featured work">{work.map(study => <p key={study.slug}>Featured work: <Link href={`/work/${study.slug}`}>{study.title}</Link></p>)}</aside>}
     {isWizwor ? <>
       <div className="blog-prose"><Markdown {...markdownProps}>{wizworIntro}</Markdown></div>

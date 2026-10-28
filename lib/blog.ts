@@ -15,7 +15,7 @@ const schema = z.object({
   demoNumber: z.number().int().positive().optional(),
   demoUrl: z.url().optional(),
   tags: z.array(text).default([]),
-  hero: z.object({ src: text, alt: text }).strict().optional(),
+  hero: z.object({ src: text, alt: text, caption: text.optional() }).strict().optional(),
   seo: z.object({ title: text.optional(), description: text.optional() }).strict().optional(),
 }).strict();
 export type BlogPost = z.infer<typeof schema> & { body: string };

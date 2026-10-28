@@ -162,6 +162,21 @@ export default function Home() {
             )}
           </article>
 
+          <article className="case case-featured" id="little-buddy" data-accent="orange" data-reveal="2" aria-labelledby="little-buddy-title">
+            <div>
+              <p className="label case-pill">Builder · Learning through play</p>
+              <h3 id="little-buddy-title">Little Buddy: a robot made to be taken apart</h3>
+              <p>I’m building an adaptable robot toy for my nieces and nephews, with a body designed for rebuilding and a browser-based PocketLab coding environment in development. The goal is to give each child a way to experiment, tinker, and make the project their own.</p>
+              <ul className="tag-list" aria-label="Little Buddy disciplines"><li className="label">Robotics</li><li className="label">Learning through play</li><li className="label">Creative coding</li></ul>
+              <ExternalLink className="label case-more" href="https://buddy.thearcades.me/">Explore Little Buddy<Arrow /><span className="visually-hidden"> (opens in a new tab)</span></ExternalLink>
+              <Link className="label case-technical-tour" href="/blog/engineering-with-love">Read Engineering with love<Arrow /></Link>
+            </div>
+            <figure className="case-figure">
+              <div><Image src="/images/blog/little-buddy-body-render.png" width={1300} height={1300} sizes="(max-width: 840px) calc(100vw - 64px), 480px" alt="A 3D render of Little Buddy, a white and orange robot with a round face, blue eyes, arms, and tank tracks." /></div>
+              <figcaption>Little Buddy body design render.</figcaption>
+            </figure>
+          </article>
+
           <article
             className="case case-split-top case-wide"
             id={cockpit.id}

@@ -9,6 +9,10 @@ tags:
   - building-in-public
   - robotics
   - engineering
+hero:
+  src: /images/blog/little-buddy-body-render.png
+  alt: 'A 3D render of Little Buddy, a white and orange robot with a round face, blue eyes, arms, and tank tracks.'
+  caption: Little Buddy body design render.
 seo:
   title: Engineering with love
   description: Building a small robot for three creative kids, and a gift of curiosity, engineering, and love.
@@ -57,10 +61,6 @@ The alternative to a sealed product isn't a pile of inaccessible parts and a pat
 My job isn't to keep the supports in place forever. It's also not to disappear the moment the gift changes hands. I can help them find the next step without deciding where the project ends. I can help fix the thing without taking it back and turning it into my project again.
 
 The body makes that invitation visible. A body made to be changed says something different from a body you're afraid to scratch. Taking the head off should be ordinary. Putting it back should be ordinary too.
-
-![A 3D render of Little Buddy, a white and orange robot with a round face, blue eyes, arms, and tank tracks.](/images/blog/little-buddy-body-render.png)
-
-*Little Buddy body design render.*
 
 That doesn't make it indestructible. Batteries need proper handling, and electronics can break. But my rough figure for the electronics is about $32. Replacing a part is a different prospect from ruining an expensive, mysterious object. Breakage doesn't have to end the project, and they don't have to face it alone. Frustration and iteration can be fun in the long run.
 
