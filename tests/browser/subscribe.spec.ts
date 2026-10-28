@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('newsletter signup has a labelled keyboard flow and pending-confirmation feedback', async ({ page }) => {
-  await page.route('**/api/kit/subscribe', async route => {
+  await page.route('**/api/newsletter/subscribe', async route => {
     await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ accepted: true }) });
   });
   await page.goto('/');
@@ -24,14 +24,14 @@ test('newsletter signup has a labelled keyboard flow and pending-confirmation fe
   await submit.focus();
   await submit.press('Enter');
 
-  await expect(status).toContainText('The request will not reach Kit until you confirm the link.');
+  await expect(status).toContainText('The request will not reach Resend until you confirm the link.');
   await expect(email).toBeDisabled();
   await expect(page.locator('body')).toHaveJSProperty('scrollWidth', await page.locator('body').evaluate(node => node.clientWidth));
 });
 
 test('newsletter signup explains a failed request and allows retry', async ({ page }) => {
   let attempts = 0;
-  await page.route('**/api/kit/subscribe', async route => {
+  await page.route('**/api/newsletter/subscribe', async route => {
     attempts += 1;
     await route.fulfill({ status: attempts === 1 ? 502 : 200, contentType: 'application/json', body: JSON.stringify({ accepted: attempts > 1 }) });
   });
@@ -46,15 +46,15 @@ test('newsletter signup explains a failed request and allows retry', async ({ pa
   await expect(status).toContainText('We could not submit your request. Please try again.');
 
   await submit.press('Enter');
-  await expect(status).toContainText('The request will not reach Kit until you confirm the link.');
+  await expect(status).toContainText('The request will not reach Resend until you confirm the link.');
   expect(attempts).toBe(2);
 });
 
-test('verification fragment is removed immediately and Kit is untouched until explicit confirmation', async ({ page }) => {
+test('verification fragment is removed immediately and Resend is untouched until explicit confirmation', async ({ page }) => {
   const requests: string[] = [];
-  await page.route('**/api/kit/**', async route => {
+  await page.route('**/api/newsletter/**', async route => {
     requests.push(route.request().url());
-    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ accepted: true, state: 'kit_confirmation_required' }) });
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ accepted: true, state: 'active' }) });
   });
   await page.setViewportSize({ width: 320, height: 780 });
   await page.goto('/newsletter/verify#token=example.signed.challenge');
@@ -68,7 +68,7 @@ test('verification fragment is removed immediately and Kit is untouched until ex
   await expect(confirm).toHaveCSS('min-height', '48px');
   await expect(confirm).toHaveCSS('outline-style', 'solid');
   await page.keyboard.press('Enter');
-  await expect(page.getByRole('status')).toContainText('Kit needs a separate confirmation');
+  await expect(page.getByRole('status')).toContainText('Your email is verified and your Work build notes request is active');
   expect(requests).toHaveLength(1);
   await expect(page.locator('body')).toHaveJSProperty('scrollWidth', await page.locator('body').evaluate(node => node.clientWidth));
 });
@@ -89,7 +89,7 @@ test('verification page reflows at a 200% desktop zoom equivalent', async ({ pag
 
 test('verification cancellation requires an explicit keyboard action', async ({ page }) => {
   let cancellations = 0;
-  await page.route('**/api/kit/cancel', async route => {
+  await page.route('**/api/newsletter/cancel', async route => {
     cancellations += 1;
     await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ cancelled: true }) });
   });

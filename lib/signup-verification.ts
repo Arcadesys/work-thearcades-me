@@ -1,21 +1,20 @@
 import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, randomUUID, timingSafeEqual } from 'node:crypto';
 import { isIP } from 'node:net';
 import { Redis } from '@upstash/redis';
-import { isValidSignupEmail } from './kit-subscription';
+import { isValidSignupEmail, normalizeSignupEmail } from './resend-contacts';
 
 const recordTtlSeconds = 35 * 24 * 60 * 60;
 const challengeTtlSeconds = 25 * 60 * 60;
 const tokenTtlSeconds = challengeTtlSeconds;
 const confirmationWindowMs = 24 * 60 * 60 * 1000;
 const verificationRetryWindowMs = 8 * 24 * 60 * 60 * 1000;
-const kitConfirmationWindowMs = 30 * 24 * 60 * 60 * 1000;
 const emailCooldownSeconds = 10 * 60;
 const ipWindowSeconds = 60 * 60;
 const ipRequestLimit = 10;
 const leaseMs = 60 * 1000;
 const namespace = 'work-newsletter:v1';
 
-export type SignupState = 'pending' | 'processing' | 'retry' | 'waiting_kit_confirmation' | 'completed' | 'cancelled' | 'suppressed' | 'expired';
+export type SignupState = 'pending' | 'processing' | 'retry' | 'completed' | 'cancelled' | 'suppressed' | 'expired';
 export type SignupRecord = {
   id: string;
   emailDigest: string;
@@ -25,10 +24,7 @@ export type SignupRecord = {
   placement: string;
   state: SignupState;
   verifiedAt?: number;
-  kitActiveAt?: number;
   leaseUntil?: number;
-  subscriberId?: number;
-  queueExpiresAt?: number;
 };
 
 export type SignupChallenge = { token: string; record: SignupRecord };
@@ -43,7 +39,7 @@ function digest(value: string) {
 }
 
 function keyForEmail(email: string, secret: string) {
-  return createHmac('sha256', secret).update(`work-signup-email:${email.trim().toLowerCase()}`).digest('hex');
+  return createHmac('sha256', secret).update(`work-signup-email:${normalizeSignupEmail(email)}`).digest('hex');
 }
 
 export function signupIpFingerprint(ip: string | undefined, secret: string) {
@@ -58,7 +54,7 @@ function encryptionKey(secret: string) {
 function encryptEmail(email: string, secret: string) {
   const iv = randomBytes(12);
   const cipher = createCipheriv('aes-256-gcm', encryptionKey(secret), iv);
-  const encrypted = Buffer.concat([cipher.update(email.trim(), 'utf8'), cipher.final()]);
+  const encrypted = Buffer.concat([cipher.update(normalizeSignupEmail(email), 'utf8'), cipher.final()]);
   return Buffer.concat([iv, cipher.getAuthTag(), encrypted]).toString('base64url');
 }
 
@@ -72,6 +68,7 @@ export function decryptSignupEmail(value: string, secret: string) {
 
 export function createSignupChallenge(email: string, placement: string, secret: string, now = Date.now()): SignupChallenge {
   if (!isValidSignupEmail(email) || !validLinkSecret(secret)) throw new Error('Invalid signup challenge input');
+  const address = normalizeSignupEmail(email);
   const id = randomUUID();
   const expiresAt = now + confirmationWindowMs;
   const nonce = randomBytes(32).toString('base64url');
@@ -82,8 +79,8 @@ export function createSignupChallenge(email: string, placement: string, secret: 
     token,
     record: {
       id,
-      emailDigest: keyForEmail(email, secret),
-      encryptedEmail: encryptEmail(email, secret),
+      emailDigest: keyForEmail(address, secret),
+      encryptedEmail: encryptEmail(address, secret),
       tokenDigest: digest(token),
       expiresAt,
       placement,
@@ -111,7 +108,6 @@ function tokenKey(tokenDigest: string) { return `${namespace}:token:${tokenDiges
 function cooldownKey(emailDigest: string) { return `${namespace}:cooldown:${emailDigest}`; }
 function ipWindowKey(fingerprint: string) { return `${namespace}:ip-window:${fingerprint}`; }
 function welcomeKey(emailDigest: string) { return `${namespace}:welcome:${emailDigest}`; }
-const queueKey = `${namespace}:queue`;
 
 /** Upstash Redis may decode Lua cjson return values before resolving EVAL. */
 function parseSignupRecord(value: unknown): SignupRecord | null {
@@ -121,14 +117,14 @@ function parseSignupRecord(value: unknown): SignupRecord | null {
   }
   if (!candidate || typeof candidate !== 'object' || Array.isArray(candidate)) return null;
   const record = candidate as Partial<SignupRecord>;
-  const states: SignupState[] = ['pending', 'processing', 'retry', 'waiting_kit_confirmation', 'completed', 'cancelled', 'suppressed', 'expired'];
+  const states: SignupState[] = ['pending', 'processing', 'retry', 'completed', 'cancelled', 'suppressed', 'expired'];
   if (typeof record.id !== 'string' || !/^[0-9a-f-]{36}$/i.test(record.id)
     || typeof record.emailDigest !== 'string' || !/^[0-9a-f]{64}$/i.test(record.emailDigest)
     || typeof record.tokenDigest !== 'string' || !/^[0-9a-f]{64}$/i.test(record.tokenDigest)
     || !Number.isSafeInteger(record.expiresAt) || typeof record.placement !== 'string'
     || !states.includes(record.state as SignupState)
     || (record.encryptedEmail !== undefined && typeof record.encryptedEmail !== 'string')
-    || (record.subscriberId !== undefined && !Number.isSafeInteger(record.subscriberId))) return null;
+) return null;
   return record as SignupRecord;
 }
 
@@ -174,7 +170,6 @@ local now = tonumber(ARGV[2])
 local status = record.state
 if status == 'completed' then return {'completed', ''} end
 if status == 'cancelled' or status == 'suppressed' or status == 'expired' then return {status, ''} end
-if status == 'waiting_kit_confirmation' then return {'waiting_kit_confirmation', ''} end
 if status == 'pending' then
   if tonumber(record.expiresAt) < now then
     record.state = 'expired'
@@ -246,71 +241,19 @@ redis.call('SET', KEYS[1], cjson.encode(record), 'EX', remaining)
 return 1
 `;
 
-const waitForKitScript = `
-local raw = redis.call('GET', KEYS[1])
-if not raw then return 0 end
-local record = cjson.decode(raw)
-if record.state ~= 'processing' then return 0 end
-record.state = 'waiting_kit_confirmation'
-record.leaseUntil = nil
-record.encryptedEmail = nil
-record.subscriberId = tonumber(ARGV[1])
-record.queueExpiresAt = tonumber(ARGV[2])
-redis.call('SET', KEYS[1], cjson.encode(record), 'EX', ARGV[4])
-redis.call('ZADD', KEYS[2], ARGV[3], record.id)
-return 1
-`;
-
 const finishScript = `
 local raw = redis.call('GET', KEYS[1])
 if not raw then return 0 end
 local record = cjson.decode(raw)
-if record.state ~= 'processing' and record.state ~= 'waiting_kit_confirmation' then return 0 end
+if record.state ~= 'processing' then return 0 end
 if ARGV[1] == 'completed' then
-  redis.call('HINCRBY', KEYS[3], 'kit_active_ready', 1)
-  redis.call('EXPIRE', KEYS[3], 34560000)
-  record.kitActiveAt = tonumber(ARGV[3])
+  redis.call('HINCRBY', KEYS[2], 'confirmed', 1)
+  redis.call('EXPIRE', KEYS[2], 34560000)
 end
 record.state = ARGV[1]
 record.leaseUntil = nil
 record.encryptedEmail = nil
 redis.call('SET', KEYS[1], cjson.encode(record), 'EX', ARGV[2])
-redis.call('ZREM', KEYS[2], record.id)
-return 1
-`;
-
-const queueClaimScript = `
-local raw = redis.call('GET', KEYS[2])
-if not raw then redis.call('ZREM', KEYS[1], ARGV[1]); return {'missing', ''} end
-local record = cjson.decode(raw)
-if record.state == 'processing' then
-  if tonumber(record.leaseUntil or 0) > tonumber(ARGV[2]) then return {'busy', ''} end
-elseif record.state ~= 'waiting_kit_confirmation' then
-  redis.call('ZREM', KEYS[1], ARGV[1])
-  return {'invalid', ''}
-end
-if tonumber(redis.call('ZSCORE', KEYS[1], ARGV[1]) or '0') > tonumber(ARGV[2]) then return {'not_due', ''} end
-if tonumber(record.queueExpiresAt or 0) < tonumber(ARGV[2]) then
-  record.state = 'expired'
-  redis.call('SET', KEYS[2], cjson.encode(record), 'EX', ARGV[4])
-  redis.call('ZREM', KEYS[1], ARGV[1])
-  return {'expired', ''}
-end
-record.state = 'processing'
-record.leaseUntil = tonumber(ARGV[2]) + tonumber(ARGV[3])
-redis.call('SET', KEYS[2], cjson.encode(record), 'EX', ARGV[4])
-return {'claimed', cjson.encode(record)}
-`;
-
-const rescheduleScript = `
-local raw = redis.call('GET', KEYS[2])
-if not raw then redis.call('ZREM', KEYS[1], ARGV[1]); return 0 end
-local record = cjson.decode(raw)
-if record.state ~= 'processing' then return 0 end
-record.state = 'waiting_kit_confirmation'
-record.leaseUntil = nil
-redis.call('SET', KEYS[2], cjson.encode(record), 'EX', ARGV[3])
-redis.call('ZADD', KEYS[1], ARGV[2], ARGV[1])
 return 1
 `;
 
@@ -345,11 +288,8 @@ export interface SignupLedger {
   claim(token: string): Promise<SignupLedgerResult>;
   cancel(token: string): Promise<string>;
   retry(id: string): Promise<void>;
-  waitForKitConfirmation(id: string, subscriberId: number, nextAt: number): Promise<void>;
   complete(id: string): Promise<void>;
   suppress(id: string): Promise<void>;
-  claimDueKitConfirmations(now: number, limit?: number): Promise<SignupRecord[]>;
-  rescheduleKitConfirmation(id: string, nextAt: number): Promise<void>;
   claimWorkWelcome(emailDigest: string): Promise<'claimed' | 'busy' | 'already_handled' | 'failed'>;
   settleWorkWelcome(emailDigest: string, state: 'sent' | 'uncertain'): Promise<boolean>;
   releaseWorkWelcome(emailDigest: string): Promise<void>;
@@ -397,34 +337,13 @@ export class UpstashSignupLedger implements SignupLedger {
     await this.redis.eval(retryScript, [requestKey(id)], [Date.now(), verificationRetryWindowMs, recordTtlSeconds]);
   }
 
-  async waitForKitConfirmation(id: string, subscriberId: number, nextAt: number) {
-    await this.redis.eval(waitForKitScript, [requestKey(id), queueKey], [subscriberId, Date.now() + kitConfirmationWindowMs, nextAt, recordTtlSeconds]);
-  }
-
   async complete(id: string) {
     const now = Date.now();
-    await this.redis.eval(finishScript, [requestKey(id), queueKey, `${namespace}:metrics:${new Date(now).toISOString().slice(0, 10)}`], ['completed', recordTtlSeconds, now]);
+    await this.redis.eval(finishScript, [requestKey(id), `${namespace}:metrics:${new Date(now).toISOString().slice(0, 10)}`], ['completed', recordTtlSeconds]);
   }
 
   async suppress(id: string) {
-    await this.redis.eval(finishScript, [requestKey(id), queueKey], ['suppressed', recordTtlSeconds]);
-  }
-
-  async claimDueKitConfirmations(now: number, limit = 25) {
-    const ids = await this.redis.zrange<string[]>(queueKey, 0, limit - 1);
-    const claimed: SignupRecord[] = [];
-    for (const id of ids) {
-      const result = await this.redis.eval<unknown[]>(queueClaimScript, [queueKey, requestKey(id)], [id, now, leaseMs, recordTtlSeconds]);
-      if (Array.isArray(result) && result[0] === 'claimed') {
-        const record = parseSignupRecord(result[1]);
-        if (record) claimed.push(record);
-      }
-    }
-    return claimed;
-  }
-
-  async rescheduleKitConfirmation(id: string, nextAt: number) {
-    await this.redis.eval(rescheduleScript, [queueKey, requestKey(id)], [id, nextAt, recordTtlSeconds]);
+    await this.redis.eval(finishScript, [requestKey(id), `${namespace}:metrics:${new Date().toISOString().slice(0, 10)}`], ['suppressed', recordTtlSeconds]);
   }
 
   async claimWorkWelcome(emailDigest: string) {

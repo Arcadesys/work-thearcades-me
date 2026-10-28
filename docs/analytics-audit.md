@@ -73,9 +73,9 @@ Newsletter events are emitted by `components/subscribe-form.tsx`, with event nam
 | --- | --- | --- |
 | `triage_skill_download` | `/layoff-triage` | `layoff_triage_page` — the main download link |
 | `subscribe_submit_intent` | signup placements | Records a user-initiated signup submission |
-| `subscribe_request_accepted` | signup placements | The server reports that Kit accepted the double-opt-in form request |
+| `subscribe_request_accepted` | signup placements | The server accepted the first-party verification request |
 
-These events represent different stages: intent records the submission attempt, and accepted means Kit accepted the request and initiated its form flow. Neither event establishes that the reader confirmed the email or remains subscribed. `triage_skill_download` means activation of the download link only, for the same reason `resume_pdf_download_initiated` above does.
+These events represent different stages: intent records the submission attempt, and accepted means the site accepted the first-party verification request. Neither event establishes that the reader confirmed the email or remains subscribed. `triage_skill_download` means activation of the download link only, for the same reason `resume_pdf_download_initiated` above does.
 
 ## Qualified inquiries are a separate outcome
 
