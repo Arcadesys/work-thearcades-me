@@ -1997,6 +1997,9 @@ main [id] { scroll-margin-top: 16px; }
 .blog-list h2 { font-size: 1.75rem; margin: .75rem 0; }
 .blog-list p { line-height: 1.7; color: var(--text-soft); }
 .blog-list h2 a, .blog-prose a, .blog-related a, .blog-provenance a { text-decoration: underline; text-underline-offset: .2em; }
+.blog-hero-figure { margin: 1.75rem 0 2.25rem; }
+.blog-hero-figure .blog-hero { display: block; margin: 0; }
+.blog-hero-figure figcaption { margin-top: .75rem; color: var(--text-muted); line-height: 1.6; }
 .blog-hero { width: 100%; height: auto; margin: 1.75rem 0 2.25rem; border-radius: var(--radius); border: 1px solid var(--line); }
 .wizwor-demo { margin: 2rem 0 3rem; padding: clamp(1rem, 3vw, 1.5rem); border: 1px solid var(--text-muted); border-radius: var(--radius); background: var(--surface); }
 .wizwor-demo > p { font-size: 1.125rem; line-height: 1.65; }
