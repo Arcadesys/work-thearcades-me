@@ -1,4 +1,4 @@
-import { isValidSignupEmail } from '@/lib/kit-subscription';
+import { isValidSignupEmail } from '@/lib/resend-contacts';
 import { createNewsletterRuntime } from '@/lib/newsletter-runtime';
 import { requestNewsletterVerification } from '@/lib/newsletter-flow';
 import { signupIpFingerprint } from '@/lib/signup-verification';

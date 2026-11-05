@@ -1,6 +1,6 @@
-import { unsubscribeKitSubscriber } from '@/lib/kit-subscription';
-import { readWorkUnsubscribeRequestToken } from '@/lib/kit-unsubscribe-request';
-import { readWorkUnsubscribeToken } from '@/lib/work-unsubscribe-token';
+import { unsubscribeLegacyKitSubscriber } from '@/lib/legacy-kit-unsubscribe';
+import { readWorkUnsubscribeRequestToken } from '@/lib/newsletter-unsubscribe-request';
+import { readLegacyWorkUnsubscribeToken } from '@/lib/work-unsubscribe-token';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -16,17 +16,14 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const secret = process.env.SIGNUP_LINK_SECRET;
-  const apiKey = process.env.KIT_API_KEY;
+  const apiKey = process.env.KIT_LEGACY_UNSUBSCRIBE_API_KEY;
   if (!secret || !apiKey) return response({ unsubscribed: false }, 503);
 
   const token = await readWorkUnsubscribeRequestToken(request);
   if (!token) return response({ unsubscribed: false }, 400);
-  const target = readWorkUnsubscribeToken(token, secret);
+  const target = readLegacyWorkUnsubscribeToken(token, secret);
   if (!target) return response({ unsubscribed: false }, 400);
-  try {
-    if (!await unsubscribeKitSubscriber(target.subscriberId, apiKey)) return response({ unsubscribed: false }, 502);
-    return response({ unsubscribed: true }, 200);
-  } catch {
-    return response({ unsubscribed: false }, 502);
-  }
+  return await unsubscribeLegacyKitSubscriber(target.subscriberId, apiKey)
+    ? response({ unsubscribed: true }, 200)
+    : response({ unsubscribed: false }, 502);
 }

@@ -26,7 +26,7 @@ export function NewsletterUnsubscribe() {
     if (!token || state === 'submitting') return;
     setState('submitting');
     try {
-      const response = await fetch('/api/kit/unsubscribe', {
+      const response = await fetch('/api/newsletter/unsubscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token }),
@@ -39,10 +39,10 @@ export function NewsletterUnsubscribe() {
   }
 
   const message = state === 'loading' ? 'Reading your unsubscribe link…'
-    : state === 'ready' ? 'Use this button to unsubscribe this address from email sent through Kit.'
+    : state === 'ready' ? 'Use this button to unsubscribe this address from Work build notes.'
       : state === 'submitting' ? 'Updating your email preferences…'
-        : state === 'done' ? 'This address has been unsubscribed from Kit email.'
-          : state === 'invalid' ? 'This unsubscribe link is missing or invalid. You can unsubscribe from any Kit email using its unsubscribe link.'
+        : state === 'done' ? 'This address has been unsubscribed from Work build notes.'
+          : state === 'invalid' ? 'This unsubscribe link is missing or invalid. You can use the unsubscribe link in any Work build notes email.'
             : 'We could not update your email preferences. You can safely try again.';
 
   return (
@@ -53,11 +53,11 @@ export function NewsletterUnsubscribe() {
       {state === 'ready' || state === 'error' ? (
         <div className={styles.actions}>
           <button className="btn btn-gradient" type="button" onClick={() => void unsubscribe()}>
-            {state === 'ready' ? 'Unsubscribe from Kit email' : 'Try again'}
+            {state === 'ready' ? 'Unsubscribe from Work build notes' : 'Try again'}
           </button>
         </div>
       ) : null}
-      {state === 'submitting' ? <p className={styles.note}>Please wait while Kit updates your subscription.</p> : null}
+      {state === 'submitting' ? <p className={styles.note}>Please wait while your subscription is updated.</p> : null}
     </section>
   );
 }

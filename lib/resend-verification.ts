@@ -1,7 +1,6 @@
 type VerificationMailConfig = {
-  serverToken: string;
+  apiKey: string;
   fromEmail: string;
-  messageStream: string;
   environment?: string;
   vercelUrl?: string;
 };
@@ -23,7 +22,7 @@ export async function sendSignupVerificationEmail(
   config: VerificationMailConfig,
   fetcher: Fetcher = fetch,
 ) {
-  if (!config.serverToken || !config.fromEmail || !config.messageStream || !token) return 'rejected';
+  if (!config.apiKey || !config.fromEmail || !token) return 'rejected';
   const verifyUrl = `${verificationSiteOrigin(config)}/newsletter/verify#token=${encodeURIComponent(token)}`;
   const textBody = [
     'Confirm your request for Work build notes',
@@ -36,31 +35,25 @@ export async function sendSignupVerificationEmail(
   const htmlBody = `<!doctype html><html lang="en"><body><main><h1>Confirm your request for Work build notes</h1><p>You asked to receive Work build notes. Confirm your email address and request by opening this link:</p><p><a href="${verifyUrl}">Confirm my email</a></p><p>This link expires in 24 hours. If you did not request these notes, choose Cancel on the confirmation page or ignore this message.</p></main></body></html>`;
 
   try {
-    const response = await fetcher('https://api.postmarkapp.com/email', {
+    const response = await fetcher('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
-        Accept: 'application/json',
         'Content-Type': 'application/json',
-        'X-Postmark-Server-Token': config.serverToken,
+        Authorization: `Bearer ${config.apiKey}`,
       },
       body: JSON.stringify({
-        From: config.fromEmail,
-        To: email,
-        Subject: 'Confirm your Work build notes request',
-        TextBody: textBody,
-        HtmlBody: htmlBody,
-        MessageStream: config.messageStream,
-        TrackOpens: false,
-        TrackLinks: 'None',
+        from: config.fromEmail,
+        to: [email],
+        subject: 'Confirm your Work build notes request',
+        text: textBody,
+        html: htmlBody,
       }),
       signal: AbortSignal.timeout(8000),
     });
     if (response.status >= 400 && response.status < 500) return 'rejected';
     if (!response.ok) return 'uncertain';
-    const result = await response.json() as { ErrorCode?: unknown };
-    if (result.ErrorCode === 0) return 'sent';
-    if (typeof result.ErrorCode === 'number') return 'rejected';
-    return 'uncertain';
+    const result = await response.json() as { id?: unknown };
+    return typeof result.id === 'string' && result.id ? 'sent' : 'uncertain';
   } catch {
     // The provider may have accepted the email before a timeout; preserve its challenge.
     return 'uncertain';

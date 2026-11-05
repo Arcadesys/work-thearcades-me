@@ -1,11 +1,10 @@
-import { verificationSiteOrigin } from './postmark-verification';
+import { verificationSiteOrigin } from './resend-verification';
 
 export type WelcomeMailResult = 'sent' | 'rejected' | 'uncertain';
 
 export type WorkWelcomeMailConfig = {
-  serverToken: string;
+  apiKey: string;
   fromEmail: string;
-  messageStream: string;
   environment?: string;
   vercelUrl?: string;
 };
@@ -56,41 +55,35 @@ export async function sendWorkWelcomeEmail(
   config: WorkWelcomeMailConfig,
   fetcher: Fetcher = fetch,
 ): Promise<WelcomeMailResult> {
-  if (!config.serverToken || !config.fromEmail || !config.messageStream || !email || !unsubscribeToken) return 'rejected';
+  if (!config.apiKey || !config.fromEmail || !email || !unsubscribeToken) return 'rejected';
   const origin = verificationSiteOrigin(config);
   const unsubscribeUrl = `${origin}/newsletter/unsubscribe#token=${encodeURIComponent(unsubscribeToken)}`;
-  const oneClickUrl = `${origin}/api/kit/unsubscribe?token=${encodeURIComponent(unsubscribeToken)}`;
+  const oneClickUrl = `${origin}/api/newsletter/unsubscribe?token=${encodeURIComponent(unsubscribeToken)}`;
   const content = createWorkWelcomeEmail(unsubscribeUrl);
   try {
-    const response = await fetcher('https://api.postmarkapp.com/email', {
+    const response = await fetcher('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
-        Accept: 'application/json',
         'Content-Type': 'application/json',
-        'X-Postmark-Server-Token': config.serverToken,
+        Authorization: `Bearer ${config.apiKey}`,
       },
       body: JSON.stringify({
-        From: config.fromEmail,
-        To: email,
-        Subject: content.subject,
-        TextBody: content.text,
-        HtmlBody: content.html,
-        Headers: [
-          { Name: 'List-Unsubscribe', Value: `<${oneClickUrl}>` },
-          { Name: 'List-Unsubscribe-Post', Value: 'List-Unsubscribe=One-Click' },
-        ],
-        MessageStream: config.messageStream,
-        TrackOpens: false,
-        TrackLinks: 'None',
+        from: config.fromEmail,
+        to: [email],
+        subject: content.subject,
+        text: content.text,
+        html: content.html,
+        headers: {
+          'List-Unsubscribe': `<${oneClickUrl}>`,
+          'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+        },
       }),
       signal: AbortSignal.timeout(8000),
     });
     if (response.status >= 400 && response.status < 500) return 'rejected';
     if (!response.ok) return 'uncertain';
-    const result = await response.json() as { ErrorCode?: unknown };
-    if (result.ErrorCode === 0) return 'sent';
-    if (typeof result.ErrorCode === 'number') return 'rejected';
-    return 'uncertain';
+    const result = await response.json() as { id?: unknown };
+    return typeof result.id === 'string' && result.id ? 'sent' : 'uncertain';
   } catch {
     return 'uncertain';
   }
