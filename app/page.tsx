@@ -83,6 +83,7 @@ export default function Home() {
       }
     : null;
 
+  const heinlein = caseById['heinlein-case'];
   const bunch = caseById['builder-case'];
   const guaranteedRate = caseById['owner-case'];
   const aiEnablement = caseById['evangelist-case'];
@@ -106,11 +107,11 @@ export default function Home() {
               </h1>
               <p className="hero-intro">{hero.intro}</p>
               <p className="hero-proof">
-                <Link href="/engineering">Bunch: web + MCP, one set of tested rules.</Link>
+                <Link href="/work/heinlein">Heinlein: writing, AI editorial review, and publishing—with the author in control.</Link>
                 <span><Link href="/work/ai-enablement">{hero.evidence}</Link> at ActiveCampaign, as part of the broader transformation effort.</span>
               </p>
               <div className="btn-row">
-                <a className="btn btn-gradient" href="#work">Selected work<Arrow /></a>
+                <Link className="btn btn-gradient" href="/work/heinlein">Explore Heinlein<Arrow /></Link>
                 <Link className="btn btn-outline" href="/engineering">Technical tour</Link>
                 <Link className="btn btn-outline" href={site.resumeUrl} data-funnel-event="resume_click" data-funnel-placement="hero">Résumé</Link>
               </div>
@@ -137,6 +138,30 @@ export default function Home() {
           <Kicker>Selected work</Kicker>
           <h2 className="h2 case-heading" id="work-heading">Working systems. Evidence you can inspect.</h2>
           <p className="work-authorship">{hero.authorship}</p>
+
+          <article
+            className="case case-featured"
+            id={heinlein.id}
+            data-accent={heinlein.accent}
+            data-reveal="1"
+            aria-labelledby={`${heinlein.id}-title`}
+          >
+            <CaseSummary study={heinlein} />
+            {heinlein.image && (
+              <figure className="case-figure">
+                <div>
+                  <Image
+                    src={heinlein.image.src}
+                    width={heinlein.image.width}
+                    height={heinlein.image.height}
+                    sizes="(max-width: 840px) calc(100vw - 64px), 480px"
+                    alt={heinlein.image.alt}
+                  />
+                </div>
+                <figcaption>{heinlein.image.caption}</figcaption>
+              </figure>
+            )}
+          </article>
 
           <article
             className="case case-featured"
