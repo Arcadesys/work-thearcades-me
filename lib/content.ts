@@ -264,6 +264,43 @@ export const lanes: Lane[] = [
 
 export const caseStudies: CaseStudy[] = [
   {
+    id: 'heinlein-case',
+    slug: 'heinlein',
+    lane: 'Featured project · Writing & AI',
+    title: 'Heinlein: a writing workspace that keeps the author in control',
+    seoTitle: 'Heinlein: Author-Controlled AI Writing and Publishing Tools',
+    body: 'I’m building the writing tools I want to use for my own books. Heinlein Studio brings long manuscripts, movable scenes, and AI editorial review into a desktop workspace built around ordinary Markdown files. Suggestions stay advisory: I review the changes and decide what belongs in the manuscript. A separate publishing toolkit turns finished text into book editions.',
+    tags: ['AI systems', 'Desktop software', 'Human-in-the-loop', 'Publishing'],
+    accent: 'pink',
+    homeSupplementaryLink: { label: 'Read the build story →', href: '/blog/talk-draft-iterate-building-heinlein' },
+    links: [
+      { label: 'Explore Heinlein on GitHub', href: 'https://github.com/Arcadesys/heinlein', emphasis: 'primary' },
+      { label: 'Read the Studio build story', href: '/blog/talk-draft-iterate-building-heinlein', emphasis: 'secondary' },
+      { label: 'How the publishing toolkit began', href: '/blog/why-i-built-heinlein', emphasis: 'quiet' },
+    ],
+    image: {
+      src: '/images/blog/heinlein-studio/heinlein-navigation.png',
+      width: 2048,
+      height: 1152,
+      alt: 'Heinlein Studio showing manuscript navigation beside the synthetic sample scene The last ferry in Reading view.',
+      caption: 'Heinlein Studio with a synthetic sample manuscript; no private writing is shown.',
+    },
+    snapshot: [
+      { label: 'My role', value: 'Independent builder: product decisions, architecture, implementation with AI assistance, review, and delivery.' },
+      { label: 'Workspace', value: 'Desktop writing app with local Markdown files and an explicit manuscript order.' },
+      { label: 'AI boundary', value: 'Editorial suggestions require author review and acceptance.' },
+      { label: 'Publishing', value: 'Separate CLI builds PDF, EPUB, DOCX, HTML, and plain text editions.' },
+    ],
+    relatedPostSlugs: ['talk-draft-iterate-building-heinlein', 'why-i-built-heinlein'],
+    star: {
+      situation: ['Writing a long manuscript meant moving between a text editor, scene organization, AI conversations, and publishing tools. I wanted a place to work on the book without losing control of its structure or voice.'],
+      task: ['I own the product and engineering decisions, using AI to help implement and test the software. The core requirements are inspectable source files, deliberate manuscript ordering, and editorial advice the author can accept or reject.'],
+      action: ['I built Studio around Markdown sheets and a separate index for their identities and reading order. Writers can arrange scenes into groups and export an assembled Markdown copy without replacing their source files.', 'AI review sits beside the writing. Authors inspect suggested revisions before accepting them. The publishing toolkit is a separate step: it takes a manuscript and layout configuration and produces editions for inspection.'],
+      result: ['The result is a working desktop workspace and publishing toolkit that I use for my own writing. The repository includes source code, example manuscripts, and tests so readers can inspect how it works. Development continues as I use it for my own books.'],
+    },
+    principle: 'The author owns the words. The tool should make each decision easier to inspect.',
+  },
+  {
     id: 'builder-case',
     slug: 'bunch',
     blogTags: ['bunch'],
