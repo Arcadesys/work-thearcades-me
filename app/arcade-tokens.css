@@ -1,0 +1,27 @@
+/*
+ * The toys and Lab case studies moved here from www.thearcades.me (Nov 2026).
+ * Their styles name that site's design tokens. These aliases point each name
+ * at this site's own token, so the moved pages follow this site's light and
+ * dark palettes. Only names this site does not already define live here.
+ */
+:root {
+  --fg: var(--text);
+  --fg-muted: var(--text-muted);
+  --muted: var(--text-muted);
+  --neon-pink: var(--pink);
+  --cyan: #00e0f0;
+  --border: var(--line);
+  --border-strong: var(--accent-line, var(--line));
+  --panel: var(--surface);
+  --radius-lg: 12px;
+  --radius-pill: 999px;
+  --reading-scale: 1;
+  --reading-line-height: 1.6;
+  --navbar-height: var(--header-clearance, 3.5rem);
+  --font-lora: var(--font-serif);
+  --font-barlow-condensed: var(--font-sans);
+}
+
+:root[data-theme='light'] {
+  --cyan: #2f7f86;
+}
