@@ -3,6 +3,8 @@ import { publicPosts } from '@/lib/blog';
 import { originalEditionUrl } from '@/lib/original-edition';
 import { caseStudies, site } from '@/lib/content';
 import { pictureGuide } from '@/lib/guides';
+import { TOY_CATALOG } from '@/data/toys/catalog';
+import { loadLabCaseStudies } from '@/lib/lab-case-studies';
 import { DEFAULT_EDITION, editionPath, publishedEditions } from '@/lib/resume/editions';
 
 const BASE_URL = 'https://work.thearcades.me';
@@ -37,6 +39,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
+  // Lab case studies and toys moved here from www.thearcades.me (Nov 2026).
+  const labRoutes: MetadataRoute.Sitemap = [
+    { url: `${BASE_URL}/lab`, changeFrequency: 'monthly', priority: 0.6 },
+    ...loadLabCaseStudies().map((study) => ({ url: `${BASE_URL}/lab/${study.slug}`, changeFrequency: 'monthly' as const, priority: 0.5 })),
+    { url: `${BASE_URL}/toys`, changeFrequency: 'monthly', priority: 0.5 },
+    ...TOY_CATALOG.map((toy) => ({ url: `${BASE_URL}${toy.href}`, changeFrequency: 'monthly' as const, priority: 0.4 })),
+    { url: `${BASE_URL}/heinlein`, changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${BASE_URL}/reaction-stickers`, changeFrequency: 'monthly', priority: 0.4 },
+  ];
+
   // /journeys is an internal working brief and its route returns 404.
-  return [...staticRoutes, ...postRoutes, ...workRoutes];
+  return [...staticRoutes, ...postRoutes, ...workRoutes, ...labRoutes];
 }

@@ -1,6 +1,6 @@
 import { sanitizeEngagement } from './reading-engagement';
 
-export const eventNames = ['$pageview', 'case_study_view', 'resume_click', 'contact_click', 'booking_click', 'triage_skill_download', 'image_ratchet_skill_download', 'subscribe_submit_intent', 'subscribe_request_accepted', 'campaign_landing', 'subscribe_verification_requested', 'subscribe_request_failed', 'reading-engagement'] as const;
+export const eventNames = ['$pageview', 'case_study_view', 'resume_click', 'contact_click', 'booking_click', 'triage_skill_download', 'image_ratchet_skill_download', 'subscribe_submit_intent', 'subscribe_request_accepted', 'campaign_landing', 'subscribe_verification_requested', 'subscribe_request_failed', 'reading-engagement', 'toy_started', 'first_choice_made', 'toy_completed', 'toy_restarted', 'next_toy_started'] as const;
 export type AnalyticsEvent = typeof eventNames[number];
 
 type CapturedEvent = {

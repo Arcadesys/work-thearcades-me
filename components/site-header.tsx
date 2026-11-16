@@ -13,6 +13,7 @@ const links = [
   ['About', '/#about'],
   ['Blog', '/blog'],
   ['Guides', '/guides'],
+  ['Lab', '/lab'],
   ['Contact', '/#contact'],
   ['Résumé', '/resume'],
 ] as const;
@@ -48,7 +49,7 @@ export function SiteHeader({ home = false, current }: SiteHeaderProps) {
   }
 
   function navigation(label: string, compact = false) {
-    const destinations = links.filter(([text]) => !compact || (text !== 'About' && text !== 'Guides')).map(([text, destination]) =>
+    const destinations = links.filter(([text]) => !compact || (text !== 'About' && text !== 'Guides' && text !== 'Lab')).map(([text, destination]) =>
       current === '/work-with-me' && text === 'Blog' ? ['Notes', '/#notes'] : [text, destination],
     );
 
